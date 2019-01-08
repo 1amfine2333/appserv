@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppActivityInviteRewardDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppActivityInviteReward" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="ACTIVITY_CODE" property="activityCode" jdbcType="VARCHAR" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="DAY" property="day" jdbcType="VARCHAR" />
+    <result column="AMOUNT" property="amount" jdbcType="INTEGER" />
+    <result column="SCALE" property="scale" jdbcType="INTEGER" />
+    <result column="REWARD" property="reward" jdbcType="INTEGER" />
+    <result column="REC_PARTY_ID" property="recPartyId" jdbcType="BIGINT" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+    <result column="REWARD_ID" property="rewardId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, ACTIVITY_CODE, PARTY_ID, DAY, AMOUNT, SCALE, REWARD, REC_PARTY_ID, STATUS, IS_DELETED, 
+    CREATE_TIME, UPDATE_TIME, COMMENTS,REWARD_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_activity_invite_reward
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppActivityInviteReward" >
+    insert into app_activity_invite_reward (ID, ACTIVITY_CODE, PARTY_ID, 
+      DAY, AMOUNT, SCALE, 
+      REWARD, REC_PARTY_ID, STATUS, 
+      IS_DELETED, CREATE_TIME, UPDATE_TIME, 
+      COMMENTS)
+    values (#{id,jdbcType=BIGINT}, #{activityCode,jdbcType=VARCHAR}, #{partyId,jdbcType=BIGINT}, 
+      #{day,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{scale,jdbcType=INTEGER}, 
+      #{reward,jdbcType=INTEGER}, #{recPartyId,jdbcType=BIGINT}, #{status,jdbcType=VARCHAR}, 
+      'N', NOW(), NOW(),
+      #{comments,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppActivityInviteReward" >
+    update app_activity_invite_reward
+    <set >
+      <if test="activityCode != null" >
+        ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="day != null" >
+        DAY = #{day,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        AMOUNT = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="scale != null" >
+        SCALE = #{scale,jdbcType=INTEGER},
+      </if>
+      <if test="reward != null" >
+        REWARD = #{reward,jdbcType=INTEGER},
+      </if>
+      <if test="recPartyId != null" >
+        REC_PARTY_ID = #{recPartyId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+      <if test="rewardId != null" >
+        REWARD_ID = #{rewardId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="select" resultMap="BaseResultMap" parameterType="com.xianglin.appserv.common.dal.dataobject.AppActivityInviteReward" >
+    select <include refid="Base_Column_List" /> from  app_activity_invite_reward
+    <where> IS_DELETED = 'N'
+      <if test="activityCode != null" >
+        AND ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+      </if>
+      <if test="partyId != null" >
+        AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="day != null" >
+        AND DAY = #{day,jdbcType=VARCHAR}
+      </if>
+      <if test="amount != null" >
+        AND AMOUNT = #{amount,jdbcType=INTEGER}
+      </if>
+      <if test="scale != null" >
+        AND SCALE = #{scale,jdbcType=INTEGER}
+      </if>
+      <if test="reward != null" >
+        AND REWARD = #{reward,jdbcType=INTEGER}
+      </if>
+      <if test="recPartyId != null" >
+        AND REC_PARTY_ID = #{recPartyId,jdbcType=BIGINT}
+      </if>
+      <if test="status != null" >
+        AND STATUS = #{status,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted != null" >
+        AND IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+      </if>
+      <if test="rewardId != null" >
+        AND  REWARD_ID = #{rewardId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+
+</mapper>

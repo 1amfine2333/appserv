@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppPrizesActivityRuleDAO" >
+  <resultMap id="ActivePrizeRuleResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppPrizesActivityRuleDO" >
+    <result column="RULE_ID" property="ruleID" jdbcType="BIGINT" />
+    <result column="ACTIVEID" property="activeId" jdbcType="BIGINT" />
+    <result column="PRIZEID" property="prizeId" jdbcType="BIGINT" />
+    <result column="PTYPE" property="ptype" jdbcType="VARCHAR" />
+    <result column="PNAME" property="pname" jdbcType="VARCHAR" />
+    <result column="RULECODE" property="ruleCode" jdbcType="VARCHAR" />
+    <result column="RULEVALUE" property="ruleValue" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="queryActivePrizeRule" resultMap="ActivePrizeRuleResultMap" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPrizesActivityRuleDO" >
+    SELECT
+		b.RULE_ID,
+		b.ACTIVEID,
+		b.PRIZEID,
+		a.PNAME,
+		a.PTYPE,
+		b.RULECODE,
+		b.RULEVALUE
+	FROM
+		app_prizes a,
+		app_prizes_activity_rule b
+	WHERE
+		a.PRIZEID = b.PRIZEID
+	AND a.DATA_STATUS = 'Y'
+	AND b.DATA_STATUS = 'Y'
+	AND b.ACTIVEID = #{activeId,jdbcType=BIGINT}
+  </select>
+  
+  <resultMap id="UserLuckWheelPrizesMap" type="com.xianglin.appserv.common.dal.dataobject.AppPrizeUserRelDO" >
+    <result column="PARTYID" property="partyid" jdbcType="VARCHAR" />
+    <result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR" />
+    <result column="NIKER_NAME" property="nikerName" jdbcType="VARCHAR" />
+    <result column="USER_TYPE" property="userType" jdbcType="VARCHAR" />
+    <result column="ACTIVEID" property="activeid" jdbcType="BIGINT" />
+    <result column="PRIZEID" property="prizeid" jdbcType="BIGINT" />
+    <result column="PTYPE" property="ptype" jdbcType="VARCHAR" />
+    <result column="PNAME" property="pname" jdbcType="VARCHAR" />
+    <result column="PRIZETIME" property="prizetime" jdbcType="DATE" />
+  </resultMap>
+  <select id="getUserLuckWheelPrizes" resultMap="UserLuckWheelPrizesMap" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPrizeUserRelDO" >
+    SELECT
+		a.PARTYID,
+		c.LOGIN_NAME,
+		c.NIKER_NAME,
+		c.USER_TYPE,
+		a.ACTIVEID,
+		a.PRIZEID,
+		b.PTYPE,
+		a.PNAME,
+		a.PRIZETIME
+	FROM
+		app_prize_user_rel a,
+		app_prizes b,
+		app_user c
+	WHERE
+		a.PRIZEID = b.PRIZEID
+	AND a.PARTYID = c.PARTY_ID
+	AND a.DATA_STATUS = 'Y'
+	AND c.IS_DELETED = 'N'
+	AND a.ACTIVEID = #{activeid,jdbcType=BIGINT}
+	<if test="partyid != null">
+		AND a.PARTYID = #{partyid}
+	</if>
+	<if test="ptype != null">
+		AND b.PTYPE = #{ptype}
+	</if>
+	LIMIT #{startPage,jdbcType=BIGINT}, #{pageSize,jdbcType=BIGINT}
+  </select>
+  
+</mapper>

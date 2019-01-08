@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppActivityTaskDAO">
+    <resultMap id="BaseResultMap"
+               type="com.xianglin.appserv.common.dal.dataobject.AppActivityTask">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="PARTY_ID" property="partyId" jdbcType="BIGINT"/>
+        <result column="DEVICE_ID" property="deviceId" jdbcType="VARCHAR"/>
+        <result column="MOBILE_PHONE" property="mobilePhone"
+                jdbcType="VARCHAR"/>
+        <result column="ACTIVITY_CODE" property="activityCode"
+                jdbcType="VARCHAR"/>
+        <result column="TASK_CODE" property="taskCode" jdbcType="VARCHAR"/>
+        <result column="DAILY" property="daily" jdbcType="VARCHAR"/>
+        <result column="TASK_DAILY_ID" property="taskDailyId"
+                jdbcType="VARCHAR"/>
+        <result column="TASK_NAME" property="taskName" jdbcType="VARCHAR"/>
+        <result column="TASK_STATUS" property="taskStatus" jdbcType="VARCHAR"/>
+        <result column="USE_STATUS" property="useStatus" jdbcType="VARCHAR"/>
+        <result column="TASK_RESULT" property="taskResult" jdbcType="VARCHAR"/>
+        <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime"
+                jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_TIME" property="updateTime"
+                jdbcType="TIMESTAMP"/>
+        <result column="COMMENTS" property="comments" jdbcType="VARCHAR"/>
+        <result column="ALERT_STATUS" property="alertStatus"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, PARTY_ID, DEVICE_ID,MOBILE_PHONE, ACTIVITY_CODE, TASK_CODE, DAILY, TASK_DAILY_ID, TASK_NAME,
+    TASK_STATUS,USE_STATUS, IS_DELETED,TASK_RESULT,CREATE_TIME, UPDATE_TIME, COMMENTS,ALERT_STATUS
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from app_activity_task
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from app_activity_task
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert"
+            parameterType="com.xianglin.appserv.common.dal.dataobject.AppActivityTask"
+            useGeneratedKeys="true" keyProperty="id">
+      insert into app_activity_task (ID, PARTY_ID, DEVICE_ID,
+      MOBILE_PHONE, ACTIVITY_CODE, TASK_CODE,
+      DAILY, TASK_DAILY_ID, TASK_NAME,
+      TASK_STATUS, USE_STATUS,TASK_RESULT, IS_DELETED,
+      CREATE_TIME, UPDATE_TIME, COMMENTS,ALERT_STATUS
+      )
+    values (#{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{deviceId,jdbcType=VARCHAR},
+      #{mobilePhone,jdbcType=VARCHAR}, #{activityCode,jdbcType=VARCHAR}, #{taskCode,jdbcType=VARCHAR},
+      #{daily,jdbcType=VARCHAR}, left(#{taskDailyId,jdbcType=VARCHAR},32), #{taskName,jdbcType=VARCHAR},
+      #{taskStatus,jdbcType=VARCHAR}, #{useStatus,jdbcType=VARCHAR},#{taskResult,jdbcType=VARCHAR}, 'N',
+      NOW(), NOW(), #{comments,jdbcType=VARCHAR}, #{alertStatus,jdbcType=VARCHAR}
+      )
+  </insert>
+
+    <insert id="insertWithSelect"
+            parameterType="com.xianglin.appserv.common.dal.dataobject.AppActivityTask"
+            useGeneratedKeys="true" keyProperty="id">
+    insert into app_activity_task (ID, PARTY_ID, DEVICE_ID,
+    MOBILE_PHONE, ACTIVITY_CODE, TASK_CODE,
+    DAILY, TASK_DAILY_ID, TASK_NAME,
+    TASK_STATUS, USE_STATUS,TASK_RESULT, IS_DELETED,
+    CREATE_TIME, UPDATE_TIME, COMMENTS,ALERT_STATUS
+    )
+    select #{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{deviceId,jdbcType=VARCHAR},
+    #{mobilePhone,jdbcType=VARCHAR}, #{activityCode,jdbcType=VARCHAR}, #{taskCode,jdbcType=VARCHAR},
+    #{daily,jdbcType=VARCHAR},left( #{taskDailyId,jdbcType=VARCHAR},32), #{taskName,jdbcType=VARCHAR},
+    #{taskStatus,jdbcType=VARCHAR}, #{useStatus,jdbcType=VARCHAR},#{taskResult,jdbcType=VARCHAR}, 'N',
+    NOW(), NOW(), #{comments,jdbcType=VARCHAR},#{alertStatus,jdbcType=VARCHAR}
+    from dual
+    where not exists (select 1 from app_activity_task where TASK_DAILY_ID = #{taskDailyId,jdbcType=BIGINT} )
+  </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.xianglin.appserv.common.dal.dataobject.AppActivityTask">
+        update app_activity_task
+        <set>
+            <if test="partyId != null">
+                PARTY_ID = #{partyId,jdbcType=BIGINT},
+            </if>
+            <if test="mobilePhone != null">
+                MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR},
+            </if>
+            <if test="activityCode != null">
+                ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="taskCode != null">
+                TASK_CODE = #{taskCode,jdbcType=VARCHAR},
+            </if>
+            <if test="daily != null">
+                DAILY = #{daily,jdbcType=VARCHAR},
+            </if>
+            <if test="taskDailyId != null">
+                TASK_DAILY_ID = #{taskDailyId,jdbcType=VARCHAR},
+            </if>
+            <if test="taskName != null">
+                TASK_NAME = #{taskName,jdbcType=VARCHAR},
+            </if>
+            <if test="taskStatus != null">
+                TASK_STATUS = #{taskStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="useStatus != null">
+                USE_STATUS = #{useStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="taskResult != null">
+                TASK_RESULT = #{taskResult,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments != null">
+                COMMENTS = #{comments,jdbcType=VARCHAR},
+            </if>
+            <if test="alertStatus != null">
+                ALERT_STATUS = #{alertStatus,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from app_activity_task
+        <where>IS_DELETED = 'N'
+            <if test="paras.partyId != null">
+                AND PARTY_ID = #{paras.partyId,jdbcType=BIGINT}
+            </if>
+            <if test="paras.deviceId != null">
+                AND DEVICE_ID = #{paras.deviceId,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.mobilePhone != null">
+                AND MOBILE_PHONE = #{paras.mobilePhone,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.activityCode != null">
+                AND ACTIVITY_CODE = #{paras.activityCode,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.taskCode != null">
+                AND TASK_CODE = #{paras.taskCode,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.daily != null">
+                AND DAILY = #{paras.daily,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.taskDailyId != null">
+                AND TASK_DAILY_ID = #{paras.taskDailyId,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.taskName != null">
+                AND TASK_NAME = #{paras.taskName,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.taskStatus != null">
+                AND TASK_STATUS = #{paras.taskStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.useStatus != null">
+                AND USE_STATUS = #{paras.useStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.alertStatus != null">
+                AND ALERT_STATUS = #{paras.alertStatus,jdbcType=VARCHAR}
+            </if>
+        </where>
+        <if test="page != null">
+            order by CREATE_TIME desc
+            <bind name="start" value="(page.startPage-1)*page.pageSize"/>
+            limit #{start},#{page.pageSize}
+        </if>
+    </select>
+
+    <select id="selectCount" resultType="int" parameterType="map">
+        select count(*)
+        from app_activity_task
+        <where>IS_DELETED = 'N'
+            <if test="partyId != null">
+                AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="deviceId != null">
+                AND DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+            </if>
+            <if test="mobilePhone != null">
+                AND MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR}
+            </if>
+            <if test="activityCode != null">
+                AND ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+            </if>
+            <if test="taskCode != null">
+                AND TASK_CODE = #{taskCode,jdbcType=VARCHAR}
+            </if>
+            <if test="daily != null">
+                AND DAILY = #{daily,jdbcType=VARCHAR}
+            </if>
+            <if test="taskDailyId != null">
+                AND TASK_DAILY_ID = #{taskDailyId,jdbcType=VARCHAR}
+            </if>
+            <if test="taskName != null">
+                AND TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test="taskStatus != null">
+                AND TASK_STATUS = #{taskStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="useStatus != null">
+                AND USE_STATUS = #{useStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="alertStatus != null">
+                AND ALERT_STATUS = #{alertStatus,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryActivityTaskCount" resultType="int" parameterType="map">
+        select count(*)
+        from app_activity_task
+        <where>IS_DELETED = 'N'
+            <if test="partyId != null">
+                AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="deviceId != null">
+                AND DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+            </if>
+            <if test="mobilePhone != null">
+                AND MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR}
+            </if>
+            <if test="activityCode != null">
+                AND ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+            </if>
+            <if test="taskCode != null">
+                AND TASK_CODE = #{taskCode,jdbcType=VARCHAR}
+            </if>
+            <if test="daily != null">
+                AND DAILY = #{daily,jdbcType=VARCHAR}
+            </if>
+            <if test="taskDailyId != null">
+                AND TASK_DAILY_ID = #{taskDailyId,jdbcType=VARCHAR}
+            </if>
+            <if test="taskName != null">
+                AND TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test="taskStatus != null">
+                AND TASK_STATUS = #{taskStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="useStatus != null">
+                AND USE_STATUS = #{useStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="startDay != null and endDay !=null">
+                <![CDATA[AND DAILY >= #{startDay,jdbcType=VARCHAR} AND DAILY <= #{endDay,jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </select>
+
+    <select id="query" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from app_activity_task
+        <where>IS_DELETED = 'N'
+            <if test="partyId != null">
+                AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="deviceId != null">
+                AND DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+            </if>
+            <if test="mobilePhone != null">
+                AND MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR}
+            </if>
+            <if test="activityCode != null">
+                AND ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+            </if>
+            <if test="taskCode != null">
+                AND TASK_CODE = #{taskCode,jdbcType=VARCHAR}
+            </if>
+            <if test="daily != null">
+                AND DAILY = #{daily,jdbcType=VARCHAR}
+            </if>
+            <if test="taskDailyId != null">
+                AND TASK_DAILY_ID = #{taskDailyId,jdbcType=VARCHAR}
+            </if>
+            <if test="taskName != null">
+                AND TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test="taskStatus != null">
+                AND TASK_STATUS = #{taskStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="useStatus != null">
+                AND USE_STATUS = #{useStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="taskResult != null">
+                AND TASK_RESULT = #{taskResult,jdbcType=VARCHAR}
+            </if>
+            <if test="startDay != null and endDay !=null">
+                <![CDATA[AND DAILY >= #{startDay,jdbcType=VARCHAR} AND DAILY <= #{endDay,jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+        <if test="orderBy == null">
+            ORDER BY CREATE_TIME DESC
+        </if>
+        <if test="orderBy != null">
+            ORDER BY ${orderBy}
+        </if>
+        <if test="number != null">
+            limit ${number}
+        </if>
+    </select>
+</mapper>

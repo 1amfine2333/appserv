@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.PropExtendDAO">
+    <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppPropExtend">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="RELATION_ID" property="relationId" jdbcType="BIGINT"/>
+        <result column="DEVICE_ID" property="deviceId" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+        <result column="EKEY" property="ekey" jdbcType="VARCHAR"/>
+        <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="COMMENTS" property="comments" jdbcType="VARCHAR"/>
+        <result column="VALUE" property="value" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ID, RELATION_ID, DEVICE_ID, TYPE, EKEY,VALUE, IS_DELETED, CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+    <sql id="Blob_Column_List">
+    VALUE
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from app_prop_extend
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from app_prop_extend
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPropExtend" useGeneratedKeys="true"
+            keyProperty="id">
+    insert into app_prop_extend (ID, RELATION_ID, DEVICE_ID, 
+      TYPE, EKEY, IS_DELETED, 
+      CREATE_TIME, UPDATE_TIME, COMMENTS, 
+      VALUE)
+    values (#{id,jdbcType=BIGINT}, #{relationId,jdbcType=BIGINT}, #{deviceId,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{ekey,jdbcType=VARCHAR},'N', 
+      NOW(), NOW(), #{comments,jdbcType=VARCHAR}, 
+      #{value,jdbcType=LONGVARCHAR})
+  </insert>
+
+    <insert id="insertExceptPropExtend" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPropExtend"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into app_prop_extend (ID, RELATION_ID, DEVICE_ID,
+        TYPE, EKEY, IS_DELETED,
+        CREATE_TIME, UPDATE_TIME, COMMENTS,
+        VALUE)
+        select #{id,jdbcType=BIGINT}, #{relationId,jdbcType=BIGINT}, #{deviceId,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR}, #{ekey,jdbcType=VARCHAR},'N',
+        NOW(), NOW(), #{comments,jdbcType=VARCHAR},
+        #{value,jdbcType=LONGVARCHAR} from dual
+        where not exists (select 1 from app_prop_extend where IS_DELETED ='N' and RELATION_ID = #{relationId,jdbcType=VARCHAR} and TYPE = #{type,jdbcType=VARCHAR} and EKEY = #{ekey,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPropExtend">
+        update app_prop_extend
+        <set>
+            <if test="relationId != null">
+                RELATION_ID = #{relationId,jdbcType=BIGINT},
+            </if>
+            <if test="deviceId != null">
+                DEVICE_ID = #{deviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="ekey != null">
+                EKEY = #{ekey,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = NOW(),
+            </if>
+            <if test="comments != null">
+                COMMENTS = #{comments,jdbcType=VARCHAR},
+            </if>
+            <if test="value != null">
+                VALUE = #{value,jdbcType=LONGVARCHAR},
+            </if>
+            UPDATE_TIME = NOW()
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByparamMap">
+        update app_prop_extend
+        <set>
+            <if test="build.relationId != null">
+                RELATION_ID = #{build.relationId,jdbcType=BIGINT},
+            </if>
+            <if test="build.deviceId != null">
+                DEVICE_ID = #{build.deviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="build.type != null">
+                TYPE = #{build.type,jdbcType=VARCHAR},
+            </if>
+            <if test="build.ekey != null">
+                EKEY = #{build.ekey,jdbcType=VARCHAR},
+            </if>
+            <if test="build.isDeleted != null">
+                IS_DELETED = #{build.isDeleted,jdbcType=VARCHAR},
+            </if>
+            <if test="build.comments != null">
+                COMMENTS = #{build.comments,jdbcType=VARCHAR},
+            </if>
+            <if test="build.value != null">
+                VALUE = #{build.value,jdbcType=LONGVARCHAR},
+            </if>
+            UPDATE_TIME = NOW()
+        </set>
+        <where>
+            <if test="param.relationId != null">
+                and RELATION_ID = #{param.relationId,jdbcType=BIGINT}
+            </if>
+            <if test="param.deviceId != null">
+                and DEVICE_ID = #{param.deviceId,jdbcType=VARCHAR}
+            </if>
+            <if test="param.type != null">
+                and TYPE = #{param.type,jdbcType=VARCHAR}
+            </if>
+            <if test="param.ekey != null">
+                and EKEY = #{param.ekey,jdbcType=VARCHAR}
+            </if>
+            <if test="param.isDeleted != null">
+                and IS_DELETED = #{param.isDeleted,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </update>
+
+    <select id="query" resultMap="BaseResultMap" parameterType="map">
+        <if test="startPage != null and pageSize !=null">
+            <bind name="start" value="(startPage-1)*pageSize"/>
+        </if>
+        select
+        <include refid="Base_Column_List"/>
+        from app_prop_extend
+        <where>IS_DELETED = 'N'
+            <if test="relationId != null">
+                and RELATION_ID = #{relationId,jdbcType=BIGINT}
+            </if>
+            <if test="deviceId != null">
+                and DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+            </if>
+            <if test="type != null">
+                and TYPE = #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="ekey != null">
+                and EKEY = #{ekey,jdbcType=VARCHAR}
+            </if>
+            <if test="isDeleted != null">
+                and IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="comments != null">
+                and COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+            <if test="value != null">
+                and VALUE = #{value,jdbcType=LONGVARCHAR}
+            </if>
+        </where>
+        <if test="orderBy == null">
+            order by CREATE_TIME desc
+        </if>
+        <if test="orderBy != null">
+            order by ${orderBy} desc
+        </if>
+
+        <if test="startPage != null and pageSize !=null">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <select id="selectProp" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from app_prop_extend
+        where RELATION_ID = #{relationId,jdbcType=BIGINT} and TYPE = #{type,jdbcType=VARCHAR} and EKEY =
+        #{ekey,jdbcType=VARCHAR} and IS_DELETED = 'N'
+    </select>
+</mapper>

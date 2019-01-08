@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:task="http://www.springframework.org/schema/task"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<task:annotation-driven executor="asyncExecutor" />
+	<task:executor id="asyncExecutor" pool-size="1-10" queue-capacity="10"/>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="sendMsgTaskTrigger" />
+				<!--<ref bean="initRedPacketTrigger" />-->
+				<!--<ref bean="decreaseRedPacketTrigger" />-->
+				<!--<ref bean="startRedActivityTrigger" />-->
+				<!--<ref bean="sendNoticeMsgTaskTrigger" />-->
+<!-- 				<ref bean="calculateScoreTaskTrigger" /> -->
+				<!--<ref bean="searchNewsTrigger"/>-->
+				<!--<ref bean="searchEastDayTrigger"/>-->
+                <ref bean="signTipTrigger"/>
+				<ref bean="srewardInviteTrigger"/>
+				<!--	<ref bean="clearAppUserTrigger"/>-->
+				<!--<ref bean="inviteAlertTrigger"/>-->
+				<!--<ref bean="inviteRankingTrigger"/>-->
+				<!--<ref bean="inviteRankingRewardTrigger"/>-->
+			</list>
+		</property>
+	</bean>
+
+	<bean id="srewardInviteTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="srewardInviteTaskDetail" />
+		<property name="cronExpression" value="${cronExp.rewardInvite}" />
+	</bean>
+
+	<bean id="srewardInviteTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="inviteAlertTask" />
+		<property name="targetMethod" value="rewardInvite" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+    <bean id="signTipTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="inviteAlertTaskDetail" />
+        <property name="cronExpression" value="${cronExp.signTip}" />
+    </bean>
+
+    <bean id="inviteAlertTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="inviteAlertTask" />
+        <property name="targetMethod" value="signTip" />
+        <property name="concurrent" value="false" />
+    </bean>
+
+	<bean id="sendMsgTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="sendMsgTaskTriggerDetail" />
+		<property name="cronExpression" value="${cronExp.sendMsgTask}" />
+	</bean>
+
+	<bean id="sendMsgTaskTriggerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="sendMsgTask" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 红包活动提醒 -->
+	<bean id="sendNoticeMsgTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="sendNoticeMsgTaskTriggerDetail" />
+		<property name="cronExpression" value="${cronExp.sendNoticMsgTask}" />
+	</bean>
+
+	<bean id="sendNoticeMsgTaskTriggerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="sendMsgTask" />
+		<property name="targetMethod" value="sendRedActivityNotice" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="sendMsgTask" class="com.xianglin.appserv.biz.shared.quartz.SendMsgTask">
+	</bean>
+	
+	<bean id="initRedPacketTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="initRedPacketTriggerDetail" />
+		<property name="cronExpression" value="${cronExp.initRedPacket}" />
+	</bean>
+
+	<bean id="initRedPacketTriggerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="redPacketTask" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="startRedActivityTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="startRedActivityTriggerDetail" />
+		<property name="cronExpression" value="${cronExp.startRedActivity}" />
+	</bean>
+
+	<bean id="startRedActivityTriggerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="redPacketTask" />
+		<property name="targetMethod" value="startActivity" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="decreaseRedPacketTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="decreaseRedPacketTriggerDetail" />
+		<property name="cronExpression" value="${cronExp.decreaseRedPacket}" />
+	</bean>
+
+	<bean id="decreaseRedPacketTriggerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="redPacketTask" />
+		<property name="targetMethod" value="decrease" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="redPacketTask" class="com.xianglin.appserv.biz.shared.quartz.RedPacketTask">
+	</bean>
+	
+	<bean id="searchNewsTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="searchNewsTriggerDetail" />
+		<property name="cronExpression" value="${cronExp.serchNewsTask}" />
+	</bean>
+
+	<bean id="searchNewsTriggerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="searchNewsTask" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="searchNewsTask" class="com.xianglin.appserv.biz.shared.quartz.SearchNewsTask">
+	</bean>
+	
+	<bean id="searchEastDayTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="searchEastDayTriggerDetail" />
+		<property name="cronExpression" value="${cronExp.serchEastDayTask}" />
+	</bean>
+
+	<bean id="searchEastDayTriggerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="searchNewsTask" />
+		<property name="targetMethod" value="executeSearchEastDay" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="clearAppUserTask" class="com.xianglin.appserv.biz.shared.quartz.ClearAppUserTask">
+	</bean>
+
+	<bean id="clearAppUserTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="clearAppUserTriggerDetail" />
+		<property name="cronExpression" value="${cronExp.clearAppUserTask}" />
+	</bean>
+
+	<bean id="clearAppUserTriggerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="clearAppUserTask" />
+		<property name="targetMethod" value="clearUser" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!--  -->
+	<bean id="inviteAlertTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="inviteAlertTriggerDetail" />
+		<property name="cronExpression" value="${cronExp.inviteAlertTask}" />
+	</bean>
+
+	<bean id="inviteAlertTriggerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="inviteAlertTask" />
+		<property name="targetMethod" value="inviteAlert" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="inviteAlertTask" class="com.xianglin.appserv.biz.shared.quartz.ActivityInviteTask">
+        
+	</bean>
+	
+	<bean id="inviteRankingTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="inviteRankingTriggerDetail" />
+		<property name="cronExpression" value="${cronExp.inviteRankingTask}" />
+	</bean>
+
+	<bean id="inviteRankingTriggerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="inviteAlertTask" />
+		<property name="targetMethod" value="inviteRanking" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="inviteRankingRewardTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="inviteRankingRewardTriggerDetail" />
+		<property name="cronExpression" value="${cronExp.inviteRankingReward}" />
+	</bean>
+
+	<bean id="inviteRankingRewardTriggerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="inviteAlertTask" />
+		<property name="targetMethod" value="inviteRankingReward" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	
+	
+<!-- 
+	<bean id="calculateScoreTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="calculateScoreTaskTrigger_Detail" />
+		<property name="cronExpression" value="0 10 23 * * ?" />
+	</bean>
+
+	<bean id="calculateScoreTaskTrigger_Detail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="calculateScoreTask" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="calculateScoreTask" class="com.xianglin.appserv.biz.shared.quartz.CalculateScoreTask">
+		<property name="taskDAO" ref="taskDAO" />
+		<property name="taskDetailDAO" ref="taskDetailDAO" />
+		<property name="contactsDAO" ref="contactsDAO" />
+		<property name="userMsgDAO" ref="userMsgDAO" />
+	</bean>
+ -->
+</beans>

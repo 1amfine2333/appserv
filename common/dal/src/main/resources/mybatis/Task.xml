@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.TaskDAO">
+	<resultMap id="task" type="com.xianglin.appserv.common.dal.dataobject.Task" autoMapping="true">
+		<id property="id" column="id" />
+		<result property="status" column="status" />
+		<result property="taskId" column="task_Id" />
+		<result property="taskName" column="task_Name" />
+		<result property="version" column="version" />
+		<result property="updateTime" column="update_Time" />
+		<result property="createTime" column="create_Time" />
+		<result property="timeStamp" column="timeStamp" />
+		<result property="executeDate" column="execute_Date" />
+	</resultMap>
+
+<select id="getTaskByTaskId" parameterType="java.util.Map" resultMap="task">
+	select id ,status ,task_Id,task_Name,version,timeStamp,update_time from app_task where task_id =#{taskId,jdbcType=VARCHAR} and status='0'
+</select>
+
+<update id="updateEntity" parameterType="com.xianglin.appserv.common.dal.dataobject.Task">
+	update app_task
+	set
+	status=#{status},
+	update_time=#{updateTime},
+	timeStamp=#{timeStamp},
+	version=#{version,jdbcType=VARCHAR}+1
+	where task_id=#{taskId} and version=#{version,jdbcType=VARCHAR}
+</update>
+<!-- 更新任务执行中 -->
+<update id="updateExcutedByTaskId">
+	update app_task
+	set
+	status = #{status},
+	update_time = NOW()
+	where task_id = #{taskId}
+	and status = '0'
+	and execute_date &lt;= #{executeDate}
+</update>
+
+<!-- 任务执行完毕，更新为下一个工作日的初始状态 -->
+<update id="updateEndByTaskId">
+	update app_task
+	set
+	status = #{status},
+	execute_date = #{nextExecuteDate},
+	update_time = NOW()
+	where task_id = #{taskId}
+	and status = '1'
+	and execute_date &lt;= #{executeDate}
+</update>
+</mapper> 

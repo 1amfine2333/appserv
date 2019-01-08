@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppMobileMapper" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppMobile" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="areacode" property="areacode" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="card" property="card" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mobile, areacode, company, card, province, city, create_time, update_time, creator,updater,
+    is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from app_mobile_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_mobile_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppMobile" >
+    insert into app_mobile_info (id, mobile, areacode,
+      company, card, province, 
+      city, create_time, update_time, 
+      creator, updater,is_deleted)
+    values (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{areacode,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{card,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{creator,jdbcType=VARCHAR}, #{updater,jdbcType=VARCHAR},#{isDeleted,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppMobile" >
+    insert into app_mobile_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="areacode != null" >
+        areacode,
+      </if>
+      <if test="company != null" >
+        company,
+      </if>
+      <if test="card != null" >
+        card,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="areacode != null" >
+        #{areacode,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="card != null" >
+        #{card,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="updater != null" >
+       #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppMobile" >
+    update app_mobile_info
+    <set >
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="areacode != null" >
+        areacode = #{areacode,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="card != null" >
+        card = #{card,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="updater != null" >
+         updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xianglin.appserv.common.dal.dataobject.AppMobile" >
+    update app_mobile_info
+    set mobile = #{mobile,jdbcType=VARCHAR},
+      areacode = #{areacode,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      card = #{card,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      updater = #{updater,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectAll" parameterType="com.xianglin.appserv.common.dal.dataobject.AppMobile" resultMap="BaseResultMap">
+
+
+    SELECT <include refid="Base_Column_List"></include>
+    FROM app_mobile_info
+    <where>
+      <include refid="where_sql"></include>
+    </where>
+
+
+  </select>
+
+  <sql id="where_sql">
+    <if test="mobile != null" >
+      mobile = #{mobile,jdbcType=VARCHAR}
+    </if>
+    <if test="areacode != null" >
+    and  areacode = #{areacode,jdbcType=VARCHAR}
+    </if>
+    <if test="company != null" >
+      and  company = #{company,jdbcType=VARCHAR}
+    </if>
+    <if test="card != null" >
+      and card = #{card,jdbcType=VARCHAR}
+    </if>
+    <if test="province != null" >
+      and  province = #{province,jdbcType=VARCHAR}
+    </if>
+    <if test="city != null" >
+      and  city = #{city,jdbcType=VARCHAR}
+    </if>
+    <if test="createTime != null" >
+      and  create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="updateTime != null" >
+      and update_time = #{updateTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="creator != null" >
+      and  creator = #{creator,jdbcType=VARCHAR}
+    </if>
+    <if test="updater != null" >
+      and  updater = #{updater,jdbcType=VARCHAR}
+    </if>
+
+    <if test="isDeleted != null" >
+      and is_deleted = #{isDeleted,jdbcType=VARCHAR}
+    </if>
+  </sql>
+
+  <select id="selectByMobile"  parameterType="com.xianglin.appserv.common.dal.dataobject.AppMobile" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"></include>
+    FROM app_mobile_info where mobile=#{mobile,jdbcType=VARCHAR}
+
+  </select>
+</mapper>

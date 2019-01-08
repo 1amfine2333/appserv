@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.ActivityInviteDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.ActivityInvite" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="ACTIVITY_CODE" property="activityCode" jdbcType="VARCHAR" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="COMMENT_NAME" property="commentName" jdbcType="VARCHAR" />
+    <result column="QR_CODE" property="qrCode" jdbcType="VARCHAR" />
+    <result column="REC_COUNT" property="recCount" jdbcType="INTEGER" />
+    <result column="REC_AMT" property="recAmt" jdbcType="DECIMAL" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+    
+    <result column="RANKING" property="ranking" jdbcType="INTEGER" />
+    <result column="HEAD_IMG" property="headImg" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, ACTIVITY_CODE,PARTY_ID,COMMENT_NAME,QR_CODE, REC_COUNT, REC_AMT, STATUS, IS_DELETED, CREATE_TIME, UPDATE_TIME,
+    COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_activity_invite
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_activity_invite
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityInvite" >
+    insert into app_activity_invite (ID,ACTIVITY_CODE, PARTY_ID,COMMENT_NAME,QR_CODE,
+      REC_COUNT, REC_AMT, STATUS, 
+      IS_DELETED, CREATE_TIME, UPDATE_TIME, 
+      COMMENTS)
+    values (#{id,jdbcType=BIGINT}, #{activityCode,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{commentName,jdbcType=VARCHAR}, #{qrCode,jdbcType=VARCHAR},
+      #{recCount,jdbcType=INTEGER}, #{recAmt,jdbcType=DECIMAL}, 'I', 
+      'N', NOW(), NOW(), 
+      #{comments,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityInvite" >
+    update app_activity_invite
+    <set >
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="commentName != null" >
+        COMMENT_NAME = #{commentName,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCode != null" >
+        QR_CODE = #{qrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="recCount != null" >
+        REC_COUNT = #{recCount,jdbcType=INTEGER},
+      </if>
+      <if test="recAmt != null" >
+        REC_AMT = #{recAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByPartyId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from app_activity_invite
+    where PARTY_ID = #{partyId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectActivity" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from app_activity_invite
+    where PARTY_ID = #{partyId,jdbcType=BIGINT}
+      and ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+  </select>
+
+   <select id="selectRanking" resultMap="BaseResultMap" parameterType="map" >
+    <bind name="start" value="(startPage-1)*pageSize"/>
+    SELECT t.*
+	FROM
+    (SELECT (@rowNO := @rowNo+1) AS RANKING,
+            a.*
+     FROM
+         (SELECT u.*,
+                 v.HEAD_IMG
+          FROM app_activity_invite u
+          LEFT JOIN app_user v ON u.PARTY_ID = v.PARTY_ID
+          WHERE u.REC_AMT > 0 AND U.IS_DELETED = 'N' ORDER BY u.REC_AMT DESC
+					) a,
+         (SELECT @rowNO :=0) b) t
+    <if test="partyId != null" >
+	 WHERE t.PARTY_ID = #{partyId,jdbcType=BIGINT}
+	</if>
+    LIMIT #{start},#{pageSize}
+  </select>
+  
+</mapper>

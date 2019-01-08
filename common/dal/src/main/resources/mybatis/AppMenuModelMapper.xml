@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppMenuModelMapper" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppMenuModel" >
+    <id column="MID" property="mid" jdbcType="VARCHAR" />
+    <result column="PID" property="pid" jdbcType="VARCHAR" />
+    <result column="MNAME" property="mname" jdbcType="VARCHAR" />
+    <result column="MLEVEL" property="mlevel" jdbcType="DECIMAL" />
+    <result column="MORDER" property="morder" jdbcType="DECIMAL" />
+    <result column="MURL" property="murl" jdbcType="VARCHAR" />
+    <result column="IMGURL" property="imgurl" jdbcType="VARCHAR" />
+    <result column="MSTATUS" property="mstatus" jdbcType="CHAR" />
+    <result column="BUSITYPE" property="busitype" jdbcType="DECIMAL" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    MID, PID, MNAME, MLEVEL, MORDER, MURL, IMGURL, MSTATUS, BUSITYPE, CREATE_TIME, UPDATE_TIME, 
+    COMMENTS
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.xianglin.appserv.common.dal.dataobject.AppMenuModelExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from app_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_menu
+    where MID = #{mid,jdbcType=VARCHAR}
+  </select>
+  <!-- 根据mname查信息 -->
+   <select id="selectByMname" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_menu
+    where MNAME = #{mname,jdbcType=VARCHAR}
+  </select>
+  <!-- 根据mid查mname -->
+   <select id="selectMname" resultType="java.lang.String" parameterType="java.lang.String" >
+    select 
+    MNAME
+    from app_menu
+    where MID = #{mid,jdbcType=VARCHAR}
+  </select>
+  <!-- 根据mid查创建时间 -->
+   <select id="selectCreateDate" resultType="java.util.Date" parameterType="java.lang.String" >
+    select 
+    CREATE_TIME
+    from app_menu
+    where MID = #{mid,jdbcType=VARCHAR}
+  </select>
+
+  <!-- 根据mid查信息 -->
+   <select id="selectAllByMid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_menu
+    where MID = #{mid,jdbcType=VARCHAR}
+  </select>
+  <!-- 查询所有 -->
+   <select id="selectAll" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_menu
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from app_menu
+    where MID = #{mid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xianglin.appserv.common.dal.dataobject.AppMenuModelExample" >
+    delete from app_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppMenuModel" >
+    insert into app_menu (MID, PID, MNAME, 
+      MLEVEL, MORDER, MURL, 
+      IMGURL, MSTATUS, BUSITYPE, 
+      CREATE_TIME, UPDATE_TIME, COMMENTS
+      )
+    values (#{mid,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR}, #{mname,jdbcType=VARCHAR}, 
+      #{mlevel,jdbcType=DECIMAL}, #{morder,jdbcType=DECIMAL}, #{murl,jdbcType=VARCHAR}, 
+      #{imgurl,jdbcType=VARCHAR}, #{mstatus,jdbcType=CHAR}, #{busitype,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{comments,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppMenuModel" >
+    insert into app_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mid != null" >
+        MID,
+      </if>
+      <if test="pid != null" >
+        PID,
+      </if>
+      <if test="mname != null" >
+        MNAME,
+      </if>
+      <if test="mlevel != null" >
+        MLEVEL,
+      </if>
+      <if test="morder != null" >
+        MORDER,
+      </if>
+      <if test="murl != null" >
+        MURL,
+      </if>
+      <if test="imgurl != null" >
+        IMGURL,
+      </if>
+      <if test="mstatus != null" >
+        MSTATUS,
+      </if>
+      <if test="busitype != null" >
+        BUSITYPE,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="comments != null" >
+        COMMENTS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mid != null" >
+        #{mid,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="mname != null" >
+        #{mname,jdbcType=VARCHAR},
+      </if>
+      <if test="mlevel != null" >
+        #{mlevel,jdbcType=DECIMAL},
+      </if>
+      <if test="morder != null" >
+        #{morder,jdbcType=DECIMAL},
+      </if>
+      <if test="murl != null" >
+        #{murl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl != null" >
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="mstatus != null" >
+        #{mstatus,jdbcType=CHAR},
+      </if>
+      <if test="busitype != null" >
+        #{busitype,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comments != null" >
+        #{comments,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update app_menu
+    <set >
+      <if test="record.mid != null" >
+        MID = #{record.mid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pid != null" >
+        PID = #{record.pid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mname != null" >
+        MNAME = #{record.mname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mlevel != null" >
+        MLEVEL = #{record.mlevel,jdbcType=DECIMAL},
+      </if>
+      <if test="record.morder != null" >
+        MORDER = #{record.morder,jdbcType=DECIMAL},
+      </if>
+      <if test="record.murl != null" >
+        MURL = #{record.murl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imgurl != null" >
+        IMGURL = #{record.imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mstatus != null" >
+        MSTATUS = #{record.mstatus,jdbcType=CHAR},
+      </if>
+      <if test="record.busitype != null" >
+        BUSITYPE = #{record.busitype,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.comments != null" >
+        COMMENTS = #{record.comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update app_menu
+    set MID = #{record.mid,jdbcType=VARCHAR},
+      PID = #{record.pid,jdbcType=VARCHAR},
+      MNAME = #{record.mname,jdbcType=VARCHAR},
+      MLEVEL = #{record.mlevel,jdbcType=DECIMAL},
+      MORDER = #{record.morder,jdbcType=DECIMAL},
+      MURL = #{record.murl,jdbcType=VARCHAR},
+      IMGURL = #{record.imgurl,jdbcType=VARCHAR},
+      MSTATUS = #{record.mstatus,jdbcType=CHAR},
+      BUSITYPE = #{record.busitype,jdbcType=DECIMAL},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      COMMENTS = #{record.comments,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppMenuModel" >
+    update app_menu
+    <set >
+      <if test="pid != null" >
+        PID = #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="mname != null" >
+        MNAME = #{mname,jdbcType=VARCHAR},
+      </if>
+      <if test="mlevel != null" >
+        MLEVEL = #{mlevel,jdbcType=DECIMAL},
+      </if>
+      <if test="morder != null" >
+        MORDER = #{morder,jdbcType=DECIMAL},
+      </if>
+      <if test="murl != null" >
+        MURL = #{murl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl != null" >
+        IMGURL = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="mstatus != null" >
+        MSTATUS = #{mstatus,jdbcType=CHAR},
+      </if>
+      <if test="busitype != null" >
+        BUSITYPE = #{busitype,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MID = #{mid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xianglin.appserv.common.dal.dataobject.AppMenuModel" >
+    update app_menu
+    set PID = #{pid,jdbcType=VARCHAR},
+      MNAME = #{mname,jdbcType=VARCHAR},
+      MLEVEL = #{mlevel,jdbcType=DECIMAL},
+      MORDER = #{morder,jdbcType=DECIMAL},
+      MURL = #{murl,jdbcType=VARCHAR},
+      IMGURL = #{imgurl,jdbcType=VARCHAR},
+      MSTATUS = #{mstatus,jdbcType=CHAR},
+      BUSITYPE = #{busitype,jdbcType=DECIMAL},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      COMMENTS = #{comments,jdbcType=VARCHAR}
+    where MID = #{mid,jdbcType=VARCHAR}
+  </update>
+</mapper>

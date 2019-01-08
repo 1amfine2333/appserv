@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppGroupMemberDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppGroupMember" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="GROUP_ID" property="groupId" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="TEMP_NAME" property="tempName" jdbcType="VARCHAR" />
+    <result column="TEMP_MOBILE_PHONE" property="tempMobilePhone" jdbcType="VARCHAR" />
+    <result column="OPERATOR" property="operator" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+    
+  <sql id="Base_Column_List" >
+    ID, GROUP_ID, PARTY_ID,TYPE, TEMP_NAME, TEMP_MOBILE_PHONE,OPERATOR, STATUS, IS_DELETED, CREATE_TIME, 
+    UPDATE_TIME, COMMENTS
+  </sql>
+    
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_group_member
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+    
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_group_member
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+    
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppGroupMember" useGeneratedKeys="true" keyProperty="id">
+    insert into app_group_member (ID, GROUP_ID, PARTY_ID,TYPE, 
+      TEMP_NAME, TEMP_MOBILE_PHONE,OPERATOR, STATUS, 
+      IS_DELETED, CREATE_TIME, UPDATE_TIME, 
+      COMMENTS)
+    values (#{id,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT},
+      #{type,jdbcType=VARCHAR}, #{tempName,jdbcType=VARCHAR}, #{tempMobilePhone,jdbcType=VARCHAR},#{operator,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      'N', NOW(), NOW(), 
+      #{comments,jdbcType=VARCHAR})
+  </insert>
+
+    <insert id="insertExceptMember" parameterType="com.xianglin.appserv.common.dal.dataobject.AppGroupMember" useGeneratedKeys="true" keyProperty="id">
+        insert into app_group_member (ID, GROUP_ID, PARTY_ID, TYPE,
+        TEMP_NAME, TEMP_MOBILE_PHONE,OPERATOR, STATUS,
+        IS_DELETED, CREATE_TIME, UPDATE_TIME,
+        COMMENTS)
+        select #{id,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT},
+        #{type,jdbcType=VARCHAR},#{tempName,jdbcType=VARCHAR}, #{tempMobilePhone,jdbcType=VARCHAR},#{operator,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},'N', NOW(), NOW(), #{comments,jdbcType=VARCHAR} from dual
+    where not exists (select 1 from app_group_member where IS_DELETED ='N' and TEMP_MOBILE_PHONE = #{tempMobilePhone,jdbcType=VARCHAR} and GROUP_ID = #{groupId,jdbcType=BIGINT}) 
+    </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppGroupMember" >
+    update app_group_member
+    <set >
+      <if test="groupId != null" >
+        GROUP_ID = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+         TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="tempName != null" >
+        TEMP_NAME = #{tempName,jdbcType=VARCHAR},
+      </if>
+      <if test="tempMobilePhone != null" >
+        TEMP_MOBILE_PHONE = #{tempMobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        OPERATOR = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+    
+  <update id="updateByPrimaryKey" parameterType="com.xianglin.appserv.common.dal.dataobject.AppGroupMember" >
+    update app_group_member
+    set GROUP_ID = #{groupId,jdbcType=BIGINT},
+      PARTY_ID = #{partyId,jdbcType=BIGINT},
+      TYPE = #{type,jdbcType=VARCHAR},
+      TEMP_NAME = #{tempName,jdbcType=VARCHAR},
+      TEMP_MOBILE_PHONE = #{tempMobilePhone,jdbcType=VARCHAR},
+      OPERATOR = #{operator,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      COMMENTS = #{comments,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+    <select id="query" resultMap="BaseResultMap" parameterType="map">
+        <if test="startPage != null and pageSize !=null">
+          <bind name="start" value="(startPage-1)*pageSize"/>
+        </if>
+        select
+        a.ID, a.GROUP_ID, a.PARTY_ID,a.TYPE, a.TEMP_NAME, a.TEMP_MOBILE_PHONE,a.OPERATOR, a.STATUS, a.IS_DELETED, a.CREATE_TIME,a.UPDATE_TIME, a.COMMENTS
+        from app_group_member a LEFT JOIN app_group b on a.GROUP_ID = b.id
+        <where>a.IS_DELETED = 'N'
+            <if test="groupId != null">
+                and a.GROUP_ID = #{groupId}
+            </if>
+            <if test="partyId != null">
+                and a.PARTY_ID = #{partyId}
+            </if>
+            <if test="expectDistrictCode != null">
+                and b.DISTRICT_CODE != #{expectDistrictCode}
+            </if>
+            <if test="type != null">
+                and a.TYPE = #{type}
+            </if>
+            <if test="tempName != null">
+                and a.TEMP_NAME = #{tempName}
+            </if>
+            <if test="likeName != null">
+                and a.TEMP_NAME LIKE CONCAT('%', #{likeName}, '%')
+            </if>
+            <if test="tempMobilePhone != null">
+                and a.TEMP_MOBILE_PHONE = #{tempMobilePhone}
+            </if>
+            <if test="operator != null" >
+                and a.OPERATOR = #{operator,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and a.STATUS = #{status}
+            </if>
+            <if test="groupType != null">
+                and b.GROUP_TYPE = #{groupType}
+            </if>
+        </where>
+        order by a.CREATE_TIME desc
+        <if test="startPage != null and pageSize !=null">
+        limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <!--查询带删除的数据-->
+    <select id="queryV2" resultMap="BaseResultMap" parameterType="map">
+        <if test="startPage != null and pageSize !=null">
+            <bind name="start" value="(startPage-1)*pageSize"/>
+        </if>
+        select
+        a.ID, a.GROUP_ID, a.PARTY_ID,a.TYPE, a.TEMP_NAME, a.TEMP_MOBILE_PHONE,a.OPERATOR, a.STATUS, a.IS_DELETED, a.CREATE_TIME,a.UPDATE_TIME, a.COMMENTS
+        from app_group_member a LEFT JOIN app_group b on a.GROUP_ID = b.id
+        <where>
+            a.GROUP_ID = #{groupId}
+            <if test="partyId != null">
+                and a.PARTY_ID = #{partyId}
+            </if>
+            <if test="type != null">
+                and a.TYPE = #{type}
+            </if>
+            <if test="tempName != null">
+                and a.TEMP_NAME = #{tempName}
+            </if>
+            <if test="likeName != null">
+                and a.TEMP_NAME LIKE CONCAT('%', #{likeName}, '%')
+            </if>
+            <if test="tempMobilePhone != null">
+                and a.TEMP_MOBILE_PHONE = #{tempMobilePhone}
+            </if>
+            <if test="operator != null" >
+                and a.OPERATOR = #{operator,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and a.STATUS = #{status}
+            </if>
+            <if test="groupType != null">
+                and b.GROUP_TYPE = #{groupType}
+            </if>
+        </where>
+        order by a.CREATE_TIME desc
+        <if test="startPage != null and pageSize !=null">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <select id="queryCount" resultType="Integer" parameterType="map" >
+        select
+        count(*)
+        from app_group_member
+        <where>IS_DELETED = 'N'
+            <if test="groupId != null">
+                and GROUP_ID = #{groupId}
+            </if>
+            <if test="partyId != null">
+                and PARTY_ID = #{partyId}
+            </if>
+            <if test="type != null">
+                and TYPE = #{type}
+            </if>
+            <if test="tempName != null">
+                and TEMP_NAME = #{tempName}
+            </if>
+            <if test="tempMobilePhone != null">
+                and TEMP_MOBILE_PHONE = #{tempMobilePhone}
+            </if>
+            <if test="operator != null" >
+                OPERATOR = #{operator,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and STATUS = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryGroupMemberCountByParam" resultType="Integer" parameterType="map" >
+        select
+        count(*) from app_group_member a LEFT JOIN app_group b on a.GROUP_ID = b.id
+        <where>a.IS_DELETED = 'N'
+            <if test="groupId != null">
+                and a.GROUP_ID = #{groupId}
+            </if>
+            <if test="partyId != null">
+                and a.PARTY_ID = #{partyId}
+            </if>
+            <if test="type != null">
+                and a.TYPE = #{type}
+            </if>
+            <if test="tempName != null">
+                and a.TEMP_NAME = #{tempName}
+            </if>
+            <if test="likeName != null">
+                and a.TEMP_NAME LIKE CONCAT('%', #{likeName}, '%')
+            </if>
+            <if test="tempMobilePhone != null">
+                and a.TEMP_MOBILE_PHONE = #{tempMobilePhone}
+            </if>
+            <if test="operator != null" >
+                and a.OPERATOR = #{operator,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and a.STATUS = #{status}
+            </if>
+            <if test="groupType != null">
+                and b.GROUP_TYPE = #{groupType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryGroupMember" resultMap="BaseResultMap" parameterType="com.xianglin.appserv.common.dal.dataobject.AppGroupMember">
+        select
+        <include refid="Base_Column_List"/>
+        from app_group_member
+        <where>IS_DELETED = 'N'
+            <if test="groupId != null">
+                and GROUP_ID = #{groupId}
+            </if>
+            <if test="groupIds != null">
+                and GROUP_ID IN #{groupIds}
+            </if>
+            <if test="ids != null">
+                and ID IN ${ids}
+            </if>
+            <if test="partyId != null">
+                and PARTY_ID = #{partyId}
+            </if>
+            <if test="type != null">
+                and TYPE = #{type}
+            </if>
+            <if test="tempName != null">
+                and TEMP_NAME = #{tempName}
+            </if>
+            <if test="tempMobilePhone != null">
+                and TEMP_MOBILE_PHONE = #{tempMobilePhone}
+            </if>
+            <if test="operator != null" >
+                OPERATOR = #{operator,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and STATUS = #{status}
+            </if>
+        </where>
+
+        <if test="orderBy != null" >
+            order by ${orderBy}
+        </if>
+        <if test="orderBy == null">
+            order by CREATE_TIME DESC
+        </if>
+        
+        <!--<choose>
+             <when test="orderBy != null">
+                 order by CREATE_TIME ASC 
+             </when>
+            <otherwise>
+                order by CREATE_TIME DESC
+            </otherwise>
+        </choose>-->
+    </select>
+
+    <update id="deleteMember" parameterType="java.lang.Long">
+        update app_group_member set IS_DELETED = 'Y' where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    
+    <select id="queryFollowAndQueryGroup" parameterType="map"  resultType="com.xianglin.appserv.common.dal.dataobject.AppGroupMember">
+        SELECT MAX(IF (partyId = 0, NULL, partyId)) partyId,MAX(tempMobilePhone) tempMobilePhone,MAX(tempName) tempName,
+        count(distinct d.tempMobilePhone) as comments FROM(
+        SELECT IFNULL(PARTY_ID, 0) partyId, TEMP_MOBILE_PHONE tempMobilePhone,TEMP_NAME tempName
+        FROM( SELECT DISTINCT PARTY_ID, TEMP_MOBILE_PHONE, TEMP_NAME FROM app_group_member a LEFT JOIN app_group b 
+        on a.GROUP_ID =b.id WHERE a.GROUP_ID IN (  SELECT DISTINCT GROUP_ID FROM  app_group_member
+        WHERE  PARTY_ID = #{partyId} AND IS_DELETED = 'N') AND a.IS_DELETED = 'N' and b.GROUP_TYPE='O' UNION 
+        select a.PARTY_ID,a.LOGIN_NAME,IFNULL(b.TRUE_NAME,IFNULL(b.NIKER_NAME,concat("xl",b.PARTY_ID)))TRUE_NAME 
+        from (select PARTY_ID,LOGIN_NAME from app_user where PARTY_ID in 
+        (select TO_PARTY_ID from app_user_relation where FROM_PARTY_ID=#{partyId} and IS_DELETED='N')
+        and IS_DELETED ='N')a LEFT JOIN app_user b on a.LOGIN_NAME=b.LOGIN_NAME where b.IS_DELETED='N')c ORDER BY
+        c.TEMP_NAME )d where #{partyId} !=d.partyId
+        <if test="groupId != null">
+            and not EXISTS (select 1 from app_group_member where GROUP_Id = #{groupId} and PARTY_ID =d.partyId And IS_DELETED = 'N')
+        </if>
+        GROUP BY d.tempMobilePhone ORDER BY d.tempMobilePhone
+    </select>
+
+    <update id="updateMemberPartyId">
+        update app_group_member set PARTY_ID =  #{partyId,jdbcType=BIGINT} where TEMP_MOBILE_PHONE = #{mobilePhoen,jdbcType=VARCHAR} and PARTY_ID is NULL
+    </update>
+    
+</mapper>

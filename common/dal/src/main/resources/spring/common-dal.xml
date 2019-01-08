@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+				http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <description>数据访问层配置</description>
+
+    <!-- 数据源配置 -->
+    <bean id="defaultDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <!-- 数据库基本信息配置 -->
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="initialSize" value="${druid.initialSize}"/>
+        <property name="maxActive" value="${druid.maxActive}"/>
+        <property name="minIdle" value="${druid.minIdle}"/>
+        <property name="removeAbandoned" value="true"/>
+        <property name="logAbandoned" value="true"/>
+        <property name="proxyFilters">
+            <list>
+                <bean class="com.alibaba.druid.filter.stat.MergeStatFilter">
+                    <property name="slowSqlMillis"
+                              value="${druid.slowSqlMillis}"/>
+                    <property name="logSlowSql" value="true"/>
+                </bean>
+                <bean class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+                    <property name="statementExecutableSqlLogEnable"
+                              value="${druid.statementExecutableSqlLogEnable}"/>
+                </bean>
+                <bean class="com.alibaba.druid.wall.WallFilter">
+                    <property name="logViolation" value="true"/>
+                    <property name="throwException" value="false"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 数据源配置 -->
+    <bean id="slaveDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <!-- 数据库基本信息配置 -->
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url_slave}"/>
+        <property name="username" value="${jdbc.username_slave}"/>
+        <property name="password" value="${jdbc.password_slave}"/>
+        <property name="initialSize" value="${druid.initialSize}"/>
+        <property name="maxActive" value="${druid.maxActive}"/>
+        <property name="minIdle" value="${druid.minIdle}"/>
+        <property name="removeAbandoned" value="true"/>
+        <property name="logAbandoned" value="true"/>
+        <property name="proxyFilters">
+            <list>
+                <bean class="com.alibaba.druid.filter.stat.MergeStatFilter">
+                    <property name="slowSqlMillis"
+                              value="${druid.slowSqlMillis}"/>
+                    <property name="logSlowSql" value="true"/>
+                </bean>
+                <bean class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+                    <property name="statementExecutableSqlLogEnable"
+                              value="${druid.statementExecutableSqlLogEnable}"/>
+                </bean>
+                <bean class="com.alibaba.druid.wall.WallFilter">
+                    <property name="logViolation" value="true"/>
+                    <property name="throwException" value="false"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="dataSource" class="com.xianglin.appserv.common.dal.datasource.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry key="master" value-ref="defaultDataSource"></entry>
+                <entry key="slave" value-ref="slaveDataSource"></entry>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="defaultDataSource"></property>
+    </bean>
+
+
+    <!--&lt;!&ndash; MyBatis配置 &ndash;&gt;-->
+    <!--<bean id="sqlSessionFactory"-->
+          <!--class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">-->
+        <!--<property name="dataSource" ref="dataSource"/>-->
+        <!--&lt;!&ndash; 自动扫描entity目录, 省掉Configuration.xml里的手工配置 &ndash;&gt;-->
+        <!--<property name="typeAliasesPackage"-->
+                  <!--value="com.xianglin.appserv.common.dal.dataobject"/>-->
+        <!--&lt;!&ndash; 显式指定Mapper文件位置 &ndash;&gt;-->
+        <!--<property name="mapperLocations" value="classpath:/mybatis/**/*.xml"/>-->
+        <!--&lt;!&ndash;<property name="typeHandlersPackage" value="com.xianglin.appserv.common.dal.typehandler" />&ndash;&gt;-->
+        <!--<property name="typeHandlers">-->
+            <!--<array value-type="org.apache.ibatis.type.TypeHandler">-->
+                <!--<bean class="org.apache.ibatis.type.InstantTypeHandler"/>-->
+                <!--<bean class="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>-->
+                <!--<bean class="org.apache.ibatis.type.LocalDateTypeHandler"/>-->
+                <!--<bean class="org.apache.ibatis.type.LocalTimeTypeHandler"/>-->
+                <!--<bean class="org.apache.ibatis.type.OffsetDateTimeTypeHandler"/>-->
+                <!--<bean class="org.apache.ibatis.type.OffsetTimeTypeHandler"/>-->
+                <!--<bean class="org.apache.ibatis.type.ZonedDateTimeTypeHandler"/>-->
+            <!--</array>-->
+        <!--</property>-->
+        <!--&lt;!&ndash;emoji表情字符转义插件&ndash;&gt;-->
+        <!--&lt;!&ndash;<property name="plugins">&ndash;&gt;-->
+            <!--&lt;!&ndash;<array value-type="org.apache.ibatis.plugin.Interceptor">&ndash;&gt;-->
+                <!--&lt;!&ndash;<bean class="com.xianglin.appserv.common.dal.plugin.EmojiEscapeInterceptor">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<property name="properties">&ndash;&gt;-->
+                        <!--&lt;!&ndash;&lt;!&ndash;key任意但是不要重复，只取value&ndash;&gt;&ndash;&gt;-->
+                        <!--&lt;!&ndash;<props>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<prop key="user">com.xianglin.appserv.common.dal.daointerface.UserDAO</prop>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</props>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</property>&ndash;&gt;-->
+                <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+            <!--&lt;!&ndash;</array>&ndash;&gt;-->
+        <!--&lt;!&ndash;</property>&ndash;&gt;-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 扫描basePackage下所有接口 &ndash;&gt;-->
+    <!--<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">-->
+        <!--<property name="basePackage"-->
+                  <!--value="com.xianglin.appserv.common.dal.daointerface"/>-->
+    <!--</bean>-->
+
+
+    <bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 配置实体扫描路径，多个package可以用分号; 逗号, 分隔， 支持通配符*-->
+        <!-- com.a.b.entity;com.a.c.entity;com.d.*.entity-->
+        <property name="typeAliasesPackage" value="com.xianglin.appserv.common.dal.typehandler"/>
+        <property name="configuration" ref="mybatisConfig"/>
+        <property name="mapperLocations" value="classpath:/mybatis/**/*.xml"/>
+        <!-- MP 全局配置注入 -->
+        <property name="globalConfig" ref="globalConfig"/>
+        <property name="plugins">
+            <array>
+                <!-- 分页插件配置 -->
+                <bean id="paginationInterceptor"
+                      class="com.baomidou.mybatisplus.plugins.PaginationInterceptor"/>
+                <!-- 乐观锁插件 -->
+                <bean id="optimisticLockerInterceptor"
+                      class="com.baomidou.mybatisplus.plugins.OptimisticLockerInterceptor">
+                </bean>
+                <!-- 性能拦截器，兼打印sql，不建议生产环境配置-->
+                <bean id="performanceInterceptor"
+                      class="com.baomidou.mybatisplus.plugins.PerformanceInterceptor"/>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="mybatisConfig" class="com.baomidou.mybatisplus.MybatisConfiguration">
+        <property name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 部分数据库不识别默认的NULL类型（比如oracle，需要配置该属性 -->
+        <property name="jdbcTypeForNull">
+            <util:constant static-field="org.apache.ibatis.type.JdbcType.NULL"/>
+        </property>
+    </bean>
+
+    <!-- 定义 MP 全局策略 -->
+    <bean id="globalConfig" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+        <!-- 逻辑删除 定义下面3个参数-->
+        <property name="sqlInjector" ref="logicSqlInjector"/>
+        <property name="logicDeleteValue" value="Y"/>
+        <property name="logicNotDeleteValue" value="N"/>
+        <!-- 全局ID类型： 0, "数据库ID自增"， 1, "用户输入ID", 2, "全局唯一ID", 3, "全局唯一ID"-->
+        <property name="idType" value="0"/>
+        <!-- 2.1-gamma+ 数据库自动识别，无需配置数据库类型
+        <property name="dbType" value="mysql" />
+        -->
+        <!-- 2.3+ 全局表前缀 mp_
+        <property name="tablePrefix" value="mp_" />
+        -->
+        <!--主键Sequence-->
+        <property name="keyGenerator" ref="keyGenerator"/>
+        <!-- 公共字段填充处理器 -->
+        <!--<property name="metaObjectHandler" ref="myMetaObjectHandler"/>-->
+        <!--数据库关键字转义符，'desc', "desc" 2.1-gamma+不需要制定-->
+        <!--<property name="identifierQuote" value="'" />-->
+    </bean>
+
+    <!-- 配置oracle主键Sequence， 其他类型数据库，请配置相应的类型-->
+    <bean id="keyGenerator" class="com.baomidou.mybatisplus.incrementer.OracleKeyGenerator"/>
+
+    <!-- 自定义处理器 -->
+    <!--<bean id="myMetaObjectHandler" class="com.baomidou.test.MyMetaObjectHandler" />-->
+    <!-- 逻辑删除Sql注入器-->
+    <bean id="logicSqlInjector" class="com.baomidou.mybatisplus.mapper.LogicSqlInjector"/>
+
+    <!-- 配置mybatis 扫描mapper接口的路径, 相当于注解@MapperScan，@MapperScan("com.baomidou.mybatisplus.test.h2.entity.mapper")-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.xianglin.appserv.common.dal.daointerface"/>
+    </bean>
+
+
+
+
+
+    <!-- 事务管理器配置 -->
+    <bean id="transactionManager"
+          class="com.xianglin.appserv.common.dal.datasource.DynamicDataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 使用annotation定义事务 -->
+    <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="query*" read-only="true" /> <!-- 在扩展的事务管理器中就可以获取到readOnly属性了 -->
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="select*" read-only="true" />
+            <tx:method name="*" propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:pointcut expression="execution(* com.xianglin.appserv.common.dal..*(..))"
+                      id="ops" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="ops" />
+    </aop:config>
+
+
+</beans>

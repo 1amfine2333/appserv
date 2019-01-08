@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.NodeGrowUpInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.NodeGrowUpInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="node_code" property="nodeCode" jdbcType="VARCHAR" />
+    <result column="node_name" property="nodeName" jdbcType="VARCHAR" />
+    <result column="node_manager_party_id" property="nodeManagerPartyId" jdbcType="VARCHAR" />
+    <result column="node_manager_name" property="nodeManagerName" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="order_all" property="orderAll" jdbcType="VARCHAR" />
+    <result column="order_province" property="orderProvince" jdbcType="VARCHAR" />
+    <result column="open_date" property="openDate" jdbcType="TIMESTAMP" />
+    <result column="bank_date" property="bankDate" jdbcType="TIMESTAMP" />
+    <result column="bank_state" property="bankState" jdbcType="VARCHAR" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
+    <result column="commerce_date" property="commerceDate" jdbcType="TIMESTAMP" />
+    <result column="commerce_state" property="commerceState" jdbcType="VARCHAR" />
+    <result column="transaction_num" property="transactionNum" jdbcType="VARCHAR" />
+    <result column="first_product" property="firstProduct" jdbcType="VARCHAR" />
+    <result column="first_order_price" property="firstOrderPrice" jdbcType="DECIMAL" />
+    <result column="import_date" property="importDate" jdbcType="TIMESTAMP" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, node_code, node_name, node_manager_party_id, node_manager_name, province, create_date, 
+    order_all, order_province, open_date, bank_date, bank_state, balance, commerce_date, 
+    commerce_state, transaction_num, first_product, first_order_price, import_date, other
+  </sql>
+  
+   <!-- 根据PartyId查所有 -->
+  <select id="selectByAllPartyId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from node_growup
+    where  node_manager_party_id = #{nodeManagerPartyId,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 查余额在某值之上 -->
+  <select id="selectCountByBalance" parameterType="java.math.BigDecimal" resultType="java.lang.Integer">
+    select count(*) from node_growup
+  
+    where balance <![CDATA[<]]> #{balance,jdbcType=DECIMAL}
+  </select>
+  
+  <!-- 查总人数 -->
+  <select id="selectCount"  resultType="java.lang.Integer">
+    select count(*) from node_growup
+  </select>
+  <!-- 省内小站个数 -->
+  <select id="selectCountByProvince" parameterType="java.lang.String"  resultType="java.lang.Integer">
+    select count(*) from node_growup
+    where province = #{province,jdbcType=VARCHAR}
+  </select>
+  
+  
+  
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.xianglin.appserv.common.dal.dataobject.NodeGrowUpInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from node_growup
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from node_growup
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from node_growup
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xianglin.appserv.common.dal.dataobject.NodeGrowUpInfoExample" >
+    delete from node_growup
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.NodeGrowUpInfo" >
+    insert into node_growup (id, node_code, node_name, 
+      node_manager_party_id, node_manager_name, province, 
+      create_date, order_all, order_province, 
+      open_date, bank_date, bank_state, 
+      balance, commerce_date, commerce_state, 
+      transaction_num, first_product, first_order_price, 
+      import_date, other)
+    values (#{id,jdbcType=VARCHAR}, #{nodeCode,jdbcType=VARCHAR}, #{nodeName,jdbcType=VARCHAR}, 
+      #{nodeManagerPartyId,jdbcType=VARCHAR}, #{nodeManagerName,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{orderAll,jdbcType=VARCHAR}, #{orderProvince,jdbcType=VARCHAR},
+      #{openDate,jdbcType=TIMESTAMP}, #{bankDate,jdbcType=TIMESTAMP}, #{bankState,jdbcType=VARCHAR},
+      #{balance,jdbcType=DECIMAL}, #{commerceDate,jdbcType=TIMESTAMP}, #{commerceState,jdbcType=VARCHAR},
+      #{transactionNum,jdbcType=VARCHAR}, #{firstProduct,jdbcType=VARCHAR}, #{firstOrderPrice,jdbcType=DECIMAL}, 
+      #{importDate,jdbcType=TIMESTAMP}, #{other,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xianglin.appserv.common.dal.dataobject.NodeGrowUpInfo" >
+    insert into node_growup
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="nodeCode != null" >
+        node_code,
+      </if>
+      <if test="nodeName != null" >
+        node_name,
+      </if>
+      <if test="nodeManagerPartyId != null" >
+        node_manager_party_id,
+      </if>
+      <if test="nodeManagerName != null" >
+        node_manager_name,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="orderAll != null" >
+        order_all,
+      </if>
+      <if test="orderProvince != null" >
+        order_province,
+      </if>
+      <if test="openDate != null" >
+        open_date,
+      </if>
+      <if test="bankDate != null" >
+        bank_date,
+      </if>
+      <if test="bankState != null" >
+        bank_state,
+      </if>
+      <if test="balance != null" >
+        balance,
+      </if>
+      <if test="commerceDate != null" >
+        commerce_date,
+      </if>
+      <if test="commerceState != null" >
+        commerce_state,
+      </if>
+      <if test="transactionNum != null" >
+        transaction_num,
+      </if>
+      <if test="firstProduct != null" >
+        first_product,
+      </if>
+      <if test="firstOrderPrice != null" >
+        first_order_price,
+      </if>
+      <if test="importDate != null" >
+        import_date,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeCode != null" >
+        #{nodeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeName != null" >
+        #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeManagerPartyId != null" >
+        #{nodeManagerPartyId,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeManagerName != null" >
+        #{nodeManagerName,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderAll != null" >
+        #{orderAll,jdbcType=VARCHAR},
+      </if>
+      <if test="orderProvince != null" >
+        #{orderProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="openDate != null" >
+        #{openDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bankDate != null" >
+        #{bankDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bankState != null" >
+        #{bankState,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="commerceDate != null" >
+        #{commerceDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commerceState != null" >
+        #{commerceState,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionNum != null" >
+        #{transactionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="firstProduct != null" >
+        #{firstProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="firstOrderPrice != null" >
+        #{firstOrderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="importDate != null" >
+        #{importDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xianglin.appserv.common.dal.dataobject.NodeGrowUpInfoExample" resultType="java.lang.Integer" >
+    select count(*) from node_growup
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update node_growup
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeCode != null" >
+        node_code = #{record.nodeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeName != null" >
+        node_name = #{record.nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeManagerPartyId != null" >
+        node_manager_party_id = #{record.nodeManagerPartyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeManagerName != null" >
+        node_manager_name = #{record.nodeManagerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null" >
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderAll != null" >
+        order_all = #{record.orderAll,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderProvince != null" >
+        order_province = #{record.orderProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.openDate != null" >
+        open_date = #{record.openDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bankDate != null" >
+        bank_date = #{record.bankDate,jdbcType=DATE},
+      </if>
+      <if test="record.bankState != null" >
+        bank_state = #{record.bankState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.balance != null" >
+        balance = #{record.balance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.commerceDate != null" >
+        commerce_date = #{record.commerceDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.commerceState != null" >
+        commerce_state = #{record.commerceState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transactionNum != null" >
+        transaction_num = #{record.transactionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstProduct != null" >
+        first_product = #{record.firstProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstOrderPrice != null" >
+        first_order_price = #{record.firstOrderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.importDate != null" >
+        import_date = #{record.importDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.other != null" >
+        other = #{record.other,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update node_growup
+    set id = #{record.id,jdbcType=VARCHAR},
+      node_code = #{record.nodeCode,jdbcType=VARCHAR},
+      node_name = #{record.nodeName,jdbcType=VARCHAR},
+      node_manager_party_id = #{record.nodeManagerPartyId,jdbcType=VARCHAR},
+      node_manager_name = #{record.nodeManagerName,jdbcType=VARCHAR},
+      province = #{record.province,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      order_all = #{record.orderAll,jdbcType=VARCHAR},
+      order_province = #{record.orderProvince,jdbcType=VARCHAR},
+      open_date = #{record.openDate,jdbcType=TIMESTAMP},
+      bank_date = #{record.bankDate,jdbcType=TIMESTAMP},
+      bank_state = #{record.bankState,jdbcType=VARCHAR},
+      balance = #{record.balance,jdbcType=DECIMAL},
+      commerce_date = #{record.commerceDate,jdbcType=TIMESTAMP},
+      commerce_state = #{record.commerceState,jdbcType=VARCHAR},
+      transaction_num = #{record.transactionNum,jdbcType=VARCHAR},
+      first_product = #{record.firstProduct,jdbcType=VARCHAR},
+      first_order_price = #{record.firstOrderPrice,jdbcType=DECIMAL},
+      import_date = #{record.importDate,jdbcType=TIMESTAMP},
+      other = #{record.other,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.NodeGrowUpInfo" >
+    update node_growup
+    <set >
+      <if test="nodeCode != null" >
+        node_code = #{nodeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeName != null" >
+        node_name = #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeManagerPartyId != null" >
+        node_manager_party_id = #{nodeManagerPartyId,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeManagerName != null" >
+        node_manager_name = #{nodeManagerName,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderAll != null" >
+        order_all = #{orderAll,jdbcType=VARCHAR},
+      </if>
+      <if test="orderProvince != null" >
+        order_province = #{orderProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="openDate != null" >
+        open_date = #{openDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bankDate != null" >
+        bank_date = #{bankDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bankState != null" >
+        bank_state = #{bankState,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="commerceDate != null" >
+        commerce_date = #{commerceDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commerceState != null" >
+        commerce_state = #{commerceState,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionNum != null" >
+        transaction_num = #{transactionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="firstProduct != null" >
+        first_product = #{firstProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="firstOrderPrice != null" >
+        first_order_price = #{firstOrderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="importDate != null" >
+        import_date = #{importDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xianglin.appserv.common.dal.dataobject.NodeGrowUpInfo" >
+    update node_growup
+    set node_code = #{nodeCode,jdbcType=VARCHAR},
+      node_name = #{nodeName,jdbcType=VARCHAR},
+      node_manager_party_id = #{nodeManagerPartyId,jdbcType=VARCHAR},
+      node_manager_name = #{nodeManagerName,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      order_all = #{orderAll,jdbcType=VARCHAR},
+      order_province = #{orderProvince,jdbcType=VARCHAR},
+      open_date = #{openDate,jdbcType=TIMESTAMP},
+      bank_date = #{bankDate,jdbcType=TIMESTAMP},
+      bank_state = #{bankState,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=DECIMAL},
+      commerce_date = #{commerceDate,jdbcType=TIMESTAMP},
+      commerce_state = #{commerceState,jdbcType=VARCHAR},
+      transaction_num = #{transactionNum,jdbcType=VARCHAR},
+      first_product = #{firstProduct,jdbcType=VARCHAR},
+      first_order_price = #{firstOrderPrice,jdbcType=DECIMAL},
+      import_date = #{importDate,jdbcType=TIMESTAMP},
+      other = #{other,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

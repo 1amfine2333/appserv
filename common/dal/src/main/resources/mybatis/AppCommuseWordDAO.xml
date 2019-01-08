@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppCommuseWordDAO" >
+  <resultMap id="TopUserUseWord" type="com.xianglin.appserv.common.dal.dataobject.AppCommuseWord" >
+    <id column="SEQ_ID" property="seqId" jdbcType="BIGINT" />
+    <result column="PARTYID" property="partyid" jdbcType="VARCHAR" />
+    <result column="MENU_ID" property="menuId" jdbcType="VARCHAR" />
+    <result column="KEYWORD" property="keyword" jdbcType="VARCHAR" />
+    <result column="USE_COUNT" property="useCount" jdbcType="BIGINT" />
+    <result column="DATA_STATUS" property="dataStatus" jdbcType="CHAR" />
+  </resultMap>
+  <resultMap id="TopCommWord" type="com.xianglin.appserv.common.dal.dataobject.AppCommuseWord" >
+    <result column="SUM_COUNT" property="useCount" jdbcType="BIGINT" />
+    <result column="KEYWORD" property="keyword" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SEQ_ID, PARTYID,MENU_ID, KEYWORD, USE_COUNT, DATA_STATUS, CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="queryTopUserCommWord" resultMap="TopUserUseWord" parameterType="com.xianglin.appserv.common.dal.dataobject.AppCommuseMenu" >
+    SELECT
+		a.SEQ_ID,
+		a.PARTYID,
+		a.MENU_ID,
+		a.KEYWORD,
+		a.USE_COUNT,
+		a.DATA_STATUS
+	FROM
+		app_commuse_word a
+	WHERE
+		a.PARTYID = #{partyid,jdbcType=VARCHAR}
+	AND a.DATA_STATUS = 'Y'
+	<if test="menuId !=null">
+		AND a.MENU_ID = #{menuId,jdbcType=VARCHAR}
+	</if>
+	ORDER BY
+		a.USE_COUNT DESC
+	LIMIT 100
+  </select>
+  
+  
+  <select id="queryTopCommWord" resultMap="TopCommWord" parameterType="com.xianglin.appserv.common.dal.dataobject.AppCommuseMenu" >
+    SELECT
+		SUM(a.USE_COUNT) AS SUM_COUNT, a.KEYWORD
+	FROM
+		app_commuse_word a
+	WHERE
+	a.DATA_STATUS = 'Y'
+	<if test="menuId !=null">
+		AND a.MENU_ID = #{menuId,jdbcType=VARCHAR}
+	</if>
+	GROUP BY
+		a.KEYWORD
+	ORDER BY
+		SUM_COUNT DESC
+	LIMIT 100
+  </select>
+</mapper>

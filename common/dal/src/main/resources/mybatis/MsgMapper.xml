@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.MsgDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.Msg" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="MSG_TITLE" property="msgTitle" jdbcType="VARCHAR" />
+    <result column="MSG_TYPE" property="msgType" jdbcType="VARCHAR" />
+    <result column="MSG_TAG" property="msgTag" jdbcType="VARCHAR" />
+    <result column="TITLE_IMG" property="titleImg" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR"/>
+    <result column="MSG_SOURCE" property="msgSource" jdbcType="VARCHAR"/>
+    <result column="MSG_SOURCE_URL" property="msgSourceUrl" jdbcType="VARCHAR"/>
+    <result column="MSG_SOURCE_TOKEN" property="msgSourceToken" jdbcType="VARCHAR"/>
+    <result column="LOGIN_CHECK" property="loginCheck" jdbcType="VARCHAR"/>
+    <result column="EXPIRY_TIME" property="expiryTime" jdbcType="INTEGER"/>
+    <result column="PASS_CHECK" property="passCheck" jdbcType="VARCHAR"/>
+    <result column="MESSAGE" property="message" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="SHARE_NUM" property="shareNum" jdbcType="INTEGER" />
+    <result column="READ_NUM" property="readNum" jdbcType="INTEGER" />
+    <result column="PRAISES" property="praises" jdbcType="INTEGER" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="UPDATER" property="updater" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+    <result column="TITLE_IMG_LIST" property="titleImgList" jdbcType="INTEGER" />
+    <result column="TREAD_NUM" property="treadNum" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, MSG_TITLE, MSG_TYPE,MSG_TAG,TITLE_IMG,URL,MSG_SOURCE,MSG_SOURCE_URL,LOGIN_CHECK,EXPIRY_TIME,PASS_CHECK,MESSAGE,REMARK,SHARE_NUM, READ_NUM,PRAISES,STATUS, IS_DELETED, CREATOR,
+    UPDATER, CREATE_TIME, UPDATE_TIME,COMMENTS,TITLE_IMG_LIST,TREAD_NUM
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_msg
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.Msg" useGeneratedKeys="true" keyProperty="id">
+    insert into app_msg (MSG_TITLE, 
+      MSG_TYPE,MSG_TAG,TITLE_IMG,URL,MSG_SOURCE,MSG_SOURCE_URL,LOGIN_CHECK,EXPIRY_TIME,PASS_CHECK, MESSAGE, READ_NUM,PRAISES,
+      STATUS, IS_DELETED, CREATOR, 
+      UPDATER, CREATE_TIME, UPDATE_TIME,COMMENTS,TITLE_IMG_LIST,TREAD_NUM
+      )
+    values (#{msgTitle,jdbcType=VARCHAR}, 
+      #{msgType,jdbcType=VARCHAR},#{msgTag,jdbcType=VARCHAR}, #{titleImg,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},#{msgSource,jdbcType=VARCHAR},#{msgSourceUrl,jdbcType=VARCHAR},
+      #{loginCheck,jdbcType=VARCHAR},#{expiryTime,jdbcType=INTEGER},#{passCheck,jdbcType=VARCHAR},#{message,jdbcType=VARCHAR}, 0,0,
+      #{status,jdbcType=VARCHAR},#{isDeleted,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{updater,jdbcType=VARCHAR}, NOW(), NOW(),#{comments,jdbcType=VARCHAR},#{titleImgList,jdbcType=VARCHAR},0
+      )
+  </insert>
+  
+  <insert id="insertExceptUrl" parameterType="com.xianglin.appserv.common.dal.dataobject.Msg" useGeneratedKeys="true" keyProperty="id">
+    insert into app_msg (MSG_TITLE, 
+      MSG_TYPE,MSG_TAG,TITLE_IMG,URL,MSG_SOURCE,MSG_SOURCE_URL,MSG_SOURCE_TOKEN,LOGIN_CHECK,EXPIRY_TIME,PASS_CHECK, MESSAGE,REMARK,SHARE_NUM, READ_NUM,PRAISES,
+      STATUS, IS_DELETED, CREATOR, 
+      UPDATER, CREATE_TIME, UPDATE_TIME,COMMENTS,TITLE_IMG_LIST,TREAD_NUM
+      )
+    select #{msgTitle,jdbcType=VARCHAR}, 
+      #{msgType,jdbcType=VARCHAR},#{msgTag,jdbcType=VARCHAR}, #{titleImg,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},#{msgSource,jdbcType=VARCHAR},#{msgSourceUrl,jdbcType=VARCHAR},#{msgSourceToken,jdbcType=VARCHAR},
+      #{loginCheck,jdbcType=VARCHAR},#{expiryTime,jdbcType=INTEGER},#{passCheck,jdbcType=VARCHAR},#{message,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},0,0,0,
+      #{status,jdbcType=VARCHAR},#{isDeleted,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{updater,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, NOW(),#{comments,jdbcType=VARCHAR},#{titleImgList,jdbcType=VARCHAR},0 from dual
+    where not exists (select 1 from app_msg where MSG_SOURCE_TOKEN = #{msgSourceToken,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.Msg" >
+    update app_msg
+    <set >
+      <if test="msgTitle != null" >
+        MSG_TITLE = #{msgTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="msgType != null" >
+        MSG_TYPE = #{msgType,jdbcType=VARCHAR},
+      </if>
+      <if test="msgTag != null" >
+        MSG_TAG = #{msgTag,jdbcType=VARCHAR},
+      </if>
+      <if test="titleImg != null" >
+        TITLE_IMG = #{titleImg,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="msgSource != null" >
+        MSG_SOURCE = #{msgSource,jdbcType=VARCHAR},
+      </if>
+      <if test="msgSourceUrl != null" >
+        MSG_SOURCE_URL = #{msgSourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="loginCheck != null" >
+        LOGIN_CHECK = #{loginCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="expiryTime != null" >
+        EXPIRY_TIME = #{expiryTime,jdbcType=INTEGER},
+      </if>
+      <if test="passCheck != null" >
+        PASS_CHECK = #{passCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        MESSAGE = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="shareNum != null" >
+        SHARE_NUM = #{shareNum,jdbcType=INTEGER},
+      </if>
+      <if test="readNum != null" >
+        READ_NUM = #{readNum,jdbcType=INTEGER},
+      </if>
+      <if test="praises != null" >
+        PRAISES = #{praises,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        CREATOR = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="updater != null" >
+        UPDATER = #{updater,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW(),
+       <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="query" resultMap="BaseResultMap" parameterType="java.util.Map">
+   <bind name="start" value="(startPage-1)*pageSize"/>
+  	select ID, MSG_TITLE, MSG_TYPE,MSG_TAG,TITLE_IMG,URL,MSG_SOURCE,MSG_SOURCE_URL,LOGIN_CHECK,EXPIRY_TIME,PASS_CHECK,MESSAGE,READ_NUM,PRAISES,STATUS, IS_DELETED, CREATOR, 
+    UPDATER, CREATE_TIME, UPDATE_TIME,COMMENTS,REMARK,SHARE_NUM,TITLE_IMG_LIST,TREAD_NUM
+    from app_msg
+    <where>
+      <if test="msgTitle != null" >
+       AND MSG_TITLE = #{msgTitle,jdbcType=VARCHAR} 
+      </if>
+      <if test="msgType != null" >
+       AND MSG_TYPE = #{msgType,jdbcType=VARCHAR} 
+      </if>
+      <if test="msgTag != null" >
+       AND MSG_TAG = #{msgTag,jdbcType=VARCHAR} 
+      </if>
+      <if test="titleImg != null" >
+       AND TITLE_IMG = #{titleImg,jdbcType=VARCHAR} 
+      </if>
+      <if test="url != null" >
+       AND URL = #{url,jdbcType=VARCHAR} 
+      </if>
+      <if test="msgSource != null" >
+       AND MSG_SOURCE = #{msgSource,jdbcType=VARCHAR} 
+      </if>
+      <if test="msgSourceUrl != null" >
+       AND MSG_SOURCE_URL = #{msgSourceUrl,jdbcType=VARCHAR} 
+      </if>
+      <if test="msgSourceToken != null" >
+        AND MSG_SOURCE_TOKEN = #{msgSourceToken,jdbcType=VARCHAR}
+      </if>
+      <if test="loginCheck != null" >
+       AND LOGIN_CHECK = #{loginCheck,jdbcType=VARCHAR} 
+      </if>
+      <if test="expiryTime != null" >
+       AND EXPIRY_TIME = #{expiryTime,jdbcType=INTEGER} 
+      </if>
+      <if test="passCheck != null" >
+       AND PASS_CHECK = #{passCheck,jdbcType=VARCHAR} 
+      </if>
+      <if test="message != null" >
+       AND MESSAGE = #{message,jdbcType=VARCHAR} 
+      </if>
+      <if test="readNum != null" >
+       AND READ_NUM = #{readNum,jdbcType=INTEGER} 
+      </if>
+      <if test="praises != null" >
+       AND PRAISES = #{praises,jdbcType=INTEGER} 
+      </if>
+      <if test="status != null" >
+       AND STATUS = #{status,jdbcType=VARCHAR} 
+      </if>
+      <if test="isDeleted != null" >
+       AND IS_DELETED = #{isDeleted,jdbcType=VARCHAR} 
+      </if>
+      <if test="isDeleted == null" >
+       AND IS_DELETED = 'N'  
+      </if>
+      <if test="creator != null" >
+       AND CREATOR = #{creator,jdbcType=VARCHAR}
+      </if>
+    </where>
+     order by CREATE_TIME DESC
+     limit #{start},#{pageSize}
+
+  </select>
+  
+  <select id="queryMap" resultType="java.util.Map" parameterType="java.util.Map">
+  	<bind name="start" value="(startPage-1)*pageSize"/>
+	SELECT m.ID as id,
+	       m.MSG_TITLE as msgTitle,
+	       m.MSG_TYPE as msgType,
+	       m.TITLE_IMG as titleImg,
+	       m.URL as url,
+	       m.PRAISES as praises,
+	       m.READ_NUM as readNum,
+	       m.STATUS as status,
+          m.MESSAGE as message,
+    m.MSG_SOURCE as msgSource,
+    m.REMARK as remark,
+    m.TITLE_IMG_LIST as titleImgList,
+    m.READ_NUM as readNum,
+	       m.CREATOR as creator,
+	       m.UPDATER as updater,
+	       m.CREATE_TIME as createTime,
+	       m.UPDATE_TIME as updateTime,
+	       u.STATUS as msgStatus,
+	       u.PRAISE_sign as praiseSign
+	FROM app_msg m
+	RIGHT JOIN app_user_msg u ON m.ID = u.MSG_ID
+	<where> m.IS_DELETED = 'N' 
+	    AND u.IS_DELETED = 'N'
+	    AND u.PARTY_ID = #{partyId}
+      <if test="msgTypes">
+        AND m.MSG_TYPE in
+        <foreach collection="msgTypes" close=")" open="(" separator="," index="index" item="item">
+          #{item}
+        </foreach>
+      </if>
+		<if test="id != null">
+			and m.ID = #{id}
+		</if>
+		<if test="status != null">
+			and u.STATUS = #{status}
+		</if>
+		<if test="msgType != null">
+			and m.MSG_TYPE = #{msgType}
+		</if>
+	</where>
+	order by m.CREATE_TIME desc
+	limit #{start},#{pageSize}
+  </select>
+
+  <select id="queryNews" resultMap="BaseResultMap" >
+    select m.ID, m.MSG_TITLE, m.MSG_TYPE,m.MSG_TAG,m.TITLE_IMG,m.URL,m.MSG_SOURCE,m.MSG_SOURCE_URL,m.MESSAGE,m.LOGIN_CHECK,m.EXPIRY_TIME,m.PASS_CHECK,m.MESSAGE,m.REMARK,m.SHARE_NUM, m.READ_NUM,m.PRAISES,m.STATUS, m.IS_DELETED, m.CREATOR,
+    m.UPDATER, m.CREATE_TIME, m.UPDATE_TIME,m.COMMENTS,m.TITLE_IMG_LIST,m.TREAD_NUM
+    from app_user_msg um LEFT JOIN app_msg m on um.MSG_ID = m.ID
+    <where> um.IS_DELETED = 'N' and m.IS_DELETED = 'N' and m.MSG_TYPE = 'NEWS'
+      <if test="paras.deviceId != null" >
+        AND um.DEVICE_ID = #{paras.deviceId,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.msgType != null" >
+        AND m.MSG_TAG = #{paras.msgType,jdbcType=VARCHAR}
+      </if>
+    </where>
+    <if test="page != null" >
+      order by UPDATE_TIME desc
+      <bind name="start" value="(page.startPage-1)*page.pageSize"/>
+      limit #{start},#{page.pageSize}
+    </if>
+  </select>
+
+  <select id="queryRecommenNews" resultMap="BaseResultMap" >
+    select m.ID, m.MSG_TITLE, m.MSG_TYPE,m.MSG_TAG,m.TITLE_IMG,m.URL,m.MSG_SOURCE,m.MSG_SOURCE_URL,m.MESSAGE,m.LOGIN_CHECK,m.EXPIRY_TIME,m.PASS_CHECK,m.MESSAGE,m.REMARK,m.SHARE_NUM, m.READ_NUM,m.PRAISES,m.STATUS, m.IS_DELETED, m.CREATOR,
+    m.UPDATER, m.CREATE_TIME, m.UPDATE_TIME,m.COMMENTS,m.TITLE_IMG_LIST,m.TREAD_NUM
+    from app_msg m
+    where
+      m.IS_DELETED = 'N' and m.MSG_TYPE = 'NEWS' and
+      m.MSG_TAG in
+    <foreach collection="msgTags" close=")" open="(" separator="," index="index" item="item">
+      #{item}
+    </foreach>
+      and NOT EXISTS (select 1 from app_user_msg um where um.DEVICE_ID = #{deviceId,jdbcType=VARCHAR} and um.MSG_ID = m.ID)
+    ORDER BY m.ID DESC
+    LIMIT #{pageSize}
+  </select>
+
+
+    <select id="queryMsgByparam" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select <include refid="Base_Column_List" />
+        from app_msg  where IS_DELETED = 'N' <![CDATA[AND CREATE_TIME >= #{startDay,jdbcType=VARCHAR} AND CREATE_TIME <= #{endDay,jdbcType=VARCHAR}]]> AND MSG_TYPE = #{msgType,jdbcType=VARCHAR}  AND MSG_TAG = #{msgTag,jdbcType=VARCHAR}  ORDER BY READ_NUM desc LIMIT 6
+    </select>
+
+    <update id="updateOperateNum" parameterType="java.lang.Long">
+        update app_msg m set READ_NUM = (select sum(READ_NUM) from app_user_msg where MSG_ID = #{id,jdbcType=BIGINT}),
+            SHARE_NUM = (select SUM(SHARE_NUM) from app_user_msg where MSG_ID = #{id,jdbcType=BIGINT}),
+            PRAISES = (select count(*) from app_user_msg where MSG_ID = #{id,jdbcType=BIGINT} and PRAISE_TREAD = 'Y'),
+            TREAD_NUM = (select count(*) from app_user_msg where MSG_ID = #{id,jdbcType=BIGINT} and PRAISE_TREAD = 'N') ,
+            UPDATE_TIME = NOW()
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

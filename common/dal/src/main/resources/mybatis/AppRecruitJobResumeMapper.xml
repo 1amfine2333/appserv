@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppRecruitJobResumeDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppRecruitJobResume" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="JOB_ID" property="jobId" jdbcType="BIGINT" />
+    <result column="RECRUIT_ID" property="recruitId" jdbcType="BIGINT" />
+      <result column="COMMISSION" property="commission" jdbcType="INTEGER" />
+      <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+      <result column="COMMISSION_STATUS" property="commissionStatus" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PARTY_ID, JOB_ID, RECRUIT_ID, COMMISSION, REMARK, STATUS, COMMISSION_STATUS,IS_DELETED, CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_recruit_job_resume
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_recruit_job_resume
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppRecruitJobResume" useGeneratedKeys="true" keyProperty="id">
+    insert into app_recruit_job_resume (ID, PARTY_ID, JOB_ID, 
+      RECRUIT_ID, COMMISSION, REMARK, STATUS,COMMISSION_STATUS,IS_DELETED,
+      CREATE_TIME, UPDATE_TIME, COMMENTS
+      )
+    values (#{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{jobId,jdbcType=BIGINT}, 
+      #{recruitId,jdbcType=BIGINT}, #{commission,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR},
+      #{status,jdbcType=VARCHAR}, #{commissionStatus,jdbcType=VARCHAR},  'N', NOW(), NOW(), #{comments,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppRecruitJobResume" >
+    insert into app_recruit_job_resume
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="partyId != null" >
+        PARTY_ID,
+      </if>
+      <if test="jobId != null" >
+        JOB_ID,
+      </if>
+      <if test="recruitId != null" >
+        RECRUIT_ID,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="comments != null" >
+        COMMENTS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="partyId != null" >
+        #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="jobId != null" >
+        #{jobId,jdbcType=BIGINT},
+      </if>
+      <if test="recruitId != null" >
+        #{recruitId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comments != null" >
+        #{comments,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppRecruitJobResume" >
+    update app_recruit_job_resume
+    <set >
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="jobId != null" >
+        JOB_ID = #{jobId,jdbcType=BIGINT},
+      </if>
+      <if test="recruitId != null" >
+        RECRUIT_ID = #{recruitId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+        UPDATE_TIME =NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+ 
+
+    <select id="query" resultMap="BaseResultMap" parameterType="map">
+        <if test="startPage != null and pageSize !=null">
+            <bind name="start" value="(startPage-1)*pageSize"/>
+        </if>
+        select
+        <include refid="Base_Column_List"/>
+        from app_recruit_job_resume
+        <where>IS_DELETED = 'N'
+            <if test="partyId != null" >
+                and PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="jobId != null" >
+                and JOB_ID = #{jobId,jdbcType=BIGINT}
+            </if>
+            <if test="recruitId != null" >
+                and RECRUIT_ID = #{recruitId,jdbcType=BIGINT}
+            </if>
+            <if test="status != null" >
+                and  STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="isDeleted != null" >
+                and  IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null" >
+                and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null" >
+                and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="comments != null" >
+                and COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by CREATE_TIME desc
+        <if test="startPage != null and pageSize !=null">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <select id="queryJobResume" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from app_recruit_job_resume
+        <where>IS_DELETED = 'N'
+            <if test="paras.partyId != null" >
+                and PARTY_ID = #{paras.partyId,jdbcType=BIGINT}
+            </if>
+            <if test="paras.jobId != null" >
+                and JOB_ID = #{paras.jobId,jdbcType=BIGINT}
+            </if>
+            <if test="paras.recruitId != null" >
+                and RECRUIT_ID = #{paras.recruitId,jdbcType=BIGINT}
+            </if>
+            <if test="paras.status != null" >
+                and  STATUS = #{paras.status,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.createTime != null" >
+                and CREATE_TIME = #{paras.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="paras.updateTime != null" >
+                and UPDATE_TIME = #{paras.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="paras.comments != null" >
+                and COMMENTS = #{paras.comments,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by CREATE_TIME desc
+        <if test="page != null">
+            <bind name="start" value="(page.startPage-1)*page.pageSize"/>
+            limit #{start},#{page.pageSize}
+        </if>
+    </select>
+
+    <select id="queryCount" resultType="int">
+        select
+        count(*)
+        from app_recruit_job_resume
+        <where>IS_DELETED = 'N'
+            <if test="paras.partyId != null" >
+                and PARTY_ID = #{paras.partyId,jdbcType=BIGINT}
+            </if>
+            <if test="paras.jobId != null" >
+                and JOB_ID = #{paras.jobId,jdbcType=BIGINT}
+            </if>
+            <if test="paras.recruitId != null" >
+                and RECRUIT_ID = #{paras.recruitId,jdbcType=BIGINT}
+            </if>
+            <if test="paras.status != null" >
+                and  STATUS = #{paras.status,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.isDeleted != null" >
+                and  IS_DELETED = #{paras.isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.createTime != null" >
+                and CREATE_TIME = #{paras.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="paras.updateTime != null" >
+                and UPDATE_TIME = #{paras.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="paras.comments != null" >
+                and COMMENTS = #{paras.comments,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppArticleTipDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppArticleTip" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="TIP_TYPE" property="tipType" jdbcType="VARCHAR" />
+    <result column="ARTICLE_ID" property="articleId" jdbcType="BIGINT" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="ARTICLE_TYPE" property="articleType" jdbcType="VARCHAR" />
+    <result column="TO_PARTY_ID" property="toPartyId" jdbcType="BIGINT" />
+    <result column="READ_STATUS" property="readStatus" jdbcType="VARCHAR" />
+    <result column="TIP_STATUS" property="tipStatus" jdbcType="VARCHAR" />
+    <result column="DEAL_STATUS" property="dealStatus" jdbcType="VARCHAR" />
+    <result column="OPERATOR" property="operator" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+    <association property="user" column="PARTY_ID" select="selectUserInfo"></association>
+    <association property="toUser" column="TO_PARTY_ID" select="selectUserInfo"></association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PARTY_ID, TIP_TYPE, ARTICLE_ID, ARTICLE_TYPE, CONTENT, TO_PARTY_ID,READ_STATUS, TIP_STATUS, DEAL_STATUS,OPERATOR,
+    IS_DELETED, CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_article_tip
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_article_tip
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppArticleTip" useGeneratedKeys="true" keyProperty="id">
+      insert into app_article_tip (ID, PARTY_ID, TIP_TYPE,
+      ARTICLE_ID,ARTICLE_TYPE, CONTENT, TO_PARTY_ID, READ_STATUS,
+      TIP_STATUS, DEAL_STATUS,OPERATOR,IS_DELETED,
+      CREATE_TIME, UPDATE_TIME, COMMENTS
+      )
+      values (#{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{tipType,jdbcType=VARCHAR},
+      #{articleId,jdbcType=BIGINT},#{articleType,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{toPartyId,jdbcType=BIGINT}, 'N',
+      'Y', 'N',#{operator,jdbcType=VARCHAR},'N',
+      NOW(), NOW(), #{comments,jdbcType=VARCHAR})
+  </insert>
+
+    <insert id="insertWithSelect" parameterType="com.xianglin.appserv.common.dal.dataobject.AppArticleTip" useGeneratedKeys="true" keyProperty="id">
+        insert into app_article_tip (ID, PARTY_ID, TIP_TYPE,
+        ARTICLE_ID, CONTENT, TO_PARTY_ID, READ_STATUS,
+        TIP_STATUS, DEAL_STATUS, IS_DELETED,
+        CREATE_TIME, UPDATE_TIME, COMMENTS
+        )
+        select #{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{tipType,jdbcType=VARCHAR},
+        #{articleId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{toPartyId,jdbcType=BIGINT}, 'N',
+        'Y', 'N','N',
+        NOW(), NOW(), #{comments,jdbcType=VARCHAR} from dual
+        where not exists (select 1 from app_article_tip where PARTY_ID = #{partyId,jdbcType=BIGINT} and IS_DELETED = 'N' and ARTICLE_ID = #{articleId,jdbcType=BIGINT} and TIP_TYPE = #{tipType,jdbcType=VARCHAR} and TIP_TYPE in ('PRAISE','COLLET'))
+    </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppArticleTip" >
+    update app_article_tip
+    <set >
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="tipType != null" >
+        TIP_TYPE = #{tipType,jdbcType=VARCHAR},
+      </if>
+      <if test="articleId != null" >
+        ARTICLE_ID = #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="toPartyId != null" >
+        TO_PARTY_ID = #{toPartyId,jdbcType=BIGINT},
+      </if>
+      <if test="readStatus != null" >
+        READ_STATUS = #{readStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="tipStatus != null" >
+        TIP_STATUS = #{tipStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dealStatus != null" >
+        DEAL_STATUS = #{dealStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+      <if test="operator !=null ">
+        OPERATOR = #{operator,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+    <select id="selectUserInfo" resultType="com.xianglin.appserv.common.dal.dataobject.User">
+        select ID AS id,PARTY_ID AS partyId,NIKER_NAME AS nikerName,HEAD_IMG AS headImg,USER_TYPE AS userType,TRUE_NAME AS trueName from app_user where party_id = #{partyId,jdbcType=BIGINT}
+    </select>
+
+  <select id="selectArticleTipList" resultMap="BaseResultMap" parameterType="map">
+    <bind name="start" value="(startPage-1)*pageSize"/>
+    select <include refid="Base_Column_List" />
+    from app_article_tip
+    <where> IS_DELETED = 'N'
+      <if test="partyId != null" >
+        and PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="tipType != null" >
+        and TIP_TYPE = #{tipType,jdbcType=VARCHAR}
+      </if>
+      <if test="articleId != null" >
+        and ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+      </if>
+      <if test="content != null" >
+        and CONTENT = #{content,jdbcType=VARCHAR}
+      </if>
+      <if test="toPartyId != null" >
+        and TO_PARTY_ID = #{toPartyId,jdbcType=BIGINT}
+      </if>
+      <if test="readStatus != null" >
+      	and READ_STATUS = #{readStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="tipStatus != null" >
+        and TIP_STATUS = #{tipStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="dealStatus != null" >
+        and DEAL_STATUS = #{dealStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted != null" >
+        and IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+      </if>
+      <if test="comments != null" >
+        and COMMENTS = #{comments,jdbcType=VARCHAR}
+      </if>
+      <if test="startDate != null and startDate != ''" >
+        and CREATE_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endDate != null and endDate != ''" >
+        and CREATE_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="exceptPartyId != null" >
+        and PARTY_ID != #{exceptPartyId,jdbcType=VARCHAR}
+      </if>
+      <if test="articleType != null and articleType == 'SUBJECT' ">
+        and (ARTICLE_TYPE = #{articleType,jdbcType=VARCHAR} OR ARTICLE_TYPE IS NULL)
+      </if>
+      <if test="articleType != null and articleType == 'SHORT_VIDEO' ">
+        and ARTICLE_TYPE = #{articleType,jdbcType=VARCHAR}
+      </if>
+    </where>
+    <if test="orderBy != null">
+      order by ${orderBy} desc
+    </if>
+    <if test="orderBy == null">
+      order by CREATE_TIME desc
+    </if>
+    limit #{start},#{pageSize}
+  </select>
+
+
+    <select id="selectArticleTipListByParam" resultMap="BaseResultMap" parameterType="map">
+        <bind name="start" value="(startPage-1)*pageSize"/>
+        select <include refid="Base_Column_List" />
+        from app_article_tip
+        <where> ARTICLE_TYPE in ("SHORT_VIDEO","SUBJECT")
+            <if test="partyId != null" >
+                and PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="tipType != null" >
+                and TIP_TYPE = #{tipType,jdbcType=VARCHAR}
+            </if>
+            <if test="articleId != null" >
+                and ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+            </if>
+            <if test="content != null" >
+                and CONTENT = #{content,jdbcType=VARCHAR}
+            </if>
+            <if test="toPartyId != null" >
+                and TO_PARTY_ID = #{toPartyId,jdbcType=BIGINT}
+            </if>
+            <if test="readStatus != null" >
+                and READ_STATUS = #{readStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="tipStatus != null" >
+                and TIP_STATUS = #{tipStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="dealStatus != null" >
+                and DEAL_STATUS = #{dealStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="isDeleted != null" >
+                and IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="comments != null" >
+                and COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+            <if test="startDate != null" >
+                and CREATE_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endDate != null" >
+                and CREATE_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="exceptPartyId != null" >
+                and PARTY_ID != #{exceptPartyId,jdbcType=VARCHAR}
+            </if>
+            <if test="articleType != null and articleType == 'SUBJECT' ">
+                and ARTICLE_TYPE = #{articleType,jdbcType=VARCHAR}
+            </if>
+            <if test="articleType != null and articleType == 'SHORT_VIDEO' ">
+                and ARTICLE_TYPE = #{articleType,jdbcType=VARCHAR}
+            </if>
+        </where>
+        <if test="orderBy != null">
+            order by ${orderBy} desc
+        </if>
+        <if test="orderBy == null">
+            order by CREATE_TIME desc
+        </if>
+        limit #{start},#{pageSize}
+    </select>
+    
+
+    <select id="queryArticleTipByParam" resultMap="BaseResultMap" parameterType="map">
+        <bind name="start" value="(startPage-1)*pageSize"/>
+        select a.PARTY_ID,
+        a.TIP_TYPE,
+        IFNULL(a.ARTICLE_ID,a.id) ARTICLE_ID,
+        a.CONTENT,
+        a.TO_PARTY_ID,
+        a.READ_STATUS,
+        a.TIP_STATUS,
+        a.DEAL_STATUS,
+        a.IS_DELETED,
+        a.CREATE_TIME,
+        a.UPDATE_TIME,
+        a.COMMENTS  from (select ID,
+        PARTY_ID,
+        TIP_TYPE,
+        IFNULL(ARTICLE_ID,id) ARTICLE_ID,
+        CONTENT,
+        TO_PARTY_ID,
+        READ_STATUS,
+        TIP_STATUS,
+        DEAL_STATUS,
+        IS_DELETED,
+        CREATE_TIME,
+        UPDATE_TIME,
+        COMMENTS from app_article_tip) a left JOIN app_article b ON a.ARTICLE_ID = b.id
+        <where>  a.IS_DELETED='N' and b.IS_DELETED='N'
+            <if test="partyId != null" >
+                and a.PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="tipType != null" >
+                and a.TIP_TYPE = #{tipType,jdbcType=VARCHAR}
+            </if>
+            <if test="articleId != null" >
+                and a.ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+            </if>
+            <if test="content != null" >
+                and a.CONTENT = #{content,jdbcType=VARCHAR}
+            </if>
+            <if test="toPartyId != null" >
+                and a.TO_PARTY_ID = #{toPartyId,jdbcType=BIGINT}
+            </if>
+            <if test="readStatus != null" >
+                and a.READ_STATUS = #{readStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="tipStatus != null" >
+                and a.TIP_STATUS = #{tipStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="dealStatus != null" >
+                and a.DEAL_STATUS = #{dealStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="isDeleted != null" >
+                and a.IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="comments != null" >
+                and a.COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+            <if test="startDate != null" >
+                and a.CREATE_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endDate != null" >
+                and a.CREATE_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="exceptPartyId != null" >
+                and a.PARTY_ID != #{exceptPartyId,jdbcType=VARCHAR}
+            </if>
+        </where>
+            order by a.CREATE_TIME desc
+        limit #{start},#{pageSize}
+    </select>
+
+  <select id="selectArticleTipCount" resultType="int" parameterType="map">
+    select COUNT(*)
+    from app_article_tip a left JOIN app_article b ON a.ARTICLE_ID = b.id
+    <where> a.IS_DELETED='N'
+      <if test="partyId != null" >
+        and a.PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="tipType != null" >
+        and a.TIP_TYPE = #{tipType,jdbcType=VARCHAR}
+      </if>
+      <if test="exceptTipType != null" >
+        and a.TIP_TYPE != #{exceptTipType,jdbcType=VARCHAR}
+      </if>
+        <if test="exceptTipTypes != null" >
+            and TIP_TYPE  in
+            <foreach collection="exceptTipTypes" close=")" open="(" separator="," index="index" item="item">
+                #{item}
+            </foreach>
+        </if>
+      <if test="articleId != null" >
+        and a.ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+      </if>
+      <if test="content != null" >
+        and a.CONTENT = #{content,jdbcType=VARCHAR}
+      </if>
+      <if test="toPartyId != null" >
+        and a.TO_PARTY_ID = #{toPartyId,jdbcType=BIGINT}
+      </if>
+      <if test="readStatus != null" >
+        and a.READ_STATUS = #{readStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="tipStatus != null" >
+        and a.TIP_STATUS = #{tipStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="dealStatus != null" >
+        and a.DEAL_STATUS = #{dealStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="exceptPartyId != null" >
+        and a.PARTY_ID != #{exceptPartyId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+    <select id="queryArticleTipCountIsDeleted" resultType="int" parameterType="map">
+        select COUNT(*)
+        from app_article_tip
+        <where> ARTICLE_TYPE in ("SHORT_VIDEO","SUBJECT")
+            <if test="partyId != null" >
+                and PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="tipType != null" >
+                and TIP_TYPE = #{tipType,jdbcType=VARCHAR}
+            </if>
+            <if test="articleId != null" >
+                and ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+            </if>
+            <if test="content != null" >
+                and CONTENT = #{content,jdbcType=VARCHAR}
+            </if>
+            <if test="toPartyId != null" >
+                and TO_PARTY_ID = #{toPartyId,jdbcType=BIGINT}
+            </if>
+            <if test="readStatus != null" >
+                and READ_STATUS = #{readStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="tipStatus != null" >
+                and TIP_STATUS = #{tipStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="dealStatus != null" >
+                and DEAL_STATUS = #{dealStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="isDeleted != null" >
+                and IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="comments != null" >
+                and COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+            <if test="startDate != null and startDate != ''" >
+                and CREATE_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endDate != null and endDate != ''" >
+                and CREATE_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="exceptPartyId != null" >
+                and PARTY_ID != #{exceptPartyId,jdbcType=VARCHAR}
+            </if>
+            <if test="articleType != null and articleType == 'SUBJECT' ">
+                and ARTICLE_TYPE = #{articleType,jdbcType=VARCHAR}
+            </if>
+            <if test="articleType != null and articleType == 'SHORT_VIDEO' ">
+                and ARTICLE_TYPE = #{articleType,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+  <update id="updateReadStatus" >
+    update app_article_tip
+    set   READ_STATUS = 'Y'
+    where TO_PARTY_ID = #{toPartyId,jdbcType=BIGINT}
+    <if test="tipType != null" >
+      and TIP_TYPE = #{tipType,jdbcType=VARCHAR}
+    </if>
+  </update>
+
+  <update id="batchDelete" >
+    update app_article_tip
+    set   IS_DELETED = 'Y'
+    where ARTICLE_ID in
+    <foreach collection="list" close=")" open="(" separator="," index="index" item="item">
+      #{item}
+    </foreach>
+  </update>
+</mapper>

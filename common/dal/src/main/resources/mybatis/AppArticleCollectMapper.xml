@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppArticleCollectDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppArticleCollect" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="ARTICLE_ID" property="articleId" jdbcType="BIGINT" />
+    <result column="ARTICLE_PARTY_ID" property="articlePartyId" jdbcType="BIGINT" />
+    <result column="COLLECT_STATUS" property="collectStatus" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PARTY_ID, ARTICLE_ID, ARTICLE_PARTY_ID, COLLECT_STATUS, IS_DELETED, CREATE_TIME, 
+    UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_article_collect
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppArticleCollect" >
+    insert into app_article_collect (ID, PARTY_ID, ARTICLE_ID, 
+      ARTICLE_PARTY_ID, COLLECT_STATUS, IS_DELETED, 
+      CREATE_TIME, UPDATE_TIME, COMMENTS
+      )
+    values (#{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT}, 
+      #{articlePartyId,jdbcType=BIGINT}, #{collectStatus,jdbcType=VARCHAR}, 'N',
+      NOW(), NOW(), #{comments,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppArticleCollect" >
+    update app_article_collect
+    <set >
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="articleId != null" >
+        ARTICLE_ID = #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="articlePartyId != null" >
+        ARTICLE_PARTY_ID = #{articlePartyId,jdbcType=BIGINT},
+      </if>
+      <if test="collectStatus != null" >
+        COLLECT_STATUS = #{collectStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW(),
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    <bind name="start" value="(startPage-1)*pageSize"/>
+    select
+    <include refid="Base_Column_List" />
+    from app_article_collect
+    <where> A.IS_DELETED = 'N'
+      <if test="partyId != null" >
+        AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+    </where>
+    <if test="orderBy != null">
+      order by ${orderBy} desc,CREATE_TIME desc
+    </if>
+    <if test="orderBy == null">
+      order by UPDATE_TIME desc
+    </if>
+    limit #{start},#{pageSize}
+  </select>
+
+
+</mapper>

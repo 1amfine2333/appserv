@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.ActivityInviteDetailDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.ActivityInviteDetail" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="ACTIVITY_CODE" property="activityCode" jdbcType="VARCHAR" />
+    <result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="REC_PARTY_ID" property="recPartyId" jdbcType="BIGINT" />
+    <result column="DEVICE_ID" property="deviceId" jdbcType="VARCHAR" />
+    <result column="COMMENT_NAME" property="commentName" jdbcType="VARCHAR" />
+    <result column="SOURCE" property="source" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="MSG_STATUS" property="msgStatus" jdbcType="VARCHAR" />
+    <result column="AMT" property="amt" jdbcType="DECIMAL" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID,ACTIVITY_CODE, LOGIN_NAME, PARTY_ID, REC_PARTY_ID, DEVICE_ID, COMMENT_NAME, SOURCE, STATUS, 
+    MSG_STATUS, AMT, IS_DELETED, CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_activity_invite_detail
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_activity_invite_detail
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityInviteDetail" >
+    insert into app_activity_invite_detail (ID,ACTIVITY_CODE,LOGIN_NAME, PARTY_ID,
+      REC_PARTY_ID, DEVICE_ID, COMMENT_NAME,
+      SOURCE, STATUS, MSG_STATUS,
+      IS_DELETED, CREATE_TIME,
+      UPDATE_TIME, COMMENTS)
+    VALUES (
+      #{id,jdbcType=BIGINT}, #{activityCode,jdbcType=VARCHAR},#{loginName,jdbcType=VARCHAR}, #{partyId,jdbcType=BIGINT},
+      #{recPartyId,jdbcType=BIGINT}, #{deviceId,jdbcType=VARCHAR}, #{commentName,jdbcType=VARCHAR},
+      #{source,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 'N', 'N', NOW(),
+      NOW(), #{comments,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <insert id="insertWithSelect" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityInviteDetail" >
+    insert into app_activity_invite_detail (ID,ACTIVITY_CODE,LOGIN_NAME, PARTY_ID,
+    REC_PARTY_ID, DEVICE_ID, COMMENT_NAME,
+    SOURCE, STATUS, MSG_STATUS,
+    IS_DELETED, CREATE_TIME,
+    UPDATE_TIME, COMMENTS)
+    select
+    #{id,jdbcType=BIGINT}, #{activityCode,jdbcType=VARCHAR},#{loginName,jdbcType=VARCHAR}, #{partyId,jdbcType=BIGINT},
+    #{recPartyId,jdbcType=BIGINT}, #{deviceId,jdbcType=VARCHAR}, #{commentName,jdbcType=VARCHAR},
+    #{source,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 'N', 'N', NOW(),
+    NOW(), #{comments,jdbcType=VARCHAR}
+    from dual
+    where not exists (select 1 from app_activity_invite_detail where ACTIVITY_CODE = #{activityCode,jdbcType=BIGINT} and LOGIN_NAME = #{loginName,jdbcType=BIGINT} and  IS_DELETED ='N')
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityInviteDetail" >
+    update app_activity_invite_detail
+    <set >
+        <if test="activityCode != null" >
+            ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR},
+        </if>
+       <if test="loginName != null" >
+        LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="recPartyId != null" >
+        REC_PARTY_ID = #{recPartyId,jdbcType=BIGINT},
+      </if>
+      <if test="deviceId != null" >
+        DEVICE_ID = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentName != null" >
+        COMMENT_NAME = #{commentName,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        SOURCE = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="msgStatus != null" >
+        MSG_STATUS = #{msgStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null" >
+        AMT = #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="select" resultMap="BaseResultMap" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityInviteDetail" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_activity_invite_detail 
+    <where> IS_DELETED = 'N'
+        <if test="activityCode != null" >
+        and ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+        </if>
+	   <if test="loginName != null" >
+        and LOGIN_NAME = #{loginName,jdbcType=VARCHAR}
+      </if>
+      <if test="partyId != null" >
+         and PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="recPartyId != null" >
+         and REC_PARTY_ID = #{recPartyId,jdbcType=BIGINT}
+      </if>
+      <if test="deviceId != null" >
+         and DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+      </if>
+      <if test="commentName != null" >
+         and COMMENT_NAME = #{commentName,jdbcType=VARCHAR}
+      </if>
+      <if test="source != null" >
+         and SOURCE = #{source,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null" >
+         and STATUS = #{status,jdbcType=VARCHAR}
+      </if>
+      <if test="msgStatus != null" >
+         and MSG_STATUS = #{msgStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="amt != null" >
+         and AMT = #{amt,jdbcType=DECIMAL}
+      </if>
+	</where>
+      order by ID desc
+  </select>
+  
+  <select id="selectMap" resultMap="BaseResultMap" parameterType="map" >
+  	<bind name="start" value="(startPage-1)*pageSize"/>
+    select 
+    <include refid="Base_Column_List" />
+    from app_activity_invite_detail 
+    <where> IS_DELETED = 'N'
+        <if test="activityCode != null" >
+        and ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+    </if>
+	   <if test="loginName != null" >
+        and LOGIN_NAME = #{loginName,jdbcType=VARCHAR}
+      </if>
+      <if test="partyId != null" >
+         and PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="recPartyId != null" >
+         and REC_PARTY_ID = #{recPartyId,jdbcType=BIGINT}
+      </if>
+      <if test="deviceId != null" >
+         and DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+      </if>
+      <if test="commentName != null" >
+         and COMMENT_NAME = #{commentName,jdbcType=VARCHAR}
+      </if>
+      <if test="source != null" >
+         and SOURCE = #{source,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null" >
+         and STATUS = #{status,jdbcType=VARCHAR}
+      </if>
+      <if test="msgStatus != null" >
+         and MSG_STATUS = #{msgStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="amt != null" >
+         and AMT = #{amt,jdbcType=DECIMAL}
+      </if>
+	</where>
+	order by CREATE_TIME desc 
+	limit #{start},#{pageSize}
+  </select>
+  
+  <select id="selectAlertPartyIds" resultType="java.lang.Long" >
+    select DISTINCT REC_PARTY_ID from app_activity_invite_detail where MSG_STATUS = 'N' and `STATUS` = 'S' and IS_DELETED = 'N'
+  </select>
+
+  <update id="updateSDetail" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityInviteDetail" >
+    update app_activity_invite_detail
+    <set >
+        <if test="activityCode != null" >
+            ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR},
+        </if>
+      <if test="loginName != null" >
+        LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="recPartyId != null" >
+        REC_PARTY_ID = #{recPartyId,jdbcType=BIGINT},
+      </if>
+      <if test="deviceId != null" >
+        DEVICE_ID = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentName != null" >
+        COMMENT_NAME = #{commentName,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        SOURCE = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="msgStatus != null" >
+        MSG_STATUS = #{msgStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null" >
+        AMT = #{amt,jdbcType=DECIMAL},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      UPDATE_TIME = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR} and LOGIN_NAME = #{loginName,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectCount" resultType="int" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityInviteDetail" >
+    select count(*)
+    from app_activity_invite_detail
+    <where> IS_DELETED = 'N'
+      <if test="activityCode != null" >
+        and ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+      </if>
+      <if test="loginName != null" >
+        and LOGIN_NAME = #{loginName,jdbcType=VARCHAR}
+      </if>
+      <if test="partyId != null" >
+        and PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="recPartyId != null" >
+        and REC_PARTY_ID = #{recPartyId,jdbcType=BIGINT}
+      </if>
+      <if test="deviceId != null" >
+        and DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+      </if>
+      <if test="commentName != null" >
+        and COMMENT_NAME = #{commentName,jdbcType=VARCHAR}
+      </if>
+      <if test="source != null" >
+        and SOURCE = #{source,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null" >
+        and STATUS = #{status,jdbcType=VARCHAR}
+      </if>
+      <if test="msgStatus != null" >
+        and MSG_STATUS = #{msgStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="amt != null" >
+        and AMT = #{amt,jdbcType=DECIMAL}
+      </if>
+    </where>
+  </select>
+
+    <select id="selectNoRewardInvite" resultMap="BaseResultMap" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityInviteDetail" >
+        select D.ID,D.ACTIVITY_CODE, D.LOGIN_NAME, D.PARTY_ID, D.REC_PARTY_ID, D.DEVICE_ID, D.COMMENT_NAME, D.SOURCE, D.STATUS, 
+   D. MSG_STATUS, D.AMT,D.IS_DELETED,D.CREATE_TIME,D.UPDATE_TIME, D.COMMENTS from app_activity_invite_detail d JOIN app_user u ON d.LOGIN_NAME = u.LOGIN_NAME
+        where u.TRUE_NAME is NOT NULL and d.`STATUS` = 'I' and d.ACTIVITY_CODE in (106,109) and d.IS_DELETED='N' and d.REC_PARTY_ID != 1
+       <![CDATA[ and d.CREATE_TIME < u.CREATE_TIME ]]>
+                            ORDER BY d.LOGIN_NAME
+    </select>
+</mapper>

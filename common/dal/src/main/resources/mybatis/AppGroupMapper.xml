@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppGroupDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppGroup" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="SYN_NAME" property="synName" jdbcType="VARCHAR" />
+    <result column="IMAGE_URL" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="QR_CODE" property="qrCode" jdbcType="VARCHAR" />
+    <result column="MANAGE_PARTY_ID" property="managePartyId" jdbcType="BIGINT" />
+    <result column="RY_GROUP_ID" property="ryGroupId" jdbcType="VARCHAR" />
+    <result column="DISTRICT" property="district" jdbcType="VARCHAR" />
+    <result column="DISTRICT_CODE" property="districtCode" jdbcType="VARCHAR" />
+    <result column="GROUP_TYPE" property="groupType" jdbcType="VARCHAR" />
+    <result column="CREATE_TYPE" property="createType" jdbcType="VARCHAR" />
+    <result column="OPERATOR" property="operator" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+    
+  <sql id="Base_Column_List" >
+    ID, NAME,SYN_NAME, IMAGE_URL,QR_CODE, MANAGE_PARTY_ID, RY_GROUP_ID, DISTRICT, DISTRICT_CODE, GROUP_TYPE, 
+    CREATE_TYPE,OPERATOR, STATUS, IS_DELETED, CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+    
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_group
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+    
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_group
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+    
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppGroup" useGeneratedKeys="true" keyProperty="id">
+    insert into app_group (ID, NAME,SYN_NAME, IMAGE_URL, 
+      MANAGE_PARTY_ID,QR_CODE, RY_GROUP_ID, DISTRICT, 
+      DISTRICT_CODE, GROUP_TYPE, CREATE_TYPE, 
+      OPERATOR,STATUS, IS_DELETED, CREATE_TIME, 
+      UPDATE_TIME, COMMENTS)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},#{synName,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR}, 
+      #{managePartyId,jdbcType=BIGINT},#{qrCode,jdbcType=VARCHAR}, #{ryGroupId,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, 
+      #{districtCode,jdbcType=VARCHAR}, #{groupType,jdbcType=VARCHAR}, #{createType,jdbcType=VARCHAR}, 
+      #{operator,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR}, 'N',  NOW(), 
+       NOW(), #{comments,jdbcType=VARCHAR})
+  </insert>
+  
+    
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppGroup" >
+    update app_group
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="synName != null" >
+          SYN_NAME = #{synName,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null" >
+        IMAGE_URL = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCode != null" >
+          QR_CODE = #{qrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="managePartyId != null" >
+        MANAGE_PARTY_ID = #{managePartyId,jdbcType=BIGINT},
+      </if>
+      <if test="ryGroupId != null" >
+        RY_GROUP_ID = #{ryGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        DISTRICT = #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="districtCode != null" >
+        DISTRICT_CODE = #{districtCode,jdbcType=VARCHAR},
+      </if>
+      <if test="groupType != null" >
+        GROUP_TYPE = #{groupType,jdbcType=VARCHAR},
+      </if>
+      <if test="createType != null" >
+        CREATE_TYPE = #{createType,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+         OPERATOR = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+    
+  <update id="updateByPrimaryKey" parameterType="com.xianglin.appserv.common.dal.dataobject.AppGroup" >
+    update app_group
+    set NAME = #{name,jdbcType=VARCHAR},
+      IMAGE_URL = #{imageUrl,jdbcType=VARCHAR},
+      MANAGE_PARTY_ID = #{managePartyId,jdbcType=BIGINT},
+      RY_GROUP_ID = #{ryGroupId,jdbcType=VARCHAR},
+      DISTRICT = #{district,jdbcType=VARCHAR},
+      DISTRICT_CODE = #{districtCode,jdbcType=VARCHAR},
+      GROUP_TYPE = #{groupType,jdbcType=VARCHAR},
+      CREATE_TYPE = #{createType,jdbcType=VARCHAR},
+      OPERATOR = #{operator,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      COMMENTS = #{comments,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+    <select id="query" resultMap="BaseResultMap" parameterType="map">
+        <bind name="start" value="(startPage-1)*pageSize"/>
+        select
+        <include refid="Base_Column_List"/>
+        from app_group
+        <where>IS_DELETED = 'N'
+            <if test="name != null">
+                and NAME = #{name}
+            </if>
+            <if test="synName != null" >
+                and SYN_NAME = #{synName,jdbcType=VARCHAR}
+            </if>
+            <if test="excludeId != null">
+                and ID not in (${excludeId})
+            </if>
+            <if test="imageUrl != null">
+                and IMAGE_URL = #{imageUrl}
+            </if>
+            <if test="managePartyId != null">
+                and MANAGE_PARTY_ID = #{managePartyId}
+            </if>
+            <if test="ryGroupId != null">
+                and RY_GROUP_ID = #{ryGroupId}
+            </if>
+            <if test="district != null">
+                and DISTRICT = #{district}
+            </if>
+            <if test="districtCode != null">
+                and DISTRICT_CODE = #{districtCode}
+            </if>
+            <if test="groupType != null">
+                and GROUP_TYPE = #{groupType}
+            </if>
+            <if test="createType != null">
+                and CREATE_TYPE = #{createType}
+            </if>
+            <if test="operator != null" >
+                OPERATOR = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                and STATUS = #{status}
+            </if>
+        </where>
+        order by CREATE_TIME desc
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="queryCount" resultType="Integer" parameterType="map" >
+        select
+        count(*)
+        from app_group
+        <where>IS_DELETED = 'N'
+            <if test="name != null">
+                and NAME = #{name}
+            </if>
+            <if test="synName != null" >
+                and SYN_NAME = #{synName,jdbcType=VARCHAR}
+            </if>
+            <if test="likeName != null">
+                and NAME LIKE CONCAT('%', #{likeName}, '%')
+            </if>
+
+            <if test="likeDistrict != null">
+                and DISTRICT LIKE CONCAT('%', #{likeDistrict}, '%')
+            </if>
+            <if test="excludeId != null">
+                and ID not in (${excludeId})
+            </if>
+            <if test="imageUrl != null">
+                and IMAGE_URL = #{imageUrl}
+            </if>
+            <if test="managePartyId != null">
+                and MANAGE_PARTY_ID = #{managePartyId}
+            </if>
+            <if test="ryGroupId != null">
+                and RY_GROUP_ID = #{ryGroupId}
+            </if>
+            <if test="district != null">
+                and DISTRICT = #{district}
+            </if>
+            <if test="districtCode != null">
+                and DISTRICT_CODE = #{districtCode}
+            </if>
+            <if test="groupType != null">
+                and GROUP_TYPE = #{groupType}
+            </if>
+            <if test="createType != null">
+                and CREATE_TYPE = #{createType}
+            </if>
+            <if test="operator != null" >
+                OPERATOR = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                and STATUS = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryGroup" resultMap="BaseResultMap" parameterType="com.xianglin.appserv.common.dal.dataobject.AppGroup">
+        select
+        <include refid="Base_Column_List"/>
+        from app_group
+        <where>IS_DELETED = 'N'
+            <if test="name != null">
+                and NAME = #{name}
+            </if>
+            <if test="synName != null" >
+                and SYN_NAME = #{synName,jdbcType=VARCHAR}
+            </if>
+            <if test="ids != null">
+                and id in (${ids})
+            </if>
+            <if test="imageUrl != null">
+                and IMAGE_URL = #{imageUrl}
+            </if>
+            <if test="managePartyId != null">
+                and MANAGE_PARTY_ID = #{managePartyId}
+            </if>
+            <if test="ryGroupId != null">
+                and RY_GROUP_ID = #{ryGroupId}
+            </if>
+            <if test="district != null">
+                and DISTRICT = #{district}
+            </if>
+            <if test="districtCode != null">
+                and DISTRICT_CODE = #{districtCode}
+            </if>
+            <if test="groupType != null">
+                and GROUP_TYPE = #{groupType}
+            </if>
+            <if test="createType != null">
+                and CREATE_TYPE = #{createType}
+            </if>
+            <if test="operator != null" >
+                OPERATOR = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                and STATUS = #{status}
+            </if>
+        </where>
+        order by CREATE_TIME desc
+    </select>
+
+    <select id="queryGroupLikeName" resultMap="BaseResultMap" parameterType="map">
+        SELECT <include refid="Base_Column_List"/> FROM ( SELECT <include refid="Base_Column_List"/> FROM app_group WHERE IS_DELETED = 'N' AND GROUP_TYPE='O' AND NAME LIKE CONCAT('%', #{name}, '%') ORDER BY  CREATE_TIME DESC ) a  WHERE NOT EXISTS ( SELECT  1   FROM app_group_member WHERE PARTY_ID = #{partyId} AND IS_DELETED = 'N' AND GROUP_ID = a.id )
+    </select>
+
+   
+    <select id="queryGroupByParas" resultMap="BaseResultMap" parameterType="map">
+        <bind name="start" value="(startPage-1)*pageSize"/>
+        select * from (
+        SELECT
+        DISTINCT a.id,
+        a.name,
+        a.district,
+        a.status,
+        (
+        SELECT
+        count(*)
+        FROM
+        app_group_member b
+        WHERE
+        b.GROUP_ID = a.id
+        AND IS_DELETED = 'N'
+        ) memberCount,
+        (
+        SELECT
+        count(*)
+        FROM
+        app_group_member b
+        WHERE
+        b.GROUP_ID = a.id
+        AND IS_DELETED = 'N'
+        AND type = 'MANAGER'
+        ) managerCount FROM
+        app_group a LEFT JOIN app_group_member d on a.id=d.GROUP_ID
+        <where>a.IS_DELETED = 'N'  and d.IS_DELETED = 'N'
+            <if test="id != null">
+                and a.ID LIKE CONCAT('%', #{id}, '%')
+            </if>
+            <if test="likeName != null">
+                and a.NAME LIKE CONCAT('%', #{likeName}, '%')
+            </if>
+        
+            <if test="likeDistrict != null">
+                and a.DISTRICT LIKE CONCAT('%"', #{likeDistrict}, '"%')
+            </if>
+            <if test="districtCode != null">
+                and a.DISTRICT_CODE = #{districtCode}
+            </if>
+            <if test="groupType != null">
+                and a.GROUP_TYPE = #{groupType}
+            </if>
+            <if test="createType != null">
+                and a.CREATE_TYPE = #{createType}
+            </if>
+            <if test="tempName != null">
+                and d.TEMP_NAME = #{tempName}
+            </if>
+            <if test="tempMobilePhone != null">
+                and d.TEMP_MOBILE_PHONE = #{tempMobilePhone}
+            </if>
+        </where>
+        )c   where c.memberCount >0
+        <if test="status != null and status eq 'Y'.toString()" >
+            AND  c.managerCount > 0
+        </if>
+        <if test="status != null and status eq 'N'.toString()">
+            AND c.managerCount = 0
+        </if>
+        order by c.memberCount desc
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="queryCountByParam" resultType="Integer" parameterType="map" >
+        select count(*) from (
+        SELECT
+        DISTINCT a.id,
+        a.name,
+        a.district,
+        (
+        SELECT
+        count(*)
+        FROM
+        app_group_member b
+        WHERE
+        b.GROUP_ID = a.id
+        AND IS_DELETED = 'N'
+        ) memberCount,
+        (
+        SELECT
+        count(*)
+        FROM
+        app_group_member b
+        WHERE
+        b.GROUP_ID = a.id
+        AND IS_DELETED = 'N'
+        AND type = 'MANAGER'
+        ) managerCount FROM
+        app_group a LEFT JOIN app_group_member d on a.id=d.GROUP_ID
+        <where>a.IS_DELETED = 'N'  and d.IS_DELETED = 'N'
+            <if test="id != null">
+                and a.ID LIKE CONCAT('%', #{id}, '%')
+            </if>
+            <if test="likeName != null">
+                and a.NAME LIKE CONCAT('%', #{likeName}, '%')
+            </if>
+
+            <if test="likeDistrict != null">
+                and a.DISTRICT LIKE CONCAT('%"', #{likeDistrict}, '"%')
+            </if>
+            <if test="districtCode != null">
+                and a.DISTRICT_CODE = #{districtCode}
+            </if>
+            <if test="groupType != null">
+                and a.GROUP_TYPE = #{groupType}
+            </if>
+            <if test="createType != null">
+                and a.CREATE_TYPE = #{createType}
+            </if>
+            <if test="tempName != null">
+                and d.TEMP_NAME = #{tempName}
+            </if>
+            <if test="tempMobilePhone != null">
+                and d.TEMP_MOBILE_PHONE = #{tempMobilePhone}
+            </if>
+        </where>
+        )c  where c.memberCount >0
+        <if test="status != null and status eq 'Y'.toString()" >
+            AND  c.managerCount > 0
+        </if>
+        <if test="status != null and status eq 'N'.toString()">
+            AND c.managerCount = 0
+        </if>
+        <if test="count != null">
+            AND  c.managerCount > 0
+        </if>
+    </select>
+
+    
+</mapper>

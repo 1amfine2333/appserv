@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+		
+	<dubbo:application name="${system.name}"  />
+	<dubbo:registry address="${registry.address}"  register="${dubbo.register}"/>
+	<dubbo:consumer timeout="9000" check="false"></dubbo:consumer>
+	<!--gateway开放公网对APP的服务 -->
+	<dubbo:service interface="com.xianglin.gateway.common.service.spi.JSONGatewayService" version="1.0.0"
+		ref="jsonGatewayService" group="appgw-${system.name}" />
+	<bean id="jsonGatewayService" class="com.xianglin.gateway.common.service.spi.impl.JSONGatewayServiceImpl">
+		<property name="serviceMethodInfoRepository">
+		<bean class="com.xianglin.gateway.common.service.spi.impl.ServiceMethodInfoRepositoryImpl">
+			<property name="systemName" value="${system.name}" />
+			<property name="basePackages" value="com.xianglin.appserv.biz.service.implement" />
+		</bean>
+	</property>
+		<property name="paramProcessor">
+			<bean class="com.xianglin.appserv.biz.service.implement.util.AppservParamProcessor" />
+		</property>
+		<property name="responseProcessor">
+			<bean class="com.xianglin.appserv.biz.service.implement.util.AppgwResponseProcessor" />
+		</property>
+	</bean>
+
+    <!--igw开放公网对APP的服务 -->
+    <dubbo:service interface="com.xianglin.gateway.common.service.spi.JSONGatewayService" version="1.0.0"
+                   ref="jsonGatewayService" group="igw-${system.name}" />
+
+	
+ 	<dubbo:service ref="appIndexPageService" interface="com.xianglin.appserv.common.service.facade.app.XLAppIndexPageService" ></dubbo:service>
+
+	<dubbo:service ref="appBannerService" interface="com.xianglin.appserv.common.service.facade.AppBannerService" ></dubbo:service>
+
+	<dubbo:service interface="com.xianglin.appserv.common.service.facade.MessageService" ref="messageService"  retries="0"/>
+
+	<dubbo:service interface="com.xianglin.appserv.common.service.facade.app.PermanetCalendarService" ref="permanetCalendarService"  retries="0"/>
+	
+	<dubbo:service interface="com.xianglin.appserv.common.service.facade.app.GoodwordService" ref="goodwordService"  retries="0"/>
+	
+	<dubbo:service interface="com.xianglin.appserv.common.service.facade.RedPacketService" ref="redPacketService"  retries="0"/>
+	
+	<dubbo:service interface="com.xianglin.appserv.common.service.facade.app.IndexService" ref="indexService"  retries="0"/>
+	
+	<dubbo:service id="userService" interface="com.xianglin.appserv.common.service.facade.UserService" ref="userServiceImpl"  retries="0"/>
+	
+	<dubbo:service interface="com.xianglin.appserv.common.service.facade.app.ActivityInviteService" ref="activityInviteService"  retries="0"/>
+
+	<dubbo:service id="sysParaService" interface="com.xianglin.appserv.common.service.facade.app.SystemParaService" ref="systemParaService"  retries="0"/>
+
+	<dubbo:service id="luckWheelServivce" interface="com.xianglin.appserv.common.service.facade.LuckWheelServivce" ref="luckWheelServiceImpl" retries="0"/>
+
+	<dubbo:service interface="com.xianglin.appserv.common.service.facade.app.ActivityDepositsService" ref="activityDepositsService" retries="0"/>
+
+	<dubbo:service  interface="com.xianglin.appserv.common.service.facade.NodeGrowUpService" ref="nodeGrowUpService" retries="0"/>
+	
+	<dubbo:service  interface="com.xianglin.appserv.common.service.facade.AppMenuService" ref="appMenuService" retries="0"/>
+	
+	<dubbo:service  interface="com.xianglin.appserv.common.service.facade.app.ArticleService" ref="articleService" retries="0"/>
+	
+	<dubbo:service  interface="com.xianglin.appserv.common.service.facade.app.ActivityShareService" ref="activityShareService" retries="0"/>
+	
+	<dubbo:service   interface="com.xianglin.appserv.common.service.facade.AppLoginService" ref="appLoginService" retries="0"/>
+
+	<dubbo:service   interface="com.xianglin.appserv.common.service.facade.app.ActivityTurntableService" ref="activityTurntableService" retries="0"/>
+
+	<dubbo:service   interface="com.xianglin.appserv.common.service.facade.app.DiscoryService" ref="discoryService" retries="0"/>
+    <dubbo:service   interface="com.xianglin.appserv.common.service.facade.app.PersonalService" ref="personalService" retries="0"/>
+	<dubbo:service   interface="com.xianglin.appserv.common.service.facade.app.FilofaxService" ref="filofaxService" retries="0"/>
+
+	<dubbo:service   interface="com.xianglin.appserv.common.service.facade.app.ActivityV321Service" ref="activityV321Service" retries="0"/>
+    <dubbo:service   interface="com.xianglin.appserv.common.service.facade.app.OrganizeService" ref="organizeService" retries="0"/>
+    <dubbo:service   interface="com.xianglin.appserv.common.service.facade.app.InterestService" ref="interestService" retries="0"/>
+    <dubbo:service   interface="com.xianglin.appserv.common.service.facade.app.GoldService" ref="goldService" retries="0"/>
+
+    <dubbo:service   interface="com.xianglin.appserv.common.service.facade.app.UserGenealogyService" ref="userGenealogyService" retries="0"/>
+    <dubbo:service   interface="com.xianglin.appserv.common.service.facade.app.RecruitService" ref="recruitService" retries="0"/>
+    <dubbo:service   interface="com.xianglin.appserv.common.service.facade.UserRelationService" ref="userRelationService" retries="0"/>
+    <dubbo:service   interface="com.xianglin.appserv.common.service.facade.app.LogService" ref="logService" retries="0"/>
+</beans>
+

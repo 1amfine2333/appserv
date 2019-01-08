@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppRecruitResumeDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppRecruitResume" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="GENDER" property="gender" jdbcType="VARCHAR" />
+    <result column="ETHNICITY" property="ethnicity" jdbcType="VARCHAR" />
+    <result column="EDUCATION" property="education" jdbcType="VARCHAR" />
+    <result column="CRIMINAL_RECORD" property="criminalRecord" jdbcType="VARCHAR" />
+    <result column="CONTACT_PHONE" property="contactPhone" jdbcType="VARCHAR" />
+    <result column="CERTIFICATES_NUMBER" property="certificatesNumber" jdbcType="VARCHAR" />
+    <result column="DISTRICT" property="district" jdbcType="VARCHAR" />
+    <result column="LEADER_SIGN" property="leaderSign" jdbcType="VARCHAR" />
+    <result column="RECOMMEND_PHONE" property="recommendPhone" jdbcType="VARCHAR" />
+    <result column="EXPECT_JOB" property="expectJob" jdbcType="VARCHAR" />
+    <result column="EXPECT_CITY" property="expectCity" jdbcType="VARCHAR" />
+    <result column="PAY_TYPE" property="payType" jdbcType="VARCHAR" />
+    <result column="PAY_START" property="payStart" jdbcType="INTEGER" />
+    <result column="PAY_END" property="payEnd" jdbcType="INTEGER" />
+    <result column="MARRIAGE_SIGN" property="marriageSign" jdbcType="VARCHAR" />
+    <result column="LOCATION" property="location" jdbcType="VARCHAR" />
+    <result column="PROVINCE_SIGN" property="provinceSign" jdbcType="VARCHAR" />
+    <result column="RECENT_JOB" property="recentJob" jdbcType="VARCHAR" />
+    <result column="RECENT_JOB_TIME" property="recentJobTime" jdbcType="TIMESTAMP" />
+    <result column="DELIVERY_COUNT" property="deliveryCount" jdbcType="BIGINT" />
+    <result column="MANAGE_STATUS" property="manageStatus" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+      <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PARTY_ID, TYPE, NAME,AGE, GENDER, ETHNICITY, EDUCATION, CRIMINAL_RECORD, CONTACT_PHONE, 
+    CERTIFICATES_NUMBER, DISTRICT, LEADER_SIGN, RECOMMEND_PHONE, EXPECT_JOB, EXPECT_CITY, PAY_TYPE,
+    PAY_START, PAY_END, MARRIAGE_SIGN, LOCATION, PROVINCE_SIGN,RECENT_JOB,RECENT_JOB_TIME,DELIVERY_COUNT, MANAGE_STATUS,STATUS,REMARK, IS_DELETED, 
+    CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_recruit_resume
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_recruit_resume
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppRecruitResume" useGeneratedKeys="true"
+          keyProperty="id">
+    insert into app_recruit_resume (ID, PARTY_ID, TYPE,AGE, 
+      NAME, GENDER, ETHNICITY, 
+      EDUCATION, CRIMINAL_RECORD, CONTACT_PHONE, 
+      CERTIFICATES_NUMBER, DISTRICT, LEADER_SIGN, 
+      RECOMMEND_PHONE, EXPECT_JOB, EXPECT_CITY, PAY_TYPE,
+      PAY_START, PAY_END, MARRIAGE_SIGN, 
+      LOCATION, PROVINCE_SIGN,RECENT_JOB,RECENT_JOB_TIME,DELIVERY_COUNT,MANAGE_STATUS,STATUS, 
+      IS_DELETED, CREATE_TIME, UPDATE_TIME, 
+      COMMENTS)
+    values (#{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{type,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER},#{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, #{ethnicity,jdbcType=VARCHAR}, 
+      #{education,jdbcType=VARCHAR}, #{criminalRecord,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, 
+      #{certificatesNumber,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, #{leaderSign,jdbcType=VARCHAR}, 
+      #{recommendPhone,jdbcType=VARCHAR}, #{expectJob,jdbcType=VARCHAR}, #{expectCity,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR},
+      #{payStart,jdbcType=INTEGER}, #{payEnd,jdbcType=INTEGER}, #{marriageSign,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR}, #{provinceSign,jdbcType=VARCHAR},#{recentJob,jdbcType=VARCHAR},
+        NOW(),0,#{manageStatus,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},  
+      'N', NOW(), NOW(),  #{comments,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppRecruitResume" >
+    update app_recruit_resume
+    <set >
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null and age !=0" >
+        AGE = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        GENDER = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="ethnicity != null" >
+        ETHNICITY = #{ethnicity,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null" >
+        EDUCATION = #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="criminalRecord != null" >
+        CRIMINAL_RECORD = #{criminalRecord,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null" >
+        CONTACT_PHONE = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="certificatesNumber != null" >
+        CERTIFICATES_NUMBER = #{certificatesNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        DISTRICT = #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderSign != null" >
+        LEADER_SIGN = #{leaderSign,jdbcType=VARCHAR},
+      </if>
+      <if test="recommendPhone != null" >
+        RECOMMEND_PHONE = #{recommendPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="expectJob != null" >
+        EXPECT_JOB = #{expectJob,jdbcType=VARCHAR},
+      </if>
+      <if test="expectCity != null" >
+        EXPECT_CITY = #{expectCity,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        PAY_TYPE = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="payStart != null" >
+        PAY_START = #{payStart,jdbcType=INTEGER},
+      </if>
+      <if test="payEnd != null" >
+        PAY_END = #{payEnd,jdbcType=INTEGER},
+      </if>
+      <if test="marriageSign != null" >
+        MARRIAGE_SIGN = #{marriageSign,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        LOCATION = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceSign != null" >
+        PROVINCE_SIGN = #{provinceSign,jdbcType=VARCHAR},
+      </if>
+      <if test="recentJob != null" >
+        RECENT_JOB = #{recentJob,jdbcType=VARCHAR},
+      </if>
+      <if test="recentJobTime != null" >
+        RECENT_JOB_TIME = #{recentJobTime,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryCount != null and deliveryCount !=0" >
+        DELIVERY_COUNT = #{deliveryCount,jdbcType=VARCHAR},
+      </if>
+      <if test="manageStatus != null" >
+        MANAGE_STATUS = #{manageStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+        UPDATE_TIME =NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+    <select id="query" resultMap="BaseResultMap" parameterType="map">
+        <if test="startPage != null and pageSize !=null">
+            <bind name="start" value="(startPage-1)*pageSize"/>
+        </if>
+        select
+        <include refid="Base_Column_List"/>
+        from app_recruit_resume
+        <where>IS_DELETED = 'N'
+            <if test="partyId != null" >
+                and PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="type != null" >
+                and TYPE = #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null" >
+                and NAME = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="gender != null" >
+                and GENDER = #{gender,jdbcType=VARCHAR}
+            </if>
+            <if test="ethnicity != null" >
+                and ETHNICITY = #{ethnicity,jdbcType=VARCHAR}
+            </if>
+            <if test="education != null" >
+                and EDUCATION = #{education,jdbcType=VARCHAR}
+            </if>
+            <if test="criminalRecord != null" >
+                and CRIMINAL_RECORD = #{criminalRecord,jdbcType=VARCHAR}
+            </if>
+            <if test="contactPhone != null" >
+                and CONTACT_PHONE = #{contactPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="certificatesNumber != null" >
+                and  CERTIFICATES_NUMBER = #{certificatesNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="district != null" >
+                and  DISTRICT = #{district,jdbcType=VARCHAR}
+            </if>
+            <if test="leaderSign != null" >
+                and LEADER_SIGN = #{leaderSign,jdbcType=VARCHAR}
+            </if>
+            <if test="recommendPhone != null" >
+                and RECOMMEND_PHONE = #{recommendPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="expectJob != null" >
+                and EXPECT_JOB = #{expectJob,jdbcType=VARCHAR}
+            </if>
+            <if test="expectCity != null" >
+                EXPECT_CITY = #{expectCity,jdbcType=VARCHAR},
+            </if>
+            <if test="payType != null" >
+                and PAY_TYPE = #{payType,jdbcType=VARCHAR}
+            </if>
+            <if test="payStart != null" >
+                and PAY_START = #{payStart,jdbcType=INTEGER}
+            </if>
+            <if test="payEnd != null" >
+                and PAY_END = #{payEnd,jdbcType=INTEGER}
+            </if>
+            <if test="marriageSign != null" >
+                and  MARRIAGE_SIGN = #{marriageSign,jdbcType=VARCHAR}
+            </if>
+            <if test="location != null" >
+                and LOCATION = #{location,jdbcType=VARCHAR}
+            </if>
+            <if test="provinceSign != null" >
+                and PROVINCE_SIGN = #{provinceSign,jdbcType=VARCHAR}
+            </if>
+            <if test="manageStatus != null" >
+                and  MANAGE_STATUS = #{manageStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null" >
+                and  STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="isDeleted != null" >
+                and IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null" >
+                and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null" >
+                and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="comments != null" >
+                and COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by CREATE_TIME desc
+        <if test="startPage != null and pageSize !=null">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <select id="queryResumeByParam" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from app_recruit_resume
+        <where>IS_DELETED = 'N'
+            <if test="paras.partyId != null" >
+                and PARTY_ID = #{paras.partyId,jdbcType=BIGINT}
+            </if>
+            <if test="paras.type != null" >
+                and TYPE = #{paras.type,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.name != null" >
+                and NAME = #{paras.name,jdbcType=VARCHAR}
+            </if>
+            <if test="isResume eq 'Y'.toString()" >
+                and ( NAME != null or NAME !='' )
+            </if>
+            <if test="paras.gender != null" >
+                and GENDER = #{paras.gender,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.ethnicity != null" >
+                and ETHNICITY = #{paras.ethnicity,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.education != null" >
+                and EDUCATION = #{paras.education,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.criminalRecord != null" >
+                and CRIMINAL_RECORD = #{paras.criminalRecord,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.contactPhone != null" >
+                and CONTACT_PHONE = #{contactPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.certificatesNumber != null" >
+                and  CERTIFICATES_NUMBER = #{paras.certificatesNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.district != null" >
+                and  DISTRICT = #{paras.district,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.leaderSign != null" >
+                and LEADER_SIGN = #{paras.leaderSign,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.recommendPhone != null" >
+                and RECOMMEND_PHONE = #{paras.recommendPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.expectJob != null" >
+                and EXPECT_JOB  LIKE CONCAT('%', #{paras.expectJob}, '%')
+            </if>
+            <if test="paras.payType != null" >
+                and PAY_TYPE = #{paras.payType,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.payStart != null" >
+                and PAY_START = #{paras.payStart,jdbcType=INTEGER}
+            </if>
+            <if test="paras.payEnd != null" >
+                and PAY_END = #{paras.payEnd,jdbcType=INTEGER}
+            </if>
+            <if test="paras.marriageSign != null" >
+                and  MARRIAGE_SIGN = #{paras.marriageSign,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.location != null" >
+                and LOCATION = #{paras.location,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.provinceSign != null" >
+                and PROVINCE_SIGN = #{paras.provinceSign,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.manageStatus != null" >
+                and  MANAGE_STATUS = #{paras.manageStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.status != null" >
+                and  STATUS = #{paras.status,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.isDeleted != null" >
+                and IS_DELETED = #{paras.isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.createTime != null" >
+                and CREATE_TIME = #{paras.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="paras.updateTime != null" >
+                and UPDATE_TIME = #{paras.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="paras.comments != null" >
+                and COMMENTS = #{paras.comments,jdbcType=VARCHAR}
+            </if>
+        </where>
+        <if test="orderBy != null" >
+            order by ${orderBy}
+        </if>
+        <if test="orderBy == null" >
+            order by CREATE_TIME desc
+        </if>
+        
+        <if test="page != null">
+            <bind name="start" value="(page.startPage-1)*page.pageSize"/>
+            limit #{start},#{page.pageSize}
+        </if>
+    </select>
+
+    <select id="queryResumeCountByParam" resultType="Integer">
+        select
+        count(*)
+        from app_recruit_resume
+        <where>IS_DELETED = 'N'
+            <if test="paras.partyId != null" >
+                and PARTY_ID = #{paras.partyId,jdbcType=BIGINT}
+            </if>
+            <if test="paras.type != null" >
+                and TYPE = #{paras.type,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.name != null" >
+                and NAME = #{paras.name,jdbcType=VARCHAR}
+            </if>
+            <if test="isResume eq 'Y'.toString()" >
+                and ( NAME != null or NAME !='' )
+            </if>
+            <if test="paras.gender != null" >
+                and GENDER = #{paras.gender,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.ethnicity != null" >
+                and ETHNICITY = #{paras.ethnicity,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.education != null" >
+                and EDUCATION = #{paras.education,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.criminalRecord != null" >
+                and CRIMINAL_RECORD = #{paras.criminalRecord,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.contactPhone != null" >
+                and CONTACT_PHONE = #{contactPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.certificatesNumber != null" >
+                and  CERTIFICATES_NUMBER = #{paras.certificatesNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.district != null" >
+                and  DISTRICT = #{paras.district,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.leaderSign != null" >
+                and LEADER_SIGN = #{paras.leaderSign,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.recommendPhone != null" >
+                and RECOMMEND_PHONE = #{paras.recommendPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.expectJob != null" >
+                and EXPECT_JOB  LIKE CONCAT('%', #{paras.expectJob}, '%')
+            </if>
+            <if test="paras.payType != null" >
+                and PAY_TYPE = #{paras.payType,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.payStart != null" >
+                and PAY_START = #{paras.payStart,jdbcType=INTEGER}
+            </if>
+            <if test="paras.payEnd != null" >
+                and PAY_END = #{paras.payEnd,jdbcType=INTEGER}
+            </if>
+            <if test="paras.marriageSign != null" >
+                and  MARRIAGE_SIGN = #{paras.marriageSign,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.location != null" >
+                and LOCATION = #{paras.location,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.provinceSign != null" >
+                and PROVINCE_SIGN = #{paras.provinceSign,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.manageStatus != null" >
+                and  MANAGE_STATUS = #{paras.manageStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.status != null" >
+                and  STATUS = #{paras.status,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.isDeleted != null" >
+                and IS_DELETED = #{paras.isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.createTime != null" >
+                and CREATE_TIME = #{paras.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="paras.updateTime != null" >
+                and UPDATE_TIME = #{paras.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="paras.comments != null" >
+                and COMMENTS = #{paras.comments,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryJobResumeByParam" resultMap="BaseResultMap" parameterType="map">
+        <if test="startPage != null and pageSize !=null">
+            <bind name="start" value="(startPage-1)*pageSize"/>
+        </if>
+        select a.ID, a.PARTY_ID, a.TYPE, a.NAME, a.GENDER, a.ETHNICITY, a.EDUCATION, a.CRIMINAL_RECORD, a.CONTACT_PHONE,
+        a.CERTIFICATES_NUMBER, a.DISTRICT, a.LEADER_SIGN, a.RECOMMEND_PHONE, a.EXPECT_JOB,a.EXPECT_CITY, a.PAY_TYPE,
+        a.PAY_START, a.PAY_END, a.MARRIAGE_SIGN, a.LOCATION, a.PROVINCE_SIGN,a.RECENT_JOB,a.RECENT_JOB_TIME,a.DELIVERY_COUNT, a.MANAGE_STATUS, a.IS_DELETED,
+        b.CREATE_TIME, a.UPDATE_TIME, a.COMMENTS
+        from app_recruit_resume a LEFT JOIN app_recruit_job_resume b on a.id=b.RECRUIT_ID
+        <where>a.IS_DELETED='N'
+            <if test="partyId != null" >
+                and a.PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="type != null" >
+                and a.TYPE = #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null" >
+                and a.NAME = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="gender != null" >
+                and a.GENDER = #{gender,jdbcType=VARCHAR}
+            </if>
+            <if test="ethnicity != null" >
+                and a.ETHNICITY = #{ethnicity,jdbcType=VARCHAR}
+            </if>
+            <if test="education != null" >
+                and a.EDUCATION = #{education,jdbcType=VARCHAR}
+            </if>
+            <if test="criminalRecord != null" >
+                and a.CRIMINAL_RECORD = #{criminalRecord,jdbcType=VARCHAR}
+            </if>
+            <if test="contactPhone != null" >
+                and a.CONTACT_PHONE = #{contactPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="certificatesNumber != null" >
+                and  a.CERTIFICATES_NUMBER = #{certificatesNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="district != null" >
+                and  a.DISTRICT = #{district,jdbcType=VARCHAR}
+            </if>
+            <if test="leaderSign != null" >
+                and a.LEADER_SIGN = #{leaderSign,jdbcType=VARCHAR}
+            </if>
+            <if test="recommendPhone != null" >
+                and a.RECOMMEND_PHONE = #{recommendPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="expectJob != null" >
+                and a.EXPECT_JOB = #{expectJob,jdbcType=VARCHAR}
+            </if>
+            <if test="payType != null" >
+                and a.PAY_TYPE = #{payType,jdbcType=VARCHAR}
+            </if>
+            <if test="payStart != null" >
+                and a.PAY_START = #{payStart,jdbcType=INTEGER}
+            </if>
+            <if test="payEnd != null" >
+                and a.PAY_END = #{payEnd,jdbcType=INTEGER}
+            </if>
+            <if test="marriageSign != null" >
+                and  a.MARRIAGE_SIGN = #{marriageSign,jdbcType=VARCHAR}
+            </if>
+            <if test="location != null" >
+                and a.LOCATION = #{location,jdbcType=VARCHAR}
+            </if>
+            <if test="provinceSign != null" >
+                and a.PROVINCE_SIGN = #{provinceSign,jdbcType=VARCHAR}
+            </if>
+            <if test="manageStatus != null" >
+                and  a.MANAGE_STATUS = #{manageStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null" >
+                and a.CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="status != null" >
+                and  a.STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="updateTime != null" >
+                and a.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="comments != null" >
+                and a.COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+            <if test="jobId != null" >
+                and B.JOB_ID = #{jobId,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by b.CREATE_TIME desc
+        <if test="startPage != null and pageSize !=null">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <select id="queryJobResumeCount" resultType="Integer"  parameterType="map">
+        select count(*)
+        from app_recruit_resume a LEFT JOIN app_recruit_job_resume b on a.id=b.RECRUIT_ID
+        <where>a.IS_DELETED='N'
+            <if test="partyId != null" >
+                and a.PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="type != null" >
+                and a.TYPE = #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null" >
+                and a.NAME = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="gender != null" >
+                and a.GENDER = #{gender,jdbcType=VARCHAR}
+            </if>
+            <if test="ethnicity != null" >
+                and a.ETHNICITY = #{ethnicity,jdbcType=VARCHAR}
+            </if>
+            <if test="education != null" >
+                and a.EDUCATION = #{education,jdbcType=VARCHAR}
+            </if>
+            <if test="criminalRecord != null" >
+                and a.CRIMINAL_RECORD = #{criminalRecord,jdbcType=VARCHAR}
+            </if>
+            <if test="contactPhone != null" >
+                and a.CONTACT_PHONE = #{contactPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="certificatesNumber != null" >
+                and  a.CERTIFICATES_NUMBER = #{certificatesNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="district != null" >
+                and  a.DISTRICT = #{district,jdbcType=VARCHAR}
+            </if>
+            <if test="leaderSign != null" >
+                and a.LEADER_SIGN = #{leaderSign,jdbcType=VARCHAR}
+            </if>
+            <if test="recommendPhone != null" >
+                and a.RECOMMEND_PHONE = #{recommendPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="expectJob != null" >
+                and a.EXPECT_JOB = #{expectJob,jdbcType=VARCHAR}
+            </if>
+            <if test="payType != null" >
+                and a.PAY_TYPE = #{payType,jdbcType=VARCHAR}
+            </if>
+            <if test="payStart != null" >
+                and a.PAY_START = #{payStart,jdbcType=INTEGER}
+            </if>
+            <if test="payEnd != null" >
+                and a.PAY_END = #{payEnd,jdbcType=INTEGER}
+            </if>
+            <if test="marriageSign != null" >
+                and  a.MARRIAGE_SIGN = #{marriageSign,jdbcType=VARCHAR}
+            </if>
+            <if test="location != null" >
+                and a.LOCATION = #{location,jdbcType=VARCHAR}
+            </if>
+            <if test="provinceSign != null" >
+                and a.PROVINCE_SIGN = #{provinceSign,jdbcType=VARCHAR}
+            </if>
+            <if test="manageStatus != null" >
+                and  a.MANAGE_STATUS = #{manageStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null" >
+                and  a.STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null" >
+                and a.CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null" >
+                and a.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="comments != null" >
+                and a.COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+            <if test="jobId != null" >
+                and B.JOB_ID = #{jobId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPersonalAndRecommedResumeCount" resultType="map"  parameterType="map">
+       SELECT sum( IF ( type = 'PSERSONAL' AND (NAME != NULL OR NAME != ''),1,	0)) isResume,sum(IF (
+			type = 'PSERSONAL' AND (PAY_TYPE != NULL OR PAY_TYPE != ''),1,0)) isIntention,
+	sum(IF(type = 'RECOMMEND', 1, 0)) isRecommendResume FROM app_recruit_resume a
+    WHERE a.PARTY_ID = #{partyId,jdbcType=BIGINT} AND a.IS_DELETED = 'N'
+    </select>
+</mapper>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppInstallDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppInstall" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="DEVICE_ID" property="deviceId" jdbcType="VARCHAR" />
+    <result column="APP_NAME" property="appName" jdbcType="VARCHAR" />
+    <result column="APP_PACKAGE" property="appPackage" jdbcType="VARCHAR" />
+    <result column="APP_PRIVILEGE" property="appPrivilege" jdbcType="VARCHAR" />
+    <result column="APP_INSTALL_DATE" property="appInstallDate" jdbcType="TIMESTAMP" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="APP_VERSION" property="appVersion" jdbcType="VARCHAR" />
+    <result column="APP_DEV" property="appDev" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+ 	<result column="APP_ICON" property="appIcon" jdbcType="VARCHAR" />	
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PARTY_ID, DEVICE_ID, APP_NAME, APP_PACKAGE, APP_PRIVILEGE, APP_INSTALL_DATE, 
+    IS_DELETED, APP_VERSION, APP_DEV, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <sql id="Blob_Column_List" >
+    APP_ICON
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from app_install_applist
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_install_applist
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppInstall" >
+    insert into app_install_applist (ID, PARTY_ID, DEVICE_ID, 
+      APP_NAME, APP_PACKAGE, APP_PRIVILEGE, 
+      APP_INSTALL_DATE, IS_DELETED, APP_VERSION, 
+      APP_DEV, CREATE_TIME, UPDATE_TIME, 
+      APP_ICON)
+    values (#{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{deviceId,jdbcType=VARCHAR}, 
+      #{appName,jdbcType=VARCHAR}, #{appPackage,jdbcType=VARCHAR}, #{appPrivilege,jdbcType=VARCHAR}, 
+      #{appInstallDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=VARCHAR}, #{appVersion,jdbcType=VARCHAR}, 
+      #{appDev,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{appIcon,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppInstall" >
+    insert into app_install_applist
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="partyId != null" >
+        PARTY_ID,
+      </if>
+      <if test="deviceId != null" >
+        DEVICE_ID,
+      </if>
+      <if test="appName != null" >
+        APP_NAME,
+      </if>
+      <if test="appPackage != null" >
+        APP_PACKAGE,
+      </if>
+      <if test="appPrivilege != null" >
+        APP_PRIVILEGE,
+      </if>
+      <if test="appInstallDate != null" >
+        APP_INSTALL_DATE,
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED,
+      </if>
+      <if test="appVersion != null" >
+        APP_VERSION,
+      </if>
+      <if test="appDev != null" >
+        APP_DEV,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="appIcon != null" >
+        APP_ICON,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="partyId != null" >
+        #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="appName != null" >
+        #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="appPackage != null" >
+        #{appPackage,jdbcType=VARCHAR},
+      </if>
+      <if test="appPrivilege != null" >
+        #{appPrivilege,jdbcType=VARCHAR},
+      </if>
+      <if test="appInstallDate != null" >
+        #{appInstallDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="appVersion != null" >
+        #{appVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="appDev != null" >
+        #{appDev,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appIcon != null" >
+        #{appIcon,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppInstall" >
+    update app_install_applist
+    <set >
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="deviceId != null" >
+        DEVICE_ID = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="appName != null" >
+        APP_NAME = #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="appPackage != null" >
+        APP_PACKAGE = #{appPackage,jdbcType=VARCHAR},
+      </if>
+      <if test="appPrivilege != null" >
+        APP_PRIVILEGE = #{appPrivilege,jdbcType=VARCHAR},
+      </if>
+      <if test="appInstallDate != null" >
+        APP_INSTALL_DATE = #{appInstallDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="appVersion != null" >
+        APP_VERSION = #{appVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="appDev != null" >
+        APP_DEV = #{appDev,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appIcon != null" >
+        APP_ICON = #{appIcon,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xianglin.appserv.common.dal.dataobject.AppInstall" >
+    update app_install_applist
+    set PARTY_ID = #{partyId,jdbcType=BIGINT},
+      DEVICE_ID = #{deviceId,jdbcType=VARCHAR},
+      APP_NAME = #{appName,jdbcType=VARCHAR},
+      APP_PACKAGE = #{appPackage,jdbcType=VARCHAR},
+      APP_PRIVILEGE = #{appPrivilege,jdbcType=VARCHAR},
+      APP_INSTALL_DATE = #{appInstallDate,jdbcType=TIMESTAMP},
+      IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      APP_VERSION = #{appVersion,jdbcType=VARCHAR},
+      APP_DEV = #{appDev,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      APP_ICON = #{appIcon,jdbcType=LONGVARBINARY}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xianglin.appserv.common.dal.dataobject.AppInstall" >
+    update app_install_applist
+    set PARTY_ID = #{partyId,jdbcType=BIGINT},
+      DEVICE_ID = #{deviceId,jdbcType=VARCHAR},
+      APP_NAME = #{appName,jdbcType=VARCHAR},
+      APP_PACKAGE = #{appPackage,jdbcType=VARCHAR},
+      APP_PRIVILEGE = #{appPrivilege,jdbcType=VARCHAR},
+      APP_INSTALL_DATE = #{appInstallDate,jdbcType=TIMESTAMP},
+      IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      APP_VERSION = #{appVersion,jdbcType=VARCHAR},
+      APP_DEV = #{appDev,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  
+  <insert id="batchInsertAppInstall" parameterType="list" >
+  		insert into app_install_applist (ID, PARTY_ID, DEVICE_ID, 
+      APP_NAME, APP_PACKAGE, APP_PRIVILEGE, 
+      APP_INSTALL_DATE, IS_DELETED, APP_VERSION, 
+      APP_DEV, CREATE_TIME, UPDATE_TIME, 
+      APP_ICON) values 
+      	<foreach collection="list" index="index" item="item" separator=",">
+      		(#{item.id,jdbcType=BIGINT}, #{item.partyId,jdbcType=BIGINT}, #{item.deviceId,jdbcType=VARCHAR}, 
+      		#{item.appName,jdbcType=VARCHAR}, #{item.appPackage,jdbcType=VARCHAR}, #{item.appPrivilege,jdbcType=VARCHAR}, 
+      		#{item.appInstallDate,jdbcType=TIMESTAMP}, '0', #{item.appVersion,jdbcType=VARCHAR}, 
+      		#{item.appDev,jdbcType=VARCHAR}, now(), now(), 
+      		#{item.appIcon,jdbcType=LONGVARBINARY})
+      	</foreach>
+  </insert>
+  
+  <select id="queryAppInstallByDeviceId" parameterType="String" resultMap="BaseResultMap">
+  
+  		select <include refid="Base_Column_List"></include> from app_install_applist where is_deleted='0' and device_id=#{deviceId,jdbcType=VARCHAR}
+  		
+  </select>
+  
+  <update id="deleteAppInstall" >
+  
+  		update app_install_applist set is_deleted='1' ,update_time=NOW() where device_id=#{deviceId,jdbcType=VARCHAR} and app_name=#{appName,jdbcType=VARCHAR}
+  </update>
+  
+  	<update id="updateAppInstall" parameterType="com.xianglin.appserv.common.dal.dataobject.AppInstall" >
+    update app_install_applist
+    <set >
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="appName != null" >
+        APP_NAME = #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="appPackage != null" >
+        APP_PACKAGE = #{appPackage,jdbcType=VARCHAR},
+      </if>
+      <if test="appPrivilege != null" >
+        APP_PRIVILEGE = #{appPrivilege,jdbcType=VARCHAR},
+      </if>
+      <if test="appInstallDate != null" >
+        APP_INSTALL_DATE = #{appInstallDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appVersion != null" >
+        APP_VERSION = #{appVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="appDev != null" >
+        APP_DEV = #{appDev,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appIcon != null" >
+        APP_ICON = #{appIcon,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where is_deleted='0' and device_id=#{deviceId,jdbcType=VARCHAR} and app_name=#{appName,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

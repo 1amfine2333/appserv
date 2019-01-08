@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppCommuseMenuDAO" >
+  <resultMap id="TopUserUseMenu" type="com.xianglin.appserv.common.dal.dataobject.AppCommuseMenuModel" >
+    <id column="SEQ_ID" property="seqId" jdbcType="BIGINT" />
+    <result column="PARTYID" property="partyid" jdbcType="VARCHAR" />
+    <result column="MENU_ID" property="menuId" jdbcType="VARCHAR" />
+    <result column="USE_COUNT" property="useCount" jdbcType="BIGINT" />
+    <result column="DATA_STATUS" property="dataStatus" jdbcType="CHAR" />
+    <result column="MNAME" property="menuName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TopCommMenu" type="com.xianglin.appserv.common.dal.dataobject.AppCommuseMenuModel" >
+    <result column="MENU_ID" property="menuId" jdbcType="VARCHAR" />
+    <result column="SUM_COUNT" property="useCount" jdbcType="BIGINT" />
+    <result column="MNAME" property="menuName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SEQ_ID, PARTYID, MENU_ID, USE_COUNT, DATA_STATUS, CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="queryTopUserCommMenu" resultMap="TopUserUseMenu" parameterType="com.xianglin.appserv.common.dal.dataobject.AppCommuseMenu" >
+    SELECT
+		a.SEQ_ID,
+		a.PARTYID,
+		a.MENU_ID,
+		a.USE_COUNT,
+		a.DATA_STATUS,
+		b.MNAME
+	FROM
+		app_commuse_menu a,
+		app_menu b
+	WHERE
+		a.MENU_ID = b.MID
+	AND a.PARTYID = #{partyid,jdbcType=VARCHAR}
+	AND a.DATA_STATUS = 'Y'
+	ORDER BY
+		a.USE_COUNT DESC
+	LIMIT 100
+  </select>
+  
+  <select id="queryTopCommMenu" resultMap="TopCommMenu" parameterType="com.xianglin.appserv.common.dal.dataobject.AppCommuseMenu" >
+    SELECT
+		a.MENU_ID,
+		SUM(a.USE_COUNT) AS SUM_COUNT,
+		b.MNAME
+	FROM
+		app_commuse_menu a,
+		app_menu b
+	WHERE
+		a.MENU_ID = b.MID
+	AND a.DATA_STATUS = 'Y'
+	GROUP BY
+		a.MENU_ID,
+		b.MNAME
+	ORDER BY
+		SUM_COUNT DESC
+	LIMIT 100
+  </select>
+</mapper>

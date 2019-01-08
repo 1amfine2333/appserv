@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+	<!--<dubbo:reference id="figureService" interface="com.xianglin.cif.common.service.facade.FigureService" url="${cif.service.url}"/>-->
+	<!--<bean id="figureServiceClient" class="com.xianglin.appserv.common.service.integration.cif.impl.FigureServiceClientImpl">-->
+		<!--<property name="figureService" ref="figureService" />-->
+	<!--</bean>-->
+	
+	<!--<dubbo:reference id="MessageFacade" interface="com.xianglin.xlappserver.common.service.facade.MessageFacade" />-->
+	<!--<bean id="messageSendClient" class="com.xianglin.appserv.common.service.integration.cif.impl.MessageSendClientImpl">-->
+		<!--<property name="messageFacade" ref="MessageFacade" />-->
+	<!--</bean>-->
+ 	<!-- 获取网点经理头像对外服务 -->
+	<dubbo:reference id="nodeManagerAvatarService"  interface="com.xianglin.xlnodecore.common.service.facade.NodeManagerAvatarService"  url="${xlnodecore.servive.url}"></dubbo:reference>
+ 	<dubbo:reference id="nodeService" interface="com.xianglin.xlnodecore.common.service.facade.NodeService"  url="${xlnodecore.servive.url}"></dubbo:reference>
+    <!--<dubbo:reference id="appcifLoginService" interface="com.xianglin.cif.common.service.facade.AppLoginService" url="${cif.service.url}"></dubbo:reference>-->
+ 	<!--<dubbo:reference id="pOSRegisterLoginService" interface="com.xianglin.cif.common.service.facade.POSRegisterLoginService" url="${cif.service.url}"></dubbo:reference>-->
+ 	<!--<dubbo:reference id="personService" interface="com.xianglin.cif.common.service.facade.PersonService" url="${cif.service.url}"></dubbo:reference>-->
+	<dubbo:reference id="accountNodeManagerService" interface="com.xianglin.xlnodecore.common.service.facade.AccountNodeManagerService"  url="${xlnodecore.servive.url}" ></dubbo:reference>
+	<dubbo:reference id="appmessageService" interface="com.xianglin.xlStation.common.service.facade.MessageService" url="${xlstation.service.url}" check="false"></dubbo:reference>
+	<!--<dubbo:reference id="posLoginService" interface="com.xianglin.xlnodecore.common.service.facade.PosLoginService"  url="${xlnodecore.servive.url}"></dubbo:reference>-->
+	<!--<dubbo:reference id="logService" interface="com.xianglin.xlnodecore.common.service.facade.LogService"  url="${xlnodecore.servive.url}"></dubbo:reference>-->
+	<dubbo:reference id="nodeWorkImageService" interface="com.xianglin.xlnodecore.common.service.facade.NodeWorkImageService" url="${xlnodecore.servive.url}"></dubbo:reference>
+	<bean id="appLoginServiceClient" class="com.xianglin.appserv.common.service.integration.cif.impl.AppLoginServiceClientImpl">
+		<!--<property name="appLoginService" ref="appcifLoginService" />-->
+		<!--<property name="posRegisterLoginService" ref="pOSRegisterLoginService" />-->
+		<property name="accountNodeManagerService" ref="accountNodeManagerService" />
+		<property name="nodeService" ref="nodeService" />
+		<property name="messageService" ref="appmessageService" />
+		<!--<property name="posLoginService" ref="posLoginService" />-->
+		<!--<property name="logServiceClient" ref="logServiceClient" />-->
+		<property name="nodeWorkImageService" ref="nodeWorkImageService" />
+	</bean>
+	
+	<dubbo:reference id="partyApttrAccountService" interface="com.xianglin.cif.common.service.facade.PartyAttrAccountService" url="${cif.service.url}"/>
+	<dubbo:reference id="partyAttrPasswordService" interface="com.xianglin.cif.common.service.facade.PartyAttrPasswordService" url="${cif.service.url}"/>
+	<!--<dubbo:reference id="appDeviceInfoService" interface="com.xianglin.cif.common.service.facade.AppDeviceInfoService" url="${cif.service.url}"/>-->
+	<!--<bean id="appDeviceInfoServiceClient" class="com.xianglin.appserv.common.service.integration.cif.impl.AppDeviceInfoServiceClientImpl">-->
+		<!--<property name="appDeviceInfoService" ref="appDeviceInfoService" />-->
+	<!--</bean>-->
+	
+	<dubbo:reference id="transferService" interface="com.xianglin.te.common.service.facade.TransferService" url="${te.service.url}"></dubbo:reference>
+	<dubbo:reference id="teMonthlySummaryService" interface="com.xianglin.te.common.service.facade.MonthlySummaryService" url="${te.service.url}"></dubbo:reference>
+	<dubbo:reference id="salaryImportServicAppLoginServiceClientImple" interface="com.xianglin.xlnodecore.common.service.facade.SalaryImportService" url="${xlnodecore.servive.url}"></dubbo:reference>
+	<dubbo:reference id="nodeBusinessSeAppLoginServiceClientImplrvice" interface="com.xianglin.xlnodecore.common.service.facade.NodeBusinessService"  url="${xlnodecore.servive.url}"></dubbo:reference>
+	<dubbo:reference id="bankImportService" interface="com.xianglin.xlnodecore.common.service.facade.BankImportService"  url="${xlnodecore.servive.url}"></dubbo:reference>
+	<dubbo:reference id="dsitricodeService" interface="com.xianglin.xlnodecore.common.service.facade.DistrictCodeFullService"  url="${xlnodecore.servive.url}"></dubbo:reference>
+	
+	<dubbo:reference id="appFileService" interface="com.xianglin.xlappfile.common.service.facade.FileDealService" url="${appfile.service.url}" ></dubbo:reference>
+
+	<dubbo:reference id="rewardService" interface="com.xianglin.xlnodecore.common.service.facade.RewardService" url="${xlnodecore.servive.url}"></dubbo:reference>
+	<dubbo:reference id="flowersService" interface="com.xianglin.xlnodecore.common.service.facade.FlowersService" url="${xlnodecore.servive.url}"></dubbo:reference>
+
+	<bean id="accountNodeManagerClient" class="com.xianglin.xlnodecore.common.service.integration.impl.AccountNodeManagerClientImpl"></bean>
+	<!--<bean id="logServiceClient" class="com.xianglin.xlnodecore.common.service.integration.impl.LogServiceClientImpl" ></bean>-->
+	<bean id="rewardServiceClient" class="com.xianglin.xlnodecore.common.service.integration.impl.RewardServiceClientImpl" ></bean>
+	<bean id="flowersServiceClient" class="com.xianglin.xlnodecore.common.service.integration.impl.FlowersServiceClientImpl" ></bean>
+	<!--<bean id="personServiceClient" class="com.xianglin.appserv.common.service.integration.cif.impl.PersonServiceClientImpl" ></bean>-->
+	<bean id="authenticationServiceClient" class="com.xianglin.appserv.common.service.integration.cif.impl.AuthenticationServiceClientImpl" ></bean>
+	<!--<bean id="loanServiceClient" class="com.xianglin.xloan.common.service.integration.impl.LoanServiceClientImpl" ></bean>-->
+	<bean id="juheServiceClient" class="com.xianglin.juhe.common.service.integration.impl.JuheServiceClientImpl" ></bean>
+	<dubbo:reference id="vendorService" interface="com.xianglin.xlnodecore.common.service.facade.VendorService"  url="${xlnodecore.servive.url}"></dubbo:reference>
+	<bean id="vendorServiceClient" class="com.xianglin.xlnodecore.common.service.integration.impl.VendorServiceClientImpl" ></bean>
+
+	<!-- CIF用户联系信息接口 -->
+	<!--<dubbo:reference id="partyAttrContactService" interface="com.xianglin.cif.common.service.facade.PartyAttrContactService" url="${cif.service.url}"></dubbo:reference>-->
+	<!--<dubbo:reference id="partyAttrCredentialsService" interface="com.xianglin.cif.common.service.facade.PartyAttrCredentialsService" url="${cif.service.url}"></dubbo:reference>-->
+	<!--<dubbo:reference id="authenticationService" interface="com.xianglin.cif.common.service.facade.AuthenticationService" url="${cif.service.url}"></dubbo:reference>-->
+
+	<!--loan-->
+	<!--<dubbo:reference id="loanService" interface=" com.xl.mobile.rpc.xloan.LoanService" protocol="dubbo" url="${loan.service.url}" check="false"></dubbo:reference>-->
+
+	<!-- 乡邻账房 -->
+	<dubbo:reference id="merchantServiceFacade" interface="com.xianglin.merchant.common.service.facade.MerchantServiceFacade" check="false" ></dubbo:reference>
+
+	<dubbo:reference id="merchantPayServiceFacade" interface="com.xianglin.merchant.common.service.facade.MerchantPayServiceFacade" check="false" ></dubbo:reference>
+
+	<dubbo:reference id="loanBizService" interface="com.xianglin.loanbiz.common.service.facade.ApiService" timeout="100000" check="false" ></dubbo:reference>
+    
+    <!--xlStation-->
+    <dubbo:reference id="messageFacade" interface="com.xianglin.xlStation.common.service.facade.userFacade.MessageFacade" check="false" ></dubbo:reference>
+
+    <dubbo:reference id="authService" interface="com.xianglin.cif.common.service.facade.AuthService" check="false" ></dubbo:reference>
+    
+    <dubbo:reference id="customersInfoService" interface="com.xianglin.cif.common.service.facade.CustomersInfoService" check="false" ></dubbo:reference>
+    <dubbo:reference id="goldcoinService" interface="com.xianglin.cif.common.service.facade.GoldcoinService" check="false" ></dubbo:reference>
+    <!--理财-->
+    <dubbo:reference id="zyFnChannelSafeServiceFacade" interface="com.xianglin.finan.common.service.facade.ZyFnChannelSafeServiceFacade" check="false" ></dubbo:reference>
+    <dubbo:reference id="zyFnBusiReqServiceFacade" interface="com.xianglin.finan.common.service.facade.ZyFnBusiReqServiceFacade" check="false" ></dubbo:reference>
+    <dubbo:reference id="zyFnProductServiceFacade" interface="com.xianglin.finan.common.service.facade.ZyFnProductServiceFacade" check="false" ></dubbo:reference>
+    <dubbo:reference id="fnTransServiceFacade" interface="com.xianglin.finan.common.service.facade.FnTransServiceFacade" check="false" ></dubbo:reference>
+    <dubbo:reference id="financeService" interface="com.xianglin.xlnodecore.common.service.facade.FinanceService" check="false" ></dubbo:reference>
+</beans>

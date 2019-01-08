@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppFilofaxDetailDAO">
+    <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppFilofaxDetail">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="PARTY_ID" property="partyId" jdbcType="BIGINT"/>
+        <result column="FILOFAX_ACCOUNT" property="filofaxAccount" jdbcType="BIGINT"/>
+        <result column="CATEGORY" property="category" jdbcType="BIGINT"/>
+        <result column="CATEGORY_MODE" property="categoryMode" jdbcType="VARCHAR"/>
+        <result column="DAY" property="day" jdbcType="VARCHAR"/>
+        <result column="AMOUNT" property="amount" jdbcType="DECIMAL"/>
+        <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+        <result column="LABEL" property="label" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="COMMENTS" property="comments" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, PARTY_ID, FILOFAX_ACCOUNT, CATEGORY, CATEGORY_MODE, DAY, AMOUNT, IMAGE,
+    LABEL, STATUS, IS_DELETED, CREATE_DATE, UPDATE_DATE, COMMENTS
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from app_filofax_detail
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxDetail">
+        insert into app_filofax_detail (ID, PARTY_ID, FILOFAX_ACCOUNT,
+        CATEGORY, CATEGORY_MODE, DAY,
+        AMOUNT, IMAGE, LABEL,
+        STATUS, IS_DELETED, CREATE_DATE,
+        UPDATE_DATE, COMMENTS)
+        values (#{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{filofaxAccount,jdbcType=BIGINT},
+        #{category,jdbcType=BIGINT}, #{categoryMode,jdbcType=VARCHAR}, #{day,jdbcType=VARCHAR},
+        #{amount,jdbcType=DECIMAL}, #{image,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR}, 'N', NOW(),
+        NOW(), #{comments,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxDetail">
+        update app_filofax_detail
+        <set>
+            <if test="partyId != null">
+                PARTY_ID = #{partyId,jdbcType=BIGINT},
+            </if>
+            <if test="filofaxAccount != null">
+                FILOFAX_ACCOUNT = #{filofaxAccount,jdbcType=BIGINT},
+            </if>
+            <if test="category != null">
+                CATEGORY = #{category,jdbcType=BIGINT},
+            </if>
+            <if test="categoryMode != null">
+                CATEGORY_MODE = #{categoryMode,jdbcType=VARCHAR},
+            </if>
+            <if test="day != null">
+                DAY = #{day,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">
+                AMOUNT = #{amount,jdbcType=DECIMAL},
+            </if>
+                IMAGE = #{image,jdbcType=VARCHAR},
+                LABEL = #{label,jdbcType=VARCHAR},
+            <if test="status != null">
+                STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments != null">
+                COMMENTS = #{comments,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="query" resultMap="BaseResultMap" parameterType="map">
+        <bind name="start" value="(startPage-1)*pageSize"/>
+        select
+        <include refid="Base_Column_List"/>
+        from app_user
+        <where>IS_DELETED = 'N'
+            <if test="partyId != null">
+                PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="filofaxAccount != null">
+                FILOFAX_ACCOUNT = #{filofaxAccount,jdbcType=BIGINT}
+            </if>
+            <if test="category != null">
+                CATEGORY = #{category,jdbcType=BIGINT}
+            </if>
+            <if test="categoryMode != null">
+                CATEGORY_MODE = #{categoryMode,jdbcType=VARCHAR}
+            </if>
+            <if test="day != null">
+                DAY = #{day,jdbcType=VARCHAR}
+            </if>
+            <if test="amount != null">
+                AMOUNT = #{amount,jdbcType=DECIMAL}
+            </if>
+            <if test="image != null">
+                IMAGE = #{image,jdbcType=VARCHAR}
+            </if>
+            <if test="label != null">
+                LABEL = #{label,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="comments != null">
+                COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by CREATE_TIME desc
+        limit #{start},#{pageSize}
+    </select>
+
+
+    <select id="selectSumFilofaxAccount" parameterType="map" resultType="java.math.BigDecimal">
+        select IFNULL(sum(AMOUNT),0) sum from (SELECT
+        a.ID,
+        a.PARTY_ID,
+        a.FILOFAX_ACCOUNT,
+        a.CATEGORY,
+        a.CATEGORY_MODE,
+        a. DAY,
+        a.AMOUNT,
+        a.IMAGE,
+        IFNULL(a.LABEL,'')LABEL,
+        a.STATUS,
+        b.NAME as categoryName,
+        b.ICON COMMENTS,
+        b.type,
+        a.IS_DELETED,
+        a.CREATE_DATE,
+        a.UPDATE_DATE
+        FROM
+        app_filofax_detail a
+        LEFT JOIN app_filofax_category b ON a.CATEGORY = b.id
+        )c
+        <where>C.IS_DELETED = 'N'
+            <if test="partyId != null">
+                AND C.PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="type != null">
+                AND c.type != ${type}
+            </if>
+            <if test="filofaxAccount != null">
+                AND C.FILOFAX_ACCOUNT = #{filofaxAccount,jdbcType=BIGINT}
+            </if>
+            <if test="category != null">
+                AND C.CATEGORY = #{category,jdbcType=BIGINT}
+            </if>
+            <if test="categoryName != null">
+                AND C.categoryName = #{categoryName,jdbcType=VARCHAR}
+            </if>
+            
+            <if test="categoryMode != null">
+                AND C.CATEGORY_MODE = #{categoryMode,jdbcType=VARCHAR}
+            </if>
+            <if test="startDay != null and endDay !=null">
+                <![CDATA[AND C.DAY >= #{startDay,jdbcType=VARCHAR} AND C.DAY <= #{endDay,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="amount != null">
+                AND C.AMOUNT = #{amount,jdbcType=DECIMAL}
+            </if>
+            <if test="image != null">
+                AND C.IMAGE = #{image,jdbcType=VARCHAR}
+            </if>
+            <if test="label != null">
+                AND C.LABEL = #{label,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                AND C.STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="createDate != null">
+                AND C.CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateDate != null">
+                AND C.UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="comments != null">
+                AND C.COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectList" parameterType="map" resultMap="BaseResultMap">
+        <if test="startPage !=null and ''!=startPage and pageSize !=null and ''!=pageSize">
+            <bind name="start" value="(startPage-1)* pageSize"/>
+        </if>
+        select
+        <include refid="Base_Column_List"/>
+        from app_filofax_detail
+        <where>IS_DELETED = 'N'
+            <if test="partyId != null">
+                AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="filofaxAccount != null">
+                AND FILOFAX_ACCOUNT = #{filofaxAccount,jdbcType=BIGINT}
+            </if>
+            <if test="category != null">
+                AND CATEGORY = #{category,jdbcType=BIGINT}
+            </if>
+            <if test="categoryMode != null">
+                AND CATEGORY_MODE = #{categoryMode,jdbcType=VARCHAR}
+            </if>
+            <if test="day != null">
+                AND day = #{day,jdbcType=VARCHAR}
+            </if>
+            <if test="amount != null">
+                AND AMOUNT = #{amount,jdbcType=DECIMAL}
+            </if>
+            <if test="image != null">
+                AND IMAGE = #{image,jdbcType=VARCHAR}
+            </if>
+            <if test="label != null">
+                AND LABEL = #{label,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                AND STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="isDeleted != null">
+                AND IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="createDate != null">
+                AND CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateDate != null">
+                AND UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="comments != null">
+                AND COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by CREATE_DATE desc
+        <if test="startPage !=null and pageSize !=null">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+    
+    <select id="getCategoryList"  parameterType="map" resultMap="BaseResultMap">
+        select c.*,d.name accountName  from (SELECT
+        a.ID,
+        a.PARTY_ID,
+        a.FILOFAX_ACCOUNT,
+        a.CATEGORY,
+        a.CATEGORY_MODE,
+        a. DAY,
+        a.AMOUNT,
+        a.IMAGE,
+        IFNULL(a.LABEL,'')LABEL,
+        a.STATUS,
+        b.NAME as categoryName,
+        b.type,
+        b.ICON COMMENTS,
+        a.IS_DELETED,
+        a.CREATE_DATE,
+        a.UPDATE_DATE
+        FROM
+        app_filofax_detail a
+        LEFT JOIN app_filofax_category b  ON a.CATEGORY = b.id where a.IS_DELETED = 'N'
+        )c LEFT JOIN app_filofax_account d on c.FILOFAX_ACCOUNT=d.id 
+        <where>c.IS_DELETED = 'N'
+            <if test="partyId != null">
+                AND c.PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="type != null">
+                AND c.type != ${type}
+            </if>
+            <if test="filofaxAccount != null">
+                AND c.FILOFAX_ACCOUNT = #{filofaxAccount,jdbcType=BIGINT}
+            </if>
+            <if test="category != null">
+                AND c.CATEGORY = #{category,jdbcType=BIGINT}
+            </if>
+            <if test="categoryMode != null">
+                AND c.CATEGORY_MODE = #{categoryMode,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryName != null">
+                AND c.categoryName = #{categoryName,jdbcType=VARCHAR}
+            </if>
+            <if test="day != null">
+                AND c.day = #{day,jdbcType=VARCHAR}
+            </if>
+            <if test="amount != null">
+                AND c.AMOUNT = #{amount,jdbcType=DECIMAL}
+            </if>
+            <if test="image != null">
+                AND c.IMAGE = #{image,jdbcType=VARCHAR}
+            </if>
+            <if test="label != null">
+                AND c.LABEL = #{label,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                AND c.STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="isDeleted != null">
+                AND c.IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="createDate != null">
+                AND c.CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateDate != null">
+                AND c.UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        order by c.CREATE_DATE desc
+    </select>
+
+    <select id="getAmountSum" parameterType="map" resultType="map">
+        <bind name="start" value="(startPage-1)*pageSize"/>
+        select a.`DAY` AS day,SUM(IF(a.CATEGORY_MODE = 'OUT',a.AMOUNT,0)) AS outSum,SUM(IF(a.CATEGORY_MODE = 'IN'
+        ,a.AMOUNT,0)) AS inSum FROM app_filofax_detail a LEFT JOIN app_filofax_category b on a.category=b.id
+        WHERE a.PARTY_ID = #{partyId,jdbcType=BIGINT}  AND a.IS_DELETED = 'N'
+        <if test="startDay != null and endDay !=null">
+            <![CDATA[
+	          and a.day>=#{startDay,jdbcType=VARCHAR} and a.day<=#{endDay,jdbcType=VARCHAR} 
+           ]]>
+        </if>
+        <if test="filofaxAccount != null">
+            AND a.FILOFAX_ACCOUNT = #{filofaxAccount,jdbcType=BIGINT}
+        </if>
+        <if test="type != null">
+            AND b.type != ${type}
+        </if>
+        GROUP BY  a.`DAY` desc limit #{start},#{pageSize}
+    </select>
+
+	<select id="getCategorySum" parameterType="map" resultType="map">
+        SELECT IFNULL(sum(AMOUNT),0) amount,${labelORMode} status from (select a.ID, a.PARTY_ID, a.FILOFAX_ACCOUNT
+        ,a.CATEGORY_MODE, a.DAY,a.AMOUNT, a.IMAGE,IFNULL(a.LABEL,'')LABEL, a.CATEGORY, a.IS_DELETED, a.CREATE_DATE
+        , a.UPDATE_DATE, a.COMMENTS,a.STATUS,b.name categoryName,b.type from app_filofax_detail a 
+        LEFT JOIN app_filofax_category b on a.CATEGORY=b.id AND A.IS_DELETED='N' )c where 
+        c.PARTY_ID=#{partyId,jdbcType=BIGINT} and <![CDATA[ c.day>=#{startDay,jdbcType=VARCHAR} and 
+        c.day<=#{endDay,jdbcType=VARCHAR} ]]> and C.CATEGORY_MODE=#{categoryMode,jdbcType=VARCHAR} and c.IS_DELETED='N'
+        <if test="type != null">
+            AND c.type != ${type}
+        </if>
+        GROUP BY ${labelORMode} ORDER BY sum(AMOUNT) DESC
+	</select>
+	
+	
+	<select id="getTypeSum" parameterType="map" resultType="map">
+    <if test='startPage !=null and ""!=startPage and pageSize !=null and ""!=pageSize'>
+        <bind name="start" value="(startPage-1)* pageSize"/>
+    </if>
+	SELECT sum(AMOUNT) amount, DAY day from (select a.ID, a.PARTY_ID, a.FILOFAX_ACCOUNT, a.CATEGORY_MODE, a.DAY,
+    a.AMOUNT, a.IMAGE, IFNULL(a.LABEL,'')LABEL, a.CATEGORY, a.IS_DELETED, a.CREATE_DATE, a.UPDATE_DATE, a.COMMENTS,
+    a.STATUS,b.name categoryName,b.type from app_filofax_detail a LEFT JOIN app_filofax_category b 
+    on a.CATEGORY=b.id where A.IS_DELETED='N' )c where  c.IS_DELETED='N' AND  c.PARTY_ID=#{partyId,jdbcType=BIGINT} 
+    <if test="categoryName != null">
+      AND C.categoryName = #{categoryName,jdbcType=VARCHAR}
+    </if>
+    <if test="type != null">
+      AND c.type != ${type}
+    </if>
+    <if test="label != null">
+      AND C.LABEL = #{label,jdbcType=VARCHAR}
+    </if>
+    <if test="categoryMode != null">
+      and C.CATEGORY_MODE = #{categoryMode,jdbcType=VARCHAR}
+     </if>
+     <if test="startDay != null and endDay !=null">
+      <![CDATA[ and c.day>=#{startDay,jdbcType=VARCHAR} and c.day<=#{endDay,jdbcType=VARCHAR}]]>
+     </if>
+	 GROUP BY c.day ORDER BY c.day DESC
+        <if test='startPage !=null and ""!=startPage and pageSize !=null and ""!=pageSize'>
+            limit #{start},#{pageSize}
+        </if>
+	</select>
+    
+    <select id="getMonSumByYear" parameterType="map"  resultType="map" >
+        select IFNULL(c.inSum,0) inSum,IFNULL(c.outSum,0)outSum,
+        f.time2 day from (select FROM_UNIXTIME( UNIX_TIMESTAMP(a.day),'%m' ) as mon,sum(IF(a.CATEGORY_MODE='IN',
+        a.amount,0))inSum,sum(IF(a.CATEGORY_MODE='OUT',a.amount,0))outSum from app_filofax_detail a 
+        LEFT JOIN app_filofax_category b on a.CATEGORY=b.id where a.PARTY_ID=#{partyId,jdbcType=BIGINT} 
+        and a.IS_DELETED='N' and FROM_UNIXTIME( UNIX_TIMESTAMP(a.day),'%Y' ) = #{year,jdbcType=BIGINT}
+        <if test="type != null">
+            AND b.type != ${type}
+        </if>
+        GROUP BY mon)c
+        RIGHT JOIN (SELECT '01' as time2 from DUAL UNION ALL
+        SELECT '02' as time2 from DUAL UNION ALL
+        SELECT '03' as time2 from DUAL UNION ALL
+        SELECT '04' as time2 from DUAL UNION ALL
+        SELECT '05' as time2 from DUAL UNION ALL
+        SELECT '06' as time2 from DUAL UNION ALL
+        SELECT '07' as time2 from DUAL UNION ALL
+        SELECT '08' as time2 from DUAL UNION ALL
+        SELECT '09' as time2 from DUAL UNION ALL
+        SELECT '10' as time2 from DUAL UNION ALL
+        SELECT '11' as time2 from DUAL UNION ALL
+        SELECT '12' as time2 from DUAL )f on c.mon = f.time2 ORDER BY f.time2
+    </select>
+    
+    <!--根据时间查询收入和支出-->
+    <select id="queryInSumAndOutSum" parameterType="map" resultType="map">
+        select sum(IF(a.CATEGORY_MODE='IN',a.AMOUNT,0))inSum,sum(IF(a.CATEGORY_MODE='OUT',a.AMOUNT,0))outSum 
+        from app_filofax_detail a LEFT JOIN app_filofax_category b on a.CATEGORY=b.id where a.IS_DELETED='N'
+        <if test="partyId != null">
+            and a.PARTY_ID = #{partyId,jdbcType=BIGINT}
+        </if>
+        <if test="startDay != null and endDay !=null">
+            <![CDATA[
+	          and a.day>=#{startDay,jdbcType=VARCHAR} and a.day<=#{endDay,jdbcType=VARCHAR} 
+           ]]>
+        </if>
+        <if test="filofaxAccount != null">
+            AND a.FILOFAX_ACCOUNT = #{filofaxAccount,jdbcType=BIGINT}
+        </if>
+        <if test="type != null">
+            AND b.type != ${type}
+        </if>
+        
+    </select>
+</mapper>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.MonthAchieveDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.MonthAchieve" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="MONTH" property="month" jdbcType="INTEGER" />
+    <result column="YEAR" property="year" jdbcType="INTEGER" />
+    <result column="DISTRICT_CODE" property="districtCode" jdbcType="VARCHAR" />
+    <result column="STATIC_TYPE" property="staticType" jdbcType="VARCHAR" />
+    <result column="BUSI_TYPE" property="busiType" jdbcType="VARCHAR" />
+    <result column="TOTAL" property="total" jdbcType="DECIMAL" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PARTY_ID, MONTH, YEAR, DISTRICT_CODE, STATIC_TYPE, BUSI_TYPE, TOTAL, IS_DELETED, 
+    CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_month_achieve
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    update app_month_achieve set IS_DELETED = 'N' 
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.MonthAchieve" >
+    insert into app_month_achieve (ID, PARTY_ID, MONTH, 
+      YEAR, DISTRICT_CODE, STATIC_TYPE, 
+      BUSI_TYPE, TOTAL, IS_DELETED, 
+      CREATE_TIME, UPDATE_TIME, COMMENTS
+      )
+    values (#{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{month,jdbcType=INTEGER}, 
+      #{year,jdbcType=INTEGER}, #{districtCode,jdbcType=VARCHAR}, #{staticType,jdbcType=VARCHAR}, 
+      #{busiType,jdbcType=VARCHAR}, #{total,jdbcType=DECIMAL}, 'N', 
+      NOW(), NOW(), #{comments,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.MonthAchieve" >
+    update app_month_achieve
+    <set >
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="month != null" >
+        MONTH = #{month,jdbcType=INTEGER},
+      </if>
+      <if test="year != null" >
+        YEAR = #{year,jdbcType=INTEGER},
+      </if>
+      <if test="districtCode != null" >
+        DISTRICT_CODE = #{districtCode,jdbcType=VARCHAR},
+      </if>
+      <if test="staticType != null" >
+        STATIC_TYPE = #{staticType,jdbcType=VARCHAR},
+      </if>
+      <if test="busiType != null" >
+        BUSI_TYPE = #{busiType,jdbcType=VARCHAR},
+      </if>
+      <if test="total != null" >
+        TOTAL = #{total,jdbcType=DECIMAL},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="select" resultMap="BaseResultMap" parameterType="map">
+  	<if test='startPage !=null and ""!=startPage and pageSize !=null and ""!=pageSize'>
+  		<bind name="start" value="(startPage-1)* pageSize"/>
+  	</if>
+  	select <include refid="Base_Column_List" /> from app_month_achieve
+  	<where> IS_DELETED = 'N' 
+		<if test='partyId != null and ""!= partyId'>
+			and PARTY_ID = #{partyId}
+		</if>
+		<if test='month != null and ""!= month'>
+			and MONTH = #{month}
+		</if>
+		<if test='year != null and ""!= year'>
+			and YEAR = #{year}
+		</if>
+		<if test='districtCode != null  and ""!= districtCode'>
+			and DISTRICT_CODE = #{districtCode}
+		</if>
+		<if test='staticType != null  and ""!= staticType'>
+			and STATIC_TYPE = #{staticType}
+		</if>
+		<if test='busiType != null and ""!= busiType'>
+			and BUSI_TYPE = #{busiType}
+		</if>
+	</where>
+	order by YEAR desc,MONTH desc,UPDATE_TIME desc 
+	<if test='startPage !=null and ""!=startPage and pageSize !=null and ""!=pageSize'>
+  		limit #{start},#{pageSize}
+  	</if>
+  </select>
+  
+  <select id="selectSumAmountGBYearAndMonth" parameterType="map" resultType="map">
+  	<if test="startPage !=null and ''!=startPage and pageSize !=null and ''!=pageSize">
+  		<bind name="start" value="(startPage-1)* pageSize"/>
+  	</if>
+  		SELECT SUM(IFNULL(TOTAL,0))  as sumAmount,party_id as partyId,year,month 
+  		FROM APP_MONTH_ACHIEVE AMA <include refid="where_sql"></include>
+          <if test="busiTypes != null">
+              AND BUSI_TYPE IN
+              <foreach collection="busiTypes" close=")" item="item" open="(" separator=",">
+                  #{item,jdbcType=VARCHAR}
+              </foreach>
+          </if>
+  		group by partyId,year,month
+  		order by partyId,year,month desc
+  		<if test='startPage  !=null and pageSize !=null'>
+  			limit #{start},#{pageSize}
+  		</if>
+  </select>
+
+
+  <select id="selectSumAmount" parameterType="map" resultType="java.math.BigDecimal">
+  	SELECT SUM(IFNULL(TOTAL,0))  as sumAmount
+  	 FROM APP_MONTH_ACHIEVE AMA <include refid="where_sql"></include>
+      <if test="busiTypes != null">
+          AND BUSI_TYPE IN
+          <foreach collection="busiTypes" close=")" item="item" open="(" separator=",">
+              #{item,jdbcType=VARCHAR}
+          </foreach>
+      </if>
+  </select>
+  <sql id="where_sql">
+  		<where>
+  		IS_DELETED ='N'
+  		<if test='partyId !=null and ""!=partyId'>
+  			AND PARTY_ID =#{partyId}
+  		</if>
+  		<if test='month!=null and ""!=month'>
+  			AND MONTH =#{month}
+  		</if>
+  		<if test='year !=null and ""!= year'>
+  			AND YEAR =#{year}
+  		</if>
+  		<if test='districtCode !=null and ""!= districtCode'>
+  			AND DISTRICT_CODE =#{districtCode}
+  		</if>
+  		<if test='staticType !=null and ""!= staticType'>
+  			AND STATIC_TYPE =#{staticType}
+  		</if>
+  		<if test='busiType != null and "" != busiType'>
+			AND BUSI_TYPE = #{busiType}
+		</if>
+  	</where>
+  </sql>
+  
+</mapper>

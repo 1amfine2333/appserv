@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:component-scan base-package="com.xianglin.appserv" />
+
+	<bean id="messageManager" class="com.xianglin.appserv.biz.shared.impl.MessageMangerImpl">
+	</bean>
+	<bean id="businessManager" class="com.xianglin.appserv.biz.shared.impl.BusinessManagerImpl">
+		<property name="sessionHelper" ref="sessionHelper" />
+	</bean>
+	<bean id="config" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:common.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="pushMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="APNS" value-ref="apnsPush"></entry>
+				<entry key="JPUSH" value-ref="jpush"> </entry>
+				<entry key="MIPUSH" value-ref="miPush"> </entry>
+				<entry key="HWPUSH" value-ref="hwPush"></entry>
+			</map>
+		</constructor-arg>
+	</bean>
+	<bean id="loginAttrUtil" class="com.xianglin.appserv.biz.shared.util.LoginAttrUtil">
+
+		<property name="sessionHelper" ref="sessionHelper"></property>
+
+	</bean>
+</beans>

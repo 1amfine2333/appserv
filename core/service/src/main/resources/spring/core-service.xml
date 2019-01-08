@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!--<bean id="redissonFactory" class="com.xianglin.appserv.core.service.RedissonFactory" destroy-method="shutdown">-->
+		<!--<property name="single" value="true"></property>-->
+		<!--<property name="redisAddress" value="${redis.hosts}"></property>-->
+	<!--</bean>-->
+	
+	<!--<bean id="locationInfoService" class="com.xianglin.appserv.core.service.impl.LocationInfoServiceImpl">-->
+		<!--<property name="locationInfoDAO" ref="locationInfoDAO" />-->
+		<!--<property name="figureServiceClient" ref="figureServiceClient" />-->
+	<!--</bean>-->
+
+	<bean id="qrCodeTokenService" class="com.xianglin.appserv.core.service.impl.QRCodeTokenServiceImpl">
+		<property name="redisClient" ref="redisClient" />
+		<property name="tokenTimeoutInSeconds" value="${token.timeout}" />
+		<property name="keyPrefix" value="${token.redis.key.prefix}" />
+	</bean>
+	<bean id="coreRedPacketService" class="com.xianglin.appserv.core.service.impl.CoreRedPacketServiceImpl">
+		<property name="redisUtil" ref="redisUtil" />
+	</bean>
+	
+	
+
+</beans>

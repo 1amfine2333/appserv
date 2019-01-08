@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppFilofaxCategoryDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppFilofaxCategory" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="ICON" property="icon" jdbcType="VARCHAR" />
+    <result column="ICON_POINT" property="iconPoint" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="MODE" property="mode" jdbcType="VARCHAR" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, NAME, ICON, ICON_POINT,TYPE, MODE, PARTY_ID, STATUS, IS_DELETED, CREATE_DATE, UPDATE_DATE,
+    COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long"  resultType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxCategory">
+    select 
+    <include refid="Base_Column_List" />
+    from app_filofax_category
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxCategory" >
+    insert into app_filofax_category (ID, NAME, ICON, ICON_POINT,
+      TYPE, MODE, PARTY_ID, 
+      STATUS, IS_DELETED, CREATE_DATE, 
+      UPDATE_DATE, COMMENTS)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{iconPoint,jdbcType=VARCHAR},
+      #{type,jdbcType=VARCHAR}, #{mode,jdbcType=VARCHAR}, #{partyId,jdbcType=BIGINT}, 
+      #{status,jdbcType=VARCHAR}, 'N', NOW(),
+      NOW(), #{comments,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxCategory" >
+    update app_filofax_category
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null" >
+        ICON = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="mode != null" >
+        MODE = #{mode,jdbcType=VARCHAR},
+      </if>
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_DATE = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from app_filofax_category
+    <where> IS_DELETED = 'N'
+      <if test="name != null" >
+        and NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="icon != null" >
+        and ICON = #{icon,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null" >
+        and TYPE = #{type,jdbcType=VARCHAR}
+      </if>
+      <if test="mode != null" >
+        and MODE = #{mode,jdbcType=VARCHAR}
+      </if>
+      <if test="partyId != null" >
+        and (PARTY_ID = #{partyId,jdbcType=BIGINT} or TYPE = 'PUBLIC')
+      </if>
+      <if test="status != null" >
+        and STATUS = #{status,jdbcType=VARCHAR}
+      </if>
+    </where>
+      order by ID ASC limit 60
+    </select>
+</mapper>

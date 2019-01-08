@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.ActivityDepositsDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.ActivityDeposits" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="START_ACHIEVE" property="startAchieve" jdbcType="DECIMAL" />
+    <result column="CURRENT_ACHIEVE" property="currentAchieve" jdbcType="DECIMAL" />
+    <result column="GOAL_ACHIEVE" property="goalAchieve" jdbcType="DECIMAL" />
+    <result column="REWARD_SIGN" property="rewardSign" jdbcType="VARCHAR" />
+    <result column="REWARD_RESULT" property="rewardResult" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PARTY_ID, START_ACHIEVE, CURRENT_ACHIEVE, GOAL_ACHIEVE, REWARD_SIGN, REWARD_RESULT, IS_DELETED,
+    CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_activity_deposits
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_activity_deposits
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityDeposits" >
+    insert into app_activity_deposits (PARTY_ID, START_ACHIEVE,
+      CURRENT_ACHIEVE, GOAL_ACHIEVE, REWARD_SIGN, 
+      REWARD_RESULT,IS_DELETED, CREATE_TIME, UPDATE_TIME,
+      COMMENTS)
+    values (#{partyId,jdbcType=BIGINT}, #{startAchieve,jdbcType=DECIMAL},
+      #{currentAchieve,jdbcType=DECIMAL}, #{goalAchieve,jdbcType=DECIMAL}, #{rewardSign,jdbcType=VARCHAR}, 
+      #{rewardResult,jdbcType=VARCHAR},'N', NOW(), NOW(),
+      #{comments,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityDeposits" >
+    update app_activity_deposits
+    <set >
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="startAchieve != null" >
+        START_ACHIEVE = #{startAchieve,jdbcType=DECIMAL},
+      </if>
+      <if test="currentAchieve != null" >
+        CURRENT_ACHIEVE = #{currentAchieve,jdbcType=DECIMAL},
+      </if>
+      <if test="goalAchieve != null" >
+        GOAL_ACHIEVE = #{goalAchieve,jdbcType=DECIMAL},
+      </if>
+      <if test="rewardSign != null" >
+        REWARD_SIGN = #{rewardSign,jdbcType=VARCHAR},
+      </if>
+      <if test="rewardResult != null" >
+      REWARD_RESULT = #{rewardResult,jdbcType=VARCHAR},
+    </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="queryByPairyId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from app_activity_deposits
+    where PARTY_ID = #{partyId,jdbcType=BIGINT}
+  </select>
+</mapper>

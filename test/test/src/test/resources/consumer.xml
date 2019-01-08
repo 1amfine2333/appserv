@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	 	<dubbo:application name="test"/>
+	 	<dubbo:registry address="zookeeper://zookeeper.dev.xianglin.com:2181" />
+	
+		<dubbo:consumer check="false" timeout="6000" />
+	 <!-- 电商交易数据接口
+	<dubbo:reference  interface="com.xianglin.front.common.service.facade.AccountQueryService" id="accountQueryService" check="false" />
+
+	<dubbo:reference  interface="com.xianglin.front.common.service.facade.payment.APServiceFacade" id="aPServiceFacade" check="false" />
+-->
+<!-- 	<dubbo:reference interface="com.xianglin.xlStation.common.service.facade.userFacade.SmsFacade" id="smsFacade" check="false"/> -->
+<!--  url="dubbo://172.16.8.91:20880/com.xianglin.front.common.service.facade.AccountQueryService" -->
+	 <!-- 电商交易数据接口 -->
+<!-- 	<dubbo:reference id="accountTransferService" interface="com.xianglin.front.common.service.facade.AccountTransferService"/> -->
+<!-- 	  url="dubbo://172.16.8.91:20880/com.xianglin.front.common.service.facade.AccountTransferService" -->
+
+<!-- 	<dubbo:reference  interface="com.xian glin.te.common.service.facade.TransferService" id="transferService" check="false" url="dubbo://xlte.dev.xianglin.com:20880"/>
+	<dubbo:reference  interface="com.xianglin.te.common.service.facade.TransactionService" id="transactionService" check="false" url="dubbo://xlte.dev.xianglin.com:20880"/>
+	<dubbo:reference  interface="com.xianglin.account.common.service.facade.AccountQueryService" id="accountQueryService" check="false" />
+ -->
+ 	<dubbo:reference interface="com.xianglin.appserv.common.service.facade.app.XLAppIndexPageService" id="appIndexService" check="false" />
+ 	<dubbo:reference interface="com.xianglin.appserv.common.service.facade.MessageService" id="messageService" check="false" />
+ 
+</beans>

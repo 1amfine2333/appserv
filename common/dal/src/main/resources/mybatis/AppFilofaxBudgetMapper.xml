@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppFilofaxBudgetDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppFilofaxBudget" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="BUDGET" property="budget" jdbcType="DECIMAL" />
+    <result column="START_DAY" property="startDay" jdbcType="VARCHAR" />
+    <result column="END_DAY" property="endDay" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PARTY_ID, TYPE, NAME, BUDGET, START_DAY, END_DAY, STATUS, IS_DELETED, CREATE_DATE, 
+    UPDATE_DATE, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_filofax_budget
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_filofax_budget
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxBudget" >
+    insert into app_filofax_budget (ID, PARTY_ID, TYPE, 
+      NAME, BUDGET, START_DAY, 
+      END_DAY, STATUS, IS_DELETED, 
+      CREATE_DATE, UPDATE_DATE, COMMENTS
+      )
+    values (#{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{type,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{budget,jdbcType=DECIMAL}, #{startDay,jdbcType=VARCHAR}, 
+      #{endDay,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 'N', 
+      NOW(), NOW(), #{comments,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxBudget" >
+    insert into app_filofax_budget
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="partyId != null" >
+        PARTY_ID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="budget != null" >
+        BUDGET,
+      </if>
+      <if test="startDay != null" >
+        START_DAY,
+      </if>
+      <if test="endDay != null" >
+        END_DAY,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+      <if test="comments != null" >
+        COMMENTS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="partyId != null" >
+        #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="budget != null" >
+        #{budget,jdbcType=DECIMAL},
+      </if>
+      <if test="startDay != null" >
+        #{startDay,jdbcType=VARCHAR},
+      </if>
+      <if test="endDay != null" >
+        #{endDay,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comments != null" >
+        #{comments,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxBudget" >
+    update app_filofax_budget
+    <set >
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="budget != null" >
+        BUDGET = #{budget,jdbcType=DECIMAL},
+      </if>
+      <if test="startDay != null" >
+        START_DAY = #{startDay,jdbcType=VARCHAR},
+      </if>
+      <if test="endDay != null" >
+        END_DAY = #{endDay,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxBudget" >
+    update app_filofax_budget
+    set PARTY_ID = #{partyId,jdbcType=BIGINT},
+      TYPE = #{type,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      BUDGET = #{budget,jdbcType=DECIMAL},
+      START_DAY = #{startDay,jdbcType=VARCHAR},
+      END_DAY = #{endDay,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      COMMENTS = #{comments,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="query" parameterType="map" resultMap="BaseResultMap">
+	<bind name="start" value="(startPage-1)*pageSize"/>
+     select
+     <include refid="Base_Column_List"/>
+     form app_filofax_budget 
+  	<where> IS_DELETED = 'N'
+		<if test="partyId != null" >
+       AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null" >
+       AND TYPE = #{type,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null" >
+       AND NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="budget != null" >
+       AND BUDGET = #{budget,jdbcType=DECIMAL}
+      </if>
+      <if test="startDay != null" >
+       AND START_DAY = #{startDay,jdbcType=VARCHAR}
+      </if>
+      <if test="endDay != null" >
+      AND END_DAY = #{endDay,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null" >
+       AND STATUS = #{status,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted != null" >
+       AND IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+      </if>
+      <if test="createDate != null" >
+       AND CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateDate != null" >
+       AND UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="comments != null" >
+       AND COMMENTS = #{comments,jdbcType=VARCHAR}
+      </if>
+      </where>
+	 order by CREATE_TIME desc
+     limit #{start},#{pageSize}
+  </select>
+  
+  <select id="getBudget" resultMap="BaseResultMap" parameterType="map">
+         select
+     <include refid="Base_Column_List"/>
+    from  app_filofax_budget 
+  	<where> IS_DELETED = 'N'
+		<if test="partyId != null" >
+       AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null" >
+       AND TYPE = #{type,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null" >
+       AND NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="budget != null" >
+       AND BUDGET = #{budget,jdbcType=DECIMAL}
+      </if>
+      <if test="startDay != null" >
+       AND START_DAY = #{startDay,jdbcType=VARCHAR}
+      </if>
+      <if test="endDay != null" >
+      AND END_DAY = #{endDay,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null" >
+       AND STATUS = #{status,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted != null" >
+       AND IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+      </if>
+      <if test="createDate != null" >
+       AND CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateDate != null" >
+       AND UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="comments != null" >
+       AND COMMENTS = #{comments,jdbcType=VARCHAR}
+      </if>
+      </where>
+    </select>
+  
+  <select id="selectSumBudget" parameterType="map" resultType="java.math.BigDecimal">
+  		select IFNULL(sum(BUDGET),0) sum from app_filofax_budget 
+  		
+  	<where> IS_DELETED = 'N'
+		<if test="partyId != null" >
+       AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null" >
+       AND TYPE = #{type,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null" >
+       AND NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="budget != null" >
+       AND BUDGET = #{budget,jdbcType=DECIMAL}
+      </if>
+      <if test="startDay != null" >
+      <![CDATA[ AND START_DAY = #{startDay,jdbcType=VARCHAR}]]>
+      </if>
+      <if test="endDay != null" >
+      <![CDATA[ AND END_DAY = #{endDay,jdbcType=VARCHAR}]]>
+      </if>
+      <if test="status != null" >
+       AND STATUS = #{status,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted != null" >
+       AND IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+      </if>
+      <if test="createDate != null" >
+       AND CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateDate != null" >
+       AND UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="comments != null" >
+       AND COMMENTS = #{comments,jdbcType=VARCHAR}
+      </if>
+      </where>
+	
+  </select>
+</mapper>

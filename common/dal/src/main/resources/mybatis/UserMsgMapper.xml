@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.UserMsgDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.UserMsg" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="MSG_ID" property="msgId" jdbcType="BIGINT" />
+    <result column="DEVICE_ID" property="deviceId" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="PRAISE_SIGN" property="praiseSign" jdbcType="VARCHAR" />
+    <result column="CLICK_SIGN" property="clickSign" jdbcType="VARCHAR" />
+    <result column="PUSH_SIGN" property="pushSign" jdbcType="VARCHAR" />
+    <result column="SHARE_NUM" property="shareNum" jdbcType="INTEGER" />
+    <result column="READ_NUM" property="readNum" jdbcType="INTEGER" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+    <result column="PRAISE_TREAD" property="praiseTread" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PARTY_ID, MSG_ID,DEVICE_ID,STATUS, PRAISE_SIGN,CLICK_SIGN,PUSH_SIGN,IS_DELETED, CREATE_TIME, UPDATE_TIME,COMMENTS,SHARE_NUM,READ_NUM,PRAISE_TREAD
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_user_msg
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.UserMsg" >
+    insert into app_user_msg (PARTY_ID, MSG_ID, DEVICE_ID,
+      STATUS,CLICK_SIGN,PUSH_SIGN, IS_DELETED, CREATE_TIME, 
+      UPDATE_TIME,COMMENTS)
+    values (#{partyId,jdbcType=BIGINT}, #{msgId,jdbcType=BIGINT}, #{deviceId,jdbcType=VARCHAR},
+      1,'N',#{pushSign,jdbcType=VARCHAR},'N', NOW(), NOW(),#{comments,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="list" >
+    insert into app_user_msg (PARTY_ID, MSG_ID, DEVICE_ID,
+      STATUS,CLICK_SIGN,PUSH_SIGN, IS_DELETED, CREATE_TIME, 
+      UPDATE_TIME,COMMENTS)values
+      <foreach collection="list" index="index" item="item" separator=",">
+      		(#{item.partyId,jdbcType=BIGINT}, #{item.msgId,jdbcType=BIGINT}, #{item.deviceId,jdbcType=VARCHAR},
+      1,'N','N','N', NOW(), NOW(),#{item.comments,jdbcType=VARCHAR})
+      	</foreach>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.UserMsg" >
+    update app_user_msg
+    <set >
+      <if test="msgId != null" >
+        MSG_ID = #{msgId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="praiseSign != null" >
+        PRAISE_SIGN = #{praiseSign,jdbcType=VARCHAR},
+      </if>
+      <if test="clickSign != null" >
+        CLICK_SIGN = #{clickSign,jdbcType=VARCHAR},
+      </if>
+      <if test="pushSign != null" >
+        PUSH_SIGN = #{pushSign,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <where>
+    	<if test="id != null">
+    		and ID = #{id,jdbcType=BIGINT} 
+    	</if>
+    	<if test="partyId != null" >
+	     and PARTY_ID = #{partyId,jdbcType=BIGINT} 
+	    </if>
+	    <if test="msgId != null" >
+	     and MSG_ID = #{msgId,jdbcType=BIGINT}
+	    </if>
+	    <if test="deviceId != null" >
+	     and DEVICE_ID = #{deviceId,jdbcType=BIGINT}
+	    </if>
+    </where>
+  </update>
+  
+   <select id="select" resultMap="BaseResultMap" parameterType="map" >
+       <bind name="start" value="(startPage-1)*pageSize"/>
+    select 
+    <include refid="Base_Column_List" />
+    from app_user_msg
+    <where>
+    		IS_DELETED = 'N' 
+    	<if test="partyId != null">
+    		and PARTY_ID = #{partyId,jdbcType=BIGINT} 
+    	</if>
+    	<if test="msgId != null" >
+	     	and MSG_ID = #{msgId,jdbcType=BIGINT}
+	    </if>
+	    <if test="deviceId != null" >
+	     	and DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+	    </if>
+	    <if test="status != null" >
+	     	and STATUS = #{status,jdbcType=BIGINT}
+	    </if>
+	    <if test="praiseSign != null" >
+	     	and PRAISE_SIGN = #{praiseSign,jdbcType=VARCHAR}
+	    </if>
+	    <if test="clickSign != null" >
+	     	and CLICK_SIGN = #{clickSign,jdbcType=VARCHAR}
+	    </if>
+	    <if test="pushSign != null" >
+	     	and PUSH_SIGN = #{pushSign,jdbcType=VARCHAR}
+	    </if>
+    </where>
+       order by ID desc
+       limit #{start},#{pageSize}
+  </select>
+  
+   <select id="selectForPush" resultType="map" parameterType="map" >
+   <bind name="start" value="(startPage-1)*pageSize"/>
+    SELECT m.ID AS id
+		,u.PUSH_TYPE AS pushType
+		,u.PUSH_TOCKEN AS pushTocken
+	FROM app_user_msg m
+	INNER JOIN app_user u ON m.PARTY_ID = u.PARTY_ID
+	WHERE m.IS_DELETED = 'N'
+		AND m.MSG_ID = #{msgId,jdbcType=BIGINT}
+	LIMIT #{start},#{pageSize}	
+  </select>
+  
+  <update id="updateUnBindMsg" >
+    UPDATE app_user_msg m
+	,(
+		SELECT a.MSG_ID
+		FROM app_user_msg a
+		WHERE a.DEVICE_ID = #{deviceId,jdbcType = VARCHAR} AND a.PARTY_ID is NULL
+			AND NOT EXISTS (
+				SELECT 1
+				FROM app_user_msg b
+				WHERE a.MSG_ID = b.MSG_ID
+					AND b.PARTY_ID = #{partyId,jdbcType = BIGINT}
+				)
+		) n
+	SET PARTY_ID = #{partyId,jdbcType = BIGINT}
+		,UPDATE_TIME = NOW()
+	WHERE m.DEVICE_ID = #{deviceId,jdbcType = VARCHAR}
+		AND m.MSG_ID = n.MSG_ID
+  </update>
+  
+  <select id="queryCount" resultType="Integer" parameterType="map" >
+    select 
+    count(*)
+    FROM app_msg m
+	RIGHT JOIN app_user_msg u ON m.ID = u.MSG_ID
+    <where>
+    		m.IS_DELETED = 'N'
+    		AND u.IS_DELETED = 'N'
+    	<if test="partyId != null">
+    		and u.PARTY_ID = #{partyId,jdbcType=BIGINT} 
+    	</if>
+        <if test="msgTypes">
+            and m.MSG_TYPE in
+            <foreach collection="msgTypes" close=")" open="(" separator="," index="index" item="item">
+                #{item}
+            </foreach>
+        </if>
+    	<if test="msgId != null" >
+	     	and u.MSG_ID = #{msgId,jdbcType=BIGINT}
+	    </if>
+	    <if test="deviceId != null" >
+	     	and u.DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+	    </if>
+	    <if test="status != null" >
+	     	and u.STATUS = #{status,jdbcType=BIGINT}
+	    </if>
+	    <if test="praiseSign != null" >
+	     	and u.PRAISE_SIGN = #{praiseSign,jdbcType=VARCHAR}
+	    </if>
+	    <if test="clickSign != null" >
+	     	and u.CLICK_SIGN = #{clickSign,jdbcType=VARCHAR}
+	    </if>
+	    <if test="pushSign != null" >
+	     	and u.PUSH_SIGN = #{pushSign,jdbcType=VARCHAR}
+	    </if>
+    </where>
+  </select>
+
+    <update id="batchDelUserMsg" parameterType="map">
+      update app_user_msg set IS_DELETED = 'Y' where PARTY_ID = #{partyId,jdbcType=BIGINT} AND  MSG_ID in (${msgId})
+    </update>
+
+    <update id="updateMsgOperNum" parameterType="com.xianglin.appserv.common.dal.dataobject.UserMsg" >
+        update app_user_msg
+        <set>
+            <choose>
+                <when test="operateType eq 'SHARE'">
+                    SHARE_NUM = SHARE_NUM + 1,
+                </when>
+                <when test="operateType eq 'READ'">
+                  READ_NUM = READ_NUM + 1,
+                </when>
+                <when test="operateType eq 'PRAISE'">
+                    PRAISE_TREAD = 'Y',
+                </when>
+                <when test="operateType eq 'TREAD'">
+                    PRAISE_TREAD = 'N',
+                </when>
+            </choose>
+            UPDATE_TIME = NOW()
+        </set>
+        where MSG_ID = #{msgId,jdbcType=BIGINT} and DEVICE_ID = #{deviceId,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectList" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from app_user_msg
+        <where>
+            IS_DELETED = 'N'
+            <if test="paras.partyId != null">
+                and PARTY_ID = #{paras.partyId,jdbcType=BIGINT}
+            </if>
+            <if test="paras.msgId != null" >
+                and MSG_ID = #{paras.msgId,jdbcType=BIGINT}
+            </if>
+            <if test="paras.deviceId != null" >
+                and DEVICE_ID = #{paras.deviceId,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.status != null" >
+                and STATUS = #{paras.status,jdbcType=BIGINT}
+            </if>
+            <if test="paras.praiseSign != null" >
+                and PRAISE_SIGN = #{paras.praiseSign,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.clickSign != null" >
+                and CLICK_SIGN = #{paras.clickSign,jdbcType=VARCHAR}
+            </if>
+            <if test="paras.pushSign != null" >
+                and PUSH_SIGN = #{paras.pushSign,jdbcType=VARCHAR}
+            </if>
+        </where>
+        <if test="page != null">
+            <bind name="start" value="(startPage-1)*pageSize"/>
+            order by ID desc
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <update id="readMsg" >
+        UPDATE app_user_msg m
+        ,(
+            SELECT a.MSG_ID
+            FROM app_user_msg a INNER JOIN app_msg m ON a.MSG_ID = m.ID
+            WHERE a.IS_DELETED = 'N' and m.IS_DELETED = 'N' and a.PARTY_ID = #{partyId,jdbcType = BIGINT} and m.MSG_TYPE = #{msgType,jdbcType = VARCHAR}
+            ) n
+        SET STATUS = 9
+            ,UPDATE_TIME = NOW()
+        WHERE m.MSG_ID = n.MSG_ID
+    </update>
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-autowire="byName">
+
+    <!-- aspect bean def 和网关代理部分发生冲突，暂时关闭-->
+    <!--<aop:config>-->
+    <!--<aop:aspect id="bizAop" ref="logFilter">-->
+    <!--<aop:pointcut id="bizPointCut" expression="execution(* com.xianglin.appserv.biz.service.implement.*.*(..))"/>-->
+    <!--<aop:around pointcut-ref="bizPointCut" method="doArount"/>-->
+    <!--</aop:aspect>-->
+    <!--</aop:config>-->
+
+    <aop:aspectj-autoproxy proxy-target-class="false"/>
+
+    <bean id="logFilter"
+          class="com.xianglin.appserv.biz.service.implement.filter.LogParameterFilter"></bean>
+
+    <!--
+    <bean id="lbsService" class="com.xianglin.appserv.biz.service.implement.LBSServiceImpl">
+        <property name="locationInfoManager" ref="locationInfoManager" />
+    </bean>
+
+    <bean id="contactsService" class="com.xianglin.appserv.biz.service.implement.ContactsServiceImpl">
+        <property name="contactManager" ref="contactManager" />
+    </bean>
+
+    <bean id="groupService" class="com.xianglin.appserv.biz.service.implement.GroupServiceImpl">
+        <property name="groupManager" ref="groupManager" />
+    </bean>
+
+    <bean id="qrCodeService" class="com.xianglin.appserv.biz.service.implement.QRCodeServiceImpl">
+        <property name="qrCodeManager" ref="qrCodeManager" />
+    </bean> -->
+    <bean id="appIndexPageService"
+          class="com.xianglin.appserv.biz.service.implement.XLAppIndexPageServiceImpl">
+        <property name="sessionHelper" ref="sessionHelper"/>
+    </bean>
+
+    <bean id="appLoginService"
+          class="com.xianglin.appserv.biz.service.implement.AppLoginServiceImpl">
+        <property name="sessionHelper" ref="sessionHelper"/>
+    </bean>
+
+    <bean id="deviceInfoService"
+          class="com.xianglin.appserv.biz.service.implement.DeviceInfoServiceImpl">
+        <property name="sessionHelper" ref="sessionHelper"/>
+    </bean>
+    <bean id="earnPageService"
+          class="com.xianglin.appserv.biz.service.implement.EarnPageServiceImpl">
+    </bean>
+
+    <bean id="messageService"
+          class="com.xianglin.appserv.biz.service.implement.MessageServiceImpl"></bean>
+    <bean id="appBannerService"
+          class="com.xianglin.appserv.biz.service.implement.AppBannerServiceImpl"></bean>
+
+    <bean id="permanetCalendarService"
+          class="com.xianglin.appserv.biz.service.implement.PermanetCalendarServiceImpl"></bean>
+
+    <bean id="goodwordService"
+          class="com.xianglin.appserv.biz.service.implement.GoodwordsServiceImpl"></bean>
+    <bean id="redPacketService"
+          class="com.xianglin.appserv.biz.service.implement.RedPacketServiceImpl">
+        <property name="sessionHelper" ref="sessionHelper"/>
+    </bean>
+
+    <bean id="RewardService"
+          class="com.xianglin.appserv.biz.service.implement.RewardServiceImpl"></bean>
+    <bean id="presentedFlowersService"
+          class="com.xianglin.appserv.biz.service.implement.PresentedFlowersServiceImpl"></bean>
+    <bean id="indexService"
+          class="com.xianglin.appserv.biz.service.implement.IndexServiceImpl"></bean>
+
+    <bean id="activityInviteService"
+          class="com.xianglin.appserv.biz.service.implement.ActivityInviteServiceImpl"></bean>
+
+    <bean id="clientHttpRequestFactory"
+          class="org.springframework.http.client.SimpleClientHttpRequestFactory">
+        <property name="readTimeout" value="5000"/>
+        <property name="connectTimeout" value="15000"/>
+
+    </bean>
+    <!--http 请求便捷工具-->
+    <bean class="org.springframework.web.client.RestTemplate">
+        <constructor-arg index="0" ref="clientHttpRequestFactory"/>
+    </bean>
+</beans>

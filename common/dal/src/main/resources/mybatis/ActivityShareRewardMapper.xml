@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.ActivityShareRewardDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.ActivityShareReward" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="DAILY_ID" property="dailyId" jdbcType="BIGINT" />
+    <result column="MOBILE_PHONE" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="DAILY" property="daily" jdbcType="VARCHAR" />
+    <result column="REWARD_TYPE" property="rewardType" jdbcType="VARCHAR" />
+    <result column="REWARD_AMT" property="rewardAmt" jdbcType="DECIMAL" />
+    <result column="RELATION_ID" property="relationId" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="REWARD_STATUS" property="rewardStatus" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+    <association property="activityShareAuth" column="MOBILE_PHONE" select="selectUserInfo"></association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, DAILY_ID, MOBILE_PHONE, PARTY_ID, DAILY, REWARD_TYPE, REWARD_AMT, RELATION_ID, REMARK,
+    REWARD_STATUS, IS_DELETED, CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_activity_share_reward
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_activity_share_reward
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityShareReward" >
+    insert into app_activity_share_reward (ID, DAILY_ID, MOBILE_PHONE, 
+      PARTY_ID,DAILY, REWARD_TYPE, REWARD_AMT,
+      RELATION_ID, REMARK, REWARD_STATUS, 
+      IS_DELETED, CREATE_TIME, UPDATE_TIME, 
+      COMMENTS)
+    values (#{id,jdbcType=BIGINT}, #{dailyId,jdbcType=BIGINT}, #{mobilePhone,jdbcType=VARCHAR}, 
+      #{partyId,jdbcType=BIGINT},#{daily,jdbcType=VARCHAR}, #{rewardType,jdbcType=VARCHAR}, #{rewardAmt,jdbcType=DECIMAL},
+      #{relationId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 'N',
+      'N', NOW(), NOW(),
+      #{comments,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityShareReward" >
+    update app_activity_share_reward
+    <set >
+      <if test="dailyId != null" >
+        DAILY_ID = #{dailyId,jdbcType=BIGINT},
+      </if>
+      <if test="mobilePhone != null" >
+        MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="daily != null" >
+        DAILY = #{daily,jdbcType=VARCHAR},
+      </if>
+      <if test="rewardType != null" >
+        REWARD_TYPE = #{rewardType,jdbcType=VARCHAR},
+      </if>
+      <if test="rewardAmt != null" >
+        REWARD_AMT = #{rewardAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="relationId != null" >
+        RELATION_ID = #{relationId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="rewardStatus != null" >
+        REWARD_STATUS = #{rewardStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    <bind name="start" value="(startPage-1)*pageSize"/>
+    select
+    <include refid="Base_Column_List"/>
+    from app_activity_share_reward
+    <where> IS_DELETED = 'N'
+      <if test="dailyId != null" >
+        and DAILY_ID = #{dailyId,jdbcType=BIGINT}
+      </if>
+      <if test="mobilePhone != null" >
+        and MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR}
+      </if>
+      <if test="partyId != null" >
+        and PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="daily != null" >
+        and DAILY = #{daily,jdbcType=VARCHAR}
+      </if>
+      <if test="rewardType != null" >
+        and REWARD_TYPE = #{rewardType,jdbcType=VARCHAR}
+      </if>
+      <if test="rewardAmt != null" >
+        and REWARD_AMT = #{rewardAmt,jdbcType=DECIMAL}
+      </if>
+      <if test="relationId != null" >
+        and RELATION_ID = #{relationId,jdbcType=VARCHAR}
+      </if>
+      <if test="remark != null" >
+        and REMARK = #{remark,jdbcType=VARCHAR}
+      </if>
+      <if test="rewardStatus != null" >
+        and REWARD_STATUS = #{rewardStatus,jdbcType=VARCHAR}
+      </if>
+    </where>
+    <if test="orderBy != null">
+      order by ${orderBy} desc
+    </if>
+    <if test="orderBy == null">
+      order by CREATE_TIME desc
+    </if>
+    limit #{start},#{pageSize}
+  </select>
+
+  <select id="selectUserInfo" resultType="com.xianglin.appserv.common.dal.dataobject.ActivityShareAuth">
+    select ID AS id,NICK_NAME AS nickName,HEAD_IMG_URL AS headImgUrl from app_activity_share_auth where MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectCount" resultType="int" parameterType="map">
+    select count(*)
+    from app_activity_share_reward
+    <where> IS_DELETED = 'N'
+      <if test="dailyId != null" >
+        and DAILY_ID = #{dailyId,jdbcType=BIGINT}
+      </if>
+      <if test="mobilePhone != null" >
+        and MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR}
+      </if>
+      <if test="partyId != null" >
+        and PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="daily != null" >
+        and DAILY = #{daily,jdbcType=VARCHAR}
+      </if>
+      <if test="rewardType != null" >
+        and REWARD_TYPE = #{rewardType,jdbcType=VARCHAR}
+      </if>
+      <if test="rewardAmt != null" >
+        and REWARD_AMT = #{rewardAmt,jdbcType=DECIMAL}
+      </if>
+      <if test="relationId != null" >
+        and RELATION_ID = #{relationId,jdbcType=VARCHAR}
+      </if>
+      <if test="remark != null" >
+        and REMARK = #{remark,jdbcType=VARCHAR}
+      </if>
+      <if test="rewardStatus != null" >
+        and REWARD_STATUS = #{rewardStatus,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+</mapper>

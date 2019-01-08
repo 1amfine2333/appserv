@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.GoodWordsDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.GoodWords" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="WORDS" property="words" jdbcType="VARCHAR" />
+    <result column="IMG_URL" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="WORDS_STATE" property="wordsState" jdbcType="VARCHAR" />
+    <result column="USE_DATE" property="useDate" jdbcType="VARCHAR" />
+    <result column="UPDATOR" property="updator" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="COMMENTS" property="comment" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, WORDS, IMG_URL, WORDS_STATE, USE_DATE,UPDATOR, CREATE_DATE, UPDATE_DATE, IS_DELETED, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_good_words
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_good_words
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.GoodWords" >
+    insert into app_good_words (ID, WORDS, IMG_URL, 
+      WORDS_STATE, USE_DATE,UPDATOR, CREATE_DATE, 
+      UPDATE_DATE, IS_DELETED, COMMENTS
+      )
+    values (#{id,jdbcType=BIGINT}, #{words,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{wordsState,jdbcType=VARCHAR},#{useDate,jdbcType=VARCHAR}, #{updator,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xianglin.appserv.common.dal.dataobject.GoodWords" >
+    insert into app_good_words
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="words != null" >
+        WORDS,
+      </if>
+      <if test="imgUrl != null" >
+        IMG_URL,
+      </if>
+      <if test="wordsState != null" >
+        WORDS_STATE,
+      </if>
+       <if test="useDate != null" >
+        USE_DATE,
+      </if>
+      <if test="updator != null" >
+        UPDATOR,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED,
+      </if>
+      <if test="comment != null" >
+        COMMENTS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="words != null" >
+        #{words,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="wordsState != null" >
+        #{wordsState,jdbcType=VARCHAR},
+      </if>
+       <if test="useDate != null" >
+         #{useDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updator != null" >
+        #{updator,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.GoodWords" >
+    update app_good_words
+    <set >
+      <if test="words != null" >
+        WORDS = #{words,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        IMG_URL = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="wordsState != null" >
+        WORDS_STATE = #{wordsState,jdbcType=VARCHAR},
+      </if>
+      <if test="useDate != null" >
+       USE_DATE =  #{useDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updator != null" >
+        UPDATOR = #{updator,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null" >
+        COMMENTS = #{comment,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xianglin.appserv.common.dal.dataobject.GoodWords" >
+    update app_good_words
+    set WORDS = #{words,jdbcType=VARCHAR},
+      IMG_URL = #{imgUrl,jdbcType=VARCHAR},
+      WORDS_STATE = #{wordsState,jdbcType=VARCHAR},
+      USE_DAET=#{useDate,jdbcType=VARCHAR},
+      UPDATOR = #{updator,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      COMMENTS = #{comment,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getGoodWords" parameterType="map"  resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include>
+  	from app_good_words
+  		<where>
+  			<if test="id != null" >
+        ID = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="words != null" >
+       and WORDS = #{words,jdbcType=VARCHAR}
+      </if>
+      <if test="imgUrl != null" >
+       and  IMG_URL = #{imgUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="wordsState != null" >
+       and  WORDS_STATE = #{wordsState,jdbcType=VARCHAR}
+      </if>
+        <if test="useDate != null" >
+       and  USE_DATE = #{useDate,jdbcType=VARCHAR}
+      </if>
+      <if test="updator != null" >
+       and  UPDATOR = #{updator,jdbcType=VARCHAR}
+      </if>
+      <if test="createDate != null" >
+       and  CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateDate != null" >
+       and  UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="isDeleted != null" >
+       and  IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+      </if>
+      <if test="comment != null" >
+       and COMMENTS = #{comment,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  		order by UPDATE_DATE desc
+  		<if test="startPage !=null and pageSize !=null">
+  			limit #{startPage,jdbcType=INTEGER} ,#{pageSize,jdbcType=INTEGER}
+  		</if>
+  </select>
+  
+  <update id="updateGoodStates" parameterType="com.xianglin.appserv.common.dal.dataobject.GoodWords"  >
+  		update app_good_words
+  		set word_state=#{wordsState,jdbcType=VARCHAR}
+  			use_date=#{useDate,jdbcType=VARCHAR}
+  		WHERE ID=#{id,jdbcType=BIGINT}
+  </update>
+</mapper>

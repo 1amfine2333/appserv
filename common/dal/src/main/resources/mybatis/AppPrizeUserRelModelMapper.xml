@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppPrizeUserRelModelMapper" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppPrizeUserRelModel" >
+    <id column="REL_ID" property="relId" jdbcType="BIGINT" />
+    <result column="PARTYID" property="partyid" jdbcType="VARCHAR" />
+    <result column="ACTIVEID" property="activeid" jdbcType="BIGINT" />
+    <result column="PRIZEID" property="prizeid" jdbcType="BIGINT" />
+    <result column="PNAME" property="pname" jdbcType="VARCHAR" />
+    <result column="PRIZETIME" property="prizetime" jdbcType="DATE" />
+    <result column="DATA_STATUS" property="dataStatus" jdbcType="CHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    REL_ID, PARTYID, ACTIVEID, PRIZEID, PNAME, PRIZETIME, DATA_STATUS, CREATE_TIME, UPDATE_TIME, 
+    COMMENTS
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPrizeUserRelModelExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from app_prize_user_rel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_prize_user_rel
+    where REL_ID = #{relId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_prize_user_rel
+    where REL_ID = #{relId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPrizeUserRelModelExample" >
+    delete from app_prize_user_rel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPrizeUserRelModel" >
+    insert into app_prize_user_rel (REL_ID, PARTYID, ACTIVEID, 
+      PRIZEID, PNAME, PRIZETIME, 
+      DATA_STATUS, CREATE_TIME, UPDATE_TIME, 
+      COMMENTS)
+    values (#{relId,jdbcType=BIGINT}, #{partyid,jdbcType=VARCHAR}, #{activeid,jdbcType=BIGINT}, 
+      #{prizeid,jdbcType=BIGINT}, #{pname,jdbcType=VARCHAR}, #{prizetime,jdbcType=DATE}, 
+      #{dataStatus,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{comments,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPrizeUserRelModel" >
+    insert into app_prize_user_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="relId != null" >
+        REL_ID,
+      </if>
+      <if test="partyid != null" >
+        PARTYID,
+      </if>
+      <if test="activeid != null" >
+        ACTIVEID,
+      </if>
+      <if test="prizeid != null" >
+        PRIZEID,
+      </if>
+      <if test="pname != null" >
+        PNAME,
+      </if>
+      <if test="prizetime != null" >
+        PRIZETIME,
+      </if>
+      <if test="dataStatus != null" >
+        DATA_STATUS,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="comments != null" >
+        COMMENTS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="relId != null" >
+        #{relId,jdbcType=BIGINT},
+      </if>
+      <if test="partyid != null" >
+        #{partyid,jdbcType=VARCHAR},
+      </if>
+      <if test="activeid != null" >
+        #{activeid,jdbcType=BIGINT},
+      </if>
+      <if test="prizeid != null" >
+        #{prizeid,jdbcType=BIGINT},
+      </if>
+      <if test="pname != null" >
+        #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="prizetime != null" >
+        #{prizetime,jdbcType=DATE},
+      </if>
+      <if test="dataStatus != null" >
+        #{dataStatus,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comments != null" >
+        #{comments,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPrizeUserRelModelExample" resultType="java.lang.Integer" >
+    select count(*) from app_prize_user_rel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update app_prize_user_rel
+    <set >
+      <if test="record.relId != null" >
+        REL_ID = #{record.relId,jdbcType=BIGINT},
+      </if>
+      <if test="record.partyid != null" >
+        PARTYID = #{record.partyid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activeid != null" >
+        ACTIVEID = #{record.activeid,jdbcType=BIGINT},
+      </if>
+      <if test="record.prizeid != null" >
+        PRIZEID = #{record.prizeid,jdbcType=BIGINT},
+      </if>
+      <if test="record.pname != null" >
+        PNAME = #{record.pname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prizetime != null" >
+        PRIZETIME = #{record.prizetime,jdbcType=DATE},
+      </if>
+      <if test="record.dataStatus != null" >
+        DATA_STATUS = #{record.dataStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.comments != null" >
+        COMMENTS = #{record.comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update app_prize_user_rel
+    set REL_ID = #{record.relId,jdbcType=BIGINT},
+      PARTYID = #{record.partyid,jdbcType=VARCHAR},
+      ACTIVEID = #{record.activeid,jdbcType=BIGINT},
+      PRIZEID = #{record.prizeid,jdbcType=BIGINT},
+      PNAME = #{record.pname,jdbcType=VARCHAR},
+      PRIZETIME = #{record.prizetime,jdbcType=DATE},
+      DATA_STATUS = #{record.dataStatus,jdbcType=CHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      COMMENTS = #{record.comments,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPrizeUserRelModel" >
+    update app_prize_user_rel
+    <set >
+      <if test="partyid != null" >
+        PARTYID = #{partyid,jdbcType=VARCHAR},
+      </if>
+      <if test="activeid != null" >
+        ACTIVEID = #{activeid,jdbcType=BIGINT},
+      </if>
+      <if test="prizeid != null" >
+        PRIZEID = #{prizeid,jdbcType=BIGINT},
+      </if>
+      <if test="pname != null" >
+        PNAME = #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="prizetime != null" >
+        PRIZETIME = #{prizetime,jdbcType=DATE},
+      </if>
+      <if test="dataStatus != null" >
+        DATA_STATUS = #{dataStatus,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where REL_ID = #{relId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xianglin.appserv.common.dal.dataobject.AppPrizeUserRelModel" >
+    update app_prize_user_rel
+    set PARTYID = #{partyid,jdbcType=VARCHAR},
+      ACTIVEID = #{activeid,jdbcType=BIGINT},
+      PRIZEID = #{prizeid,jdbcType=BIGINT},
+      PNAME = #{pname,jdbcType=VARCHAR},
+      PRIZETIME = #{prizetime,jdbcType=DATE},
+      DATA_STATUS = #{dataStatus,jdbcType=CHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      COMMENTS = #{comments,jdbcType=VARCHAR}
+    where REL_ID = #{relId,jdbcType=BIGINT}
+  </update>
+</mapper>

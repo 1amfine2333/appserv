@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.UserFeedbackDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.UserFeedback" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="DATE" property="date" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CREATER" property="creater" jdbcType="VARCHAR" />
+    <result column="OPERATOR" property="operator" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PARTY_ID, DATE, CONTENT,STATUS ,CREATER,OPERATOR,REMARK, IS_DELETED, CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_user_feedback
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+ <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.UserFeedback" >
+    insert into app_user_feedback (ID, PARTY_ID, DATE, 
+      CONTENT, STATUS, CREATER,IS_DELETED,REMARK, 
+      CREATE_TIME, UPDATE_TIME, COMMENTS
+      )
+    values (#{id,jdbcType=BIGINT}, #{partyId,jdbcType=BIGINT}, #{date,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, 'N',#{creater,jdbcType=VARCHAR}, 'N',#{remark,jdbcType=VARCHAR},
+      NOW(), NOW(), #{comments,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.UserFeedback" >
+    update app_user_feedback
+    <set >
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="date != null" >
+        DATE = #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+       <if test="creater != null" >
+        CREATER = #{creater,jdbcType=VARCHAR},
+      </if>
+        <if test="remark != null" >
+            REMARK = #{remark,jdbcType=VARCHAR},
+        </if>
+        <if test="operator != null" >
+            OPERATOR = #{operator,jdbcType=VARCHAR},
+        </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW()
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    <bind name="start" value="(startPage-1)*pageSize"/>
+      SELECT
+      a.ID,
+      a.PARTY_ID,
+      a.DATE,
+      a.CONTENT,
+      IFNULL(a. STATUS, 'N') STATUS,
+      a.OPERATOR,
+      IFNULL(IFNULL(b.TRUE_NAME,b.NIKER_NAME),CONCAT('xl',a.PARTY_ID)) CREATER,
+      a.REMARK,
+      a.IS_DELETED,
+      a.CREATE_TIME,
+      a.UPDATE_TIME,
+      a.COMMENTS,
+      b.LOGIN_NAME phone
+      FROM
+      app_user_feedback a
+      LEFT JOIN app_user b ON a.PARTY_ID = b.PARTY_ID 
+    <where>a.IS_DELETED = 'N'
+      <if test="partyId != null" >
+        AND a.PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+        <if test="likeContent != null" >
+            AND a.CONTENT LIKE CONCAT('%', #{likeContent}, '%')
+        </if>
+        <if test="status != null and status eq 'Y'.toString()" >
+            AND a.STATUS='Y'
+        </if>
+        <if test="status != null and status eq 'N'.toString()">
+            AND (a.STATUS='N' or a.STATUS is null or a.STATUS ='')
+        </if>
+        <if test="startDate != null and endDate !=null">
+            <![CDATA[AND a.CREATE_TIME >= #{startDate,jdbcType=VARCHAR} AND a.CREATE_TIME <= #{endDate,jdbcType=VARCHAR}]]>
+        </if>
+    </where>
+    order by a.CREATE_TIME desc
+    limit #{start},#{pageSize}
+  </select>
+
+  <select id="selectCount" resultType="Integer" parameterType="map">
+    select count(*)
+    from app_user_feedback
+    <where> IS_DELETED = 'N'
+      <if test="partyId != null" >
+        AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="likeContent != null">
+        AND CONTENT LIKE CONCAT('%', #{likeContent}, '%')
+      </if>
+      <if test="date != null" >
+       AND DATE = #{date,jdbcType=VARCHAR}
+      </if>
+      <if test="creater != null" >
+       AND CREATER = #{creater,jdbcType=VARCHAR}
+      </if>
+        <if test="status != null and status eq 'Y'.toString()" >
+            AND STATUS='Y'
+        </if>
+        <if test="status != null and status eq 'N'.toString()">
+            AND (STATUS='N' or STATUS is null or STATUS ='')
+        </if>
+        <if test="startDate != null and endDate !=null">
+            <![CDATA[AND CREATE_TIME >= #{startDate,jdbcType=VARCHAR} AND CREATE_TIME <= #{endDate,jdbcType=VARCHAR}]]>
+        </if>
+    </where>
+  </select>
+
+</mapper>

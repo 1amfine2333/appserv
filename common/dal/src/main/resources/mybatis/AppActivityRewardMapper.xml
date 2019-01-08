@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppActivityRewardDAO">
+    <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppActivityReward">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="ACTIVITY_CODE" property="activityCode" jdbcType="VARCHAR"/>
+        <result column="REWARD_CATEGARY" property="rewardCategary" jdbcType="VARCHAR"/>
+        <result column="REWARD_TYPE" property="rewardType" jdbcType="VARCHAR"/>
+        <result column="REWARD_NAME" property="rewardName" jdbcType="VARCHAR"/>
+        <result column="START_AMT" property="startAmt" jdbcType="DECIMAL"/>
+        <result column="END_AMT" property="endAmt" jdbcType="DECIMAL"/>
+        <result column="START_SECTION" property="startSection" jdbcType="INTEGER"/>
+        <result column="END_SECTION" property="endSection" jdbcType="INTEGER"/>
+        <result column="DAILY_LIMIT" property="dailyLimit" jdbcType="INTEGER"/>
+        <result column="TOTAL_LIMIT" property="limit" jdbcType="INTEGER"/>
+        <result column="REWARD_STATUS" property="rewardStatus" jdbcType="VARCHAR"/>
+        <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="COMMENTS" property="comments" jdbcType="VARCHAR"/>
+        <result column="DESCS" property="descs" jdbcType="VARCHAR"/>
+        <result column="PRIORITY_LEVEL" property="priorityLevel" jdbcType="DECIMAL" />
+        <result column="SUB_CATEGARY" property="subCategary" jdbcType="VARCHAR"/>
+        <result column="SHOW_STATUS" property="showStatus" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, ACTIVITY_CODE, REWARD_CATEGARY, REWARD_TYPE, REWARD_NAME, START_AMT,END_AMT, START_SECTION,
+    END_SECTION, DAILY_LIMIT, TOTAL_LIMIT, REWARD_STATUS, IS_DELETED, CREATE_TIME, UPDATE_TIME,
+    COMMENTS,DESCS,PRIORITY_LEVEL,SUB_CATEGARY,SHOW_STATUS
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from app_activity_reward
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from app_activity_reward
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppActivityReward">
+    insert into app_activity_reward (ID, ACTIVITY_CODE, REWARD_CATEGARY, 
+      REWARD_TYPE, REWARD_NAME, START_AMT,END_AMT,
+      START_SECTION, END_SECTION, DAILY_LIMIT, 
+      TOTAL_LIMIT, REWARD_STATUS,PRIORITY_LEVEL, IS_DELETED,
+      CREATE_TIME, UPDATE_TIME,SHOW_STATUS, COMMENTS
+      )
+    values (#{id,jdbcType=BIGINT}, #{activityCode,jdbcType=VARCHAR}, #{rewardCategary,jdbcType=VARCHAR}, 
+      #{rewardType,jdbcType=VARCHAR}, #{rewardName,jdbcType=VARCHAR}, #{startAmt,jdbcType=DECIMAL},#{endAmt,jdbcType=DECIMAL},
+      #{startSection,jdbcType=INTEGER}, #{endSection,jdbcType=INTEGER}, #{dailyLimit,jdbcType=INTEGER}, 
+      #{limit,jdbcType=INTEGER}, #{rewardStatus,jdbcType=VARCHAR},#{priorityLevel,jdbcType=BIGINT}, 'N',
+      NOW(), NOW(), #{showStatus,jdbcType=VARCHAR}, #{comments,jdbcType=VARCHAR}
+      )
+  </insert>
+
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.xianglin.appserv.common.dal.dataobject.AppActivityReward">
+        update app_activity_reward
+        <set>
+            <if test="activityCode != null">
+                ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="showStatus != null">
+                SHOW_STATUS = #{showStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="rewardCategary != null">
+                REWARD_CATEGARY = #{rewardCategary,jdbcType=VARCHAR},
+            </if>
+            <if test="rewardType != null">
+                REWARD_TYPE = #{rewardType,jdbcType=VARCHAR},
+            </if>
+            <if test="rewardName != null">
+                REWARD_NAME = #{rewardName,jdbcType=VARCHAR},
+            </if>
+            <if test="startSection != null">
+                START_SECTION = #{startSection,jdbcType=INTEGER},
+            </if>
+            <if test="endSection != null">
+                END_SECTION = #{endSection,jdbcType=INTEGER},
+            </if>
+            <if test="dailyLimit != null">
+                DAILY_LIMIT = #{dailyLimit,jdbcType=INTEGER},
+            </if>
+            <if test="limit != null">
+                TOTAL_LIMIT = #{limit,jdbcType=INTEGER},
+            </if>
+            <if test="rewardStatus != null">
+                REWARD_STATUS = #{rewardStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="priorityLevel != null">
+                PRIORITY_LEVEL = #{priorityLevel,jdbcType=INTEGER},
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments != null">
+                COMMENTS = #{comments,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+        <if test="startPage != null and pageSize !=null">
+        <bind name="start" value="(startPage-1)*pageSize"/>
+        </if>
+        select
+        <include refid="Base_Column_List"/>
+        from app_activity_reward
+        <where>IS_DELETED = 'N'
+            <if test="activityCode != null">
+                AND ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+            </if>
+            <if test="showStatus != null">
+                AND SHOW_STATUS = #{showStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="expectActivityCode != null">
+                AND ACTIVITY_CODE != #{expectActivityCode,jdbcType=VARCHAR}
+            </if>
+            <if test="activityCodes != null">
+                AND ACTIVITY_CODE in (${activityCodes})
+            </if>
+            <if test="rewardCategary != null">
+                AND REWARD_CATEGARY = #{rewardCategary,jdbcType=VARCHAR}
+            </if>
+            <if test="expectRewardCategary != null">
+                AND REWARD_CATEGARY != #{expectRewardCategary,jdbcType=VARCHAR}
+            </if>
+            <if test="rewardType != null">
+                AND REWARD_TYPE = #{rewardType,jdbcType=VARCHAR}
+            </if>
+            <if test="rewardName != null">
+                AND REWARD_NAME = #{rewardName,jdbcType=VARCHAR}
+            </if>
+            <if test="startSection != null">
+                AND START_SECTION = #{startSection,jdbcType=INTEGER}
+            </if>
+            <if test="endSection != null">
+                AND END_SECTION = #{endSection,jdbcType=INTEGER}
+            </if>
+            <if test="dailyLimit != null">
+                AND DAILY_LIMIT = #{dailyLimit,jdbcType=INTEGER}
+            </if>
+            <if test="limit != null">
+                AND TOTAL_LIMIT = #{limit,jdbcType=INTEGER}
+            </if>
+            <if test="priorityLevel != null">
+                AND PRIORITY_LEVEL = #{priorityLevel,jdbcType=INTEGER}
+            </if>
+            <if test="rewardStatus != null">
+                AND REWARD_STATUS = #{rewardStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="subCategary != null">
+                AND SUB_CATEGARY = #{subCategary,jdbcType=VARCHAR}
+            </if>
+            <if test="random != null">
+                AND START_SECTION &lt;= #{random,jdbcType=INTEGER} AND END_SECTION &gt; #{random,jdbcType=INTEGER}
+            </if>
+        </where>
+        <if test="orderBy != null">
+            order by ${orderBy}
+        </if>
+        <if test="orderBy == null">
+            order by UPDATE_TIME desc
+        </if>
+        <if test="startPage != null and pageSize !=null">
+        limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <select id="selectCount" resultType="int" parameterType="map">
+        select
+        count(*)
+        from app_activity_reward
+        <where>IS_DELETED = 'N'
+            <if test="activityCode != null">
+                AND ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+            </if>
+            <if test="showStatus != null">
+                AND SHOW_STATUS = #{showStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="rewardCategary != null">
+                AND REWARD_CATEGARY = #{rewardCategary,jdbcType=VARCHAR}
+            </if>
+            <if test="rewardType != null">
+                AND REWARD_TYPE = #{rewardType,jdbcType=VARCHAR}
+            </if>
+            <if test="rewardName != null">
+                AND REWARD_NAME = #{rewardName,jdbcType=VARCHAR}
+            </if>
+            <if test="startSection != null">
+                AND START_SECTION = #{startSection,jdbcType=INTEGER}
+            </if>
+            <if test="endSection != null">
+                AND END_SECTION = #{endSection,jdbcType=INTEGER}
+            </if>
+            <if test="dailyLimit != null">
+                AND DAILY_LIMIT = #{dailyLimit,jdbcType=INTEGER}
+            </if>
+            <if test="limit != null">
+                AND TOTAL_LIMIT = #{limit,jdbcType=INTEGER}
+            </if>
+            <if test="rewardStatus != null">
+                AND REWARD_STATUS = #{rewardStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="priorityLevel != null">
+                AND PRIORITY_LEVEL = #{priorityLevel,jdbcType=INTEGER}
+            </if>
+            <if test="priorityLevel != null">
+                AND PRIORITY_LEVEL = #{priorityLevel,jdbcType=INTEGER}
+            </if>
+            <if test="random != null">
+                AND START_SECTION &lt;= #{random,jdbcType=INTEGER} AND END_SECTION &gt; #{random,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+</mapper>

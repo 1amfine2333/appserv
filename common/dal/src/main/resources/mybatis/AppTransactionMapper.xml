@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppTransactionDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppTransaction" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="TRANS_NO" property="transNo" jdbcType="VARCHAR" />
+    <result column="SUB_TRANS_NO" property="subTransNo" jdbcType="VARCHAR" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="MOBILE_PHONE" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="ACTIVITY_CODE" property="activityCode" jdbcType="VARCHAR" />
+    <result column="ACTIVITY_CATEGARY" property="activityCategary" jdbcType="VARCHAR" />
+    <result column="TASK_ID" property="taskId" jdbcType="BIGINT" />
+    <result column="TRANS_TYPE" property="transType" jdbcType="VARCHAR" />
+    <result column="AMT_TYPE" property="amtType" jdbcType="VARCHAR" />
+    <result column="AMOUNT" property="amount" jdbcType="VARCHAR" />
+    <result column="TRANS_STATUS" property="transStatus" jdbcType="VARCHAR" />
+    <result column="DAILY" property="daily" jdbcType="VARCHAR" />
+    <result column="TRANS_REMARK" property="transRemark" jdbcType="VARCHAR" />
+    <result column="TRANS_RESULT" property="transResult" jdbcType="VARCHAR" />
+    <result column="TO_PARTY_ID" property="toPartyId" jdbcType="BIGINT" />
+    <result column="TO_MOBILE_PHONE" property="toMobilePhone" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, TRANS_NO, SUB_TRANS_NO, PARTY_ID, MOBILE_PHONE, ACTIVITY_CODE,ACTIVITY_CATEGARY, TASK_ID, TRANS_TYPE,
+    AMT_TYPE, AMOUNT, TRANS_STATUS, DAILY, TRANS_REMARK, TRANS_RESULT, TO_PARTY_ID, TO_MOBILE_PHONE, 
+    IS_DELETED, CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_transaction
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_transaction
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppTransaction" useGeneratedKeys="true" keyProperty="id">
+    insert into app_transaction (ID, TRANS_NO, SUB_TRANS_NO, 
+      PARTY_ID, MOBILE_PHONE, ACTIVITY_CODE, ACTIVITY_CATEGARY,
+      TASK_ID, TRANS_TYPE, AMT_TYPE, 
+      AMOUNT, TRANS_STATUS, DAILY, 
+      TRANS_REMARK, TRANS_RESULT, TO_PARTY_ID, 
+      TO_MOBILE_PHONE, IS_DELETED, CREATE_TIME, 
+      UPDATE_TIME, COMMENTS)
+    values (#{id,jdbcType=BIGINT}, #{transNo,jdbcType=VARCHAR}, #{subTransNo,jdbcType=VARCHAR}, 
+      #{partyId,jdbcType=BIGINT}, #{mobilePhone,jdbcType=VARCHAR}, #{activityCode,jdbcType=VARCHAR}, #{activityCategary,jdbcType=VARCHAR},
+      #{taskId,jdbcType=BIGINT}, #{transType,jdbcType=VARCHAR}, #{amtType,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=VARCHAR}, #{transStatus,jdbcType=VARCHAR}, #{daily,jdbcType=VARCHAR}, 
+      #{transRemark,jdbcType=VARCHAR}, #{transResult,jdbcType=VARCHAR}, #{toPartyId,jdbcType=BIGINT}, 
+      #{toMobilePhone,jdbcType=VARCHAR}, 'N',
+      NOW(), NOW(), #{comments,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppTransaction" >
+    update app_transaction
+    <set >
+      <if test="transNo != null" >
+        TRANS_NO = #{transNo,jdbcType=VARCHAR},
+      </if>
+      <if test="subTransNo != null" >
+        SUB_TRANS_NO = #{subTransNo,jdbcType=VARCHAR},
+      </if>
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="mobilePhone != null" >
+        MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCode != null" >
+        ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null" >
+        TASK_ID = #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="transType != null" >
+        TRANS_TYPE = #{transType,jdbcType=VARCHAR},
+      </if>
+      <if test="amtType != null" >
+        AMT_TYPE = #{amtType,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        AMOUNT = #{amount,jdbcType=VARCHAR},
+      </if>
+      <if test="transStatus != null" >
+        TRANS_STATUS = #{transStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="daily != null" >
+        DAILY = #{daily,jdbcType=VARCHAR},
+      </if>
+      <if test="transRemark != null" >
+        TRANS_REMARK = #{transRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="transResult != null" >
+        TRANS_RESULT = #{transResult,jdbcType=VARCHAR},
+      </if>
+      <if test="toPartyId != null" >
+        TO_PARTY_ID = #{toPartyId,jdbcType=BIGINT},
+      </if>
+      <if test="toMobilePhone != null" >
+        TO_MOBILE_PHONE = #{toMobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+        UPDATE_TIME = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectList" resultType="int" parameterType="map">
+    <bind name="start" value="(startPage-1)*pageSize"/>
+    select
+    <include refid="Base_Column_List" />
+    from app_transaction
+    <where> IS_DELETED = 'N'
+      <if test="transNo != null" >
+        AND TRANS_NO = #{transNo,jdbcType=VARCHAR}
+      </if>
+      <if test="subTransNo != null" >
+        AND SUB_TRANS_NO = #{subTransNo,jdbcType=VARCHAR}
+      </if>
+      <if test="partyId != null" >
+        AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="mobilePhone != null" >
+        AND MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR}
+      </if>
+      <if test="activityCode != null" >
+        AND ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+      </if>
+      <if test="activityCategary != null" >
+        AND ACTIVITY_CATEGARY = #{activityCategary,jdbcType=VARCHAR}
+      </if>
+      <if test="taskId != null" >
+        AND TASK_ID = #{taskId,jdbcType=BIGINT}
+      </if>
+      <if test="transType != null" >
+        AND TRANS_TYPE = #{transType,jdbcType=VARCHAR}
+      </if>
+      <if test="amtType != null" >
+        AND AMT_TYPE = #{amtType,jdbcType=VARCHAR}
+      </if>
+      <if test="amount != null" >
+        AND AMOUNT = #{amount,jdbcType=VARCHAR}
+      </if>
+      <if test="transStatus != null" >
+        AND TRANS_STATUS = #{transStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="daily != null" >
+        AND DAILY = #{daily,jdbcType=VARCHAR}
+      </if>
+      <if test="transRemark != null" >
+        AND TRANS_REMARK = #{transRemark,jdbcType=VARCHAR}
+      </if>
+      <if test="transResult != null" >
+        AND TRANS_RESULT = #{transResult,jdbcType=VARCHAR}
+      </if>
+      <if test="toPartyId != null" >
+        AND TO_PARTY_ID = #{toPartyId,jdbcType=BIGINT}
+      </if>
+      <if test="toMobilePhone != null" >
+        AND TO_MOBILE_PHONE = #{toMobilePhone,jdbcType=VARCHAR}
+      </if>
+    </where>
+    <if test="orderBy != null">
+      order by ${orderBy} desc,CREATE_TIME desc
+    </if>
+    <if test="orderBy == null">
+      order by UPDATE_TIME desc
+    </if>
+    limit #{start},#{pageSize}
+  </select>
+
+  <select id="selectCount" resultType="int" parameterType="map">
+    select
+    count(*)
+    from app_transaction
+    <where> IS_DELETED = 'N'
+      <if test="transNo != null" >
+        AND TRANS_NO = #{transNo,jdbcType=VARCHAR}
+      </if>
+      <if test="subTransNo != null" >
+        AND SUB_TRANS_NO = #{subTransNo,jdbcType=VARCHAR}
+      </if>
+      <if test="partyId != null" >
+        AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="mobilePhone != null" >
+        AND MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR}
+      </if>
+      <if test="activityCode != null" >
+        AND ACTIVITY_CODE = #{activityCode,jdbcType=VARCHAR}
+      </if>
+      <if test="activityCategary != null" >
+        AND ACTIVITY_CATEGARY = #{activityCategary,jdbcType=VARCHAR}
+      </if>
+      <if test="taskId != null" >
+        AND TASK_ID = #{taskId,jdbcType=BIGINT}
+      </if>
+      <if test="transType != null" >
+        AND TRANS_TYPE = #{transType,jdbcType=VARCHAR}
+      </if>
+      <if test="amtType != null" >
+        AND AMT_TYPE = #{amtType,jdbcType=VARCHAR}
+      </if>
+      <if test="amount != null" >
+        AND AMOUNT = #{amount,jdbcType=VARCHAR}
+      </if>
+      <if test="transStatus != null" >
+        AND TRANS_STATUS = #{transStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="daily != null" >
+        AND DAILY = #{daily,jdbcType=VARCHAR}
+      </if>
+      <if test="transRemark != null" >
+        AND TRANS_REMARK = #{transRemark,jdbcType=VARCHAR}
+      </if>
+      <if test="transResult != null" >
+        AND TRANS_RESULT = #{transResult,jdbcType=VARCHAR}
+      </if>
+      <if test="toPartyId != null" >
+        AND TO_PARTY_ID = #{toPartyId,jdbcType=BIGINT}
+      </if>
+      <if test="toMobilePhone != null" >
+        AND TO_MOBILE_PHONE = #{toMobilePhone,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectTotalAmount" resultType="java.math.BigDecimal">
+    select IFNULL(sum(AMOUNT),0)
+    from app_transaction
+    <where> IS_DELETED = 'N'
+      <if test="paras.transNo != null" >
+        AND TRANS_NO = #{paras.transNo,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.subTransNo != null" >
+        AND SUB_TRANS_NO = #{paras.subTransNo,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.partyId != null" >
+        AND PARTY_ID = #{paras.partyId,jdbcType=BIGINT}
+      </if>
+      <if test="paras.mobilePhone != null" >
+        AND MOBILE_PHONE = #{paras.mobilePhone,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.activityCode != null" >
+        AND ACTIVITY_CODE = #{paras.activityCode,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.activityCategary != null" >
+        AND ACTIVITY_CATEGARY = #{paras.activityCategary,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.taskId != null" >
+        AND TASK_ID = #{paras.taskId,jdbcType=BIGINT}
+      </if>
+      <if test="paras.transType != null" >
+        AND TRANS_TYPE = #{paras.transType,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.amtType != null" >
+        AND AMT_TYPE = #{paras.amtType,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.amount != null" >
+        AND AMOUNT = #{paras.amount,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.transStatus != null" >
+        AND TRANS_STATUS = #{paras.transStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.daily != null" >
+        AND DAILY = #{paras.daily,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.transRemark != null" >
+        AND TRANS_REMARK = #{paras.transRemark,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.toPartyId != null" >
+        AND TO_PARTY_ID = #{paras.toPartyId,jdbcType=BIGINT}
+      </if>
+      <if test="paras.toMobilePhone != null" >
+        AND TO_MOBILE_PHONE = #{paras.toMobilePhone,jdbcType=VARCHAR}
+      </if>
+    </where>
+    <if test="page != null" >
+      order by CREATE_TIME desc
+      <bind name="start" value="(page.startPage-1)*page.pageSize"/>
+      limit #{start},#{page.pageSize}
+    </if>
+  </select>
+
+  <select id="selectTranList" >
+    select <include refid="Base_Column_List" />
+    from app_transaction
+    <where> IS_DELETED = 'N'
+      <if test="paras.transNo != null" >
+        AND TRANS_NO = #{paras.transNo,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.subTransNo != null" >
+        AND SUB_TRANS_NO = #{paras.subTransNo,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.partyId != null" >
+        AND PARTY_ID = #{paras.partyId,jdbcType=BIGINT}
+      </if>
+      <if test="paras.mobilePhone != null" >
+        AND MOBILE_PHONE = #{paras.mobilePhone,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.activityCode != null" >
+        AND ACTIVITY_CODE = #{paras.activityCode,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.activityCategary != null" >
+        AND ACTIVITY_CATEGARY = #{paras.activityCategary,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.taskId != null" >
+        AND TASK_ID = #{paras.taskId,jdbcType=BIGINT}
+      </if>
+      <if test="paras.transType != null" >
+        AND TRANS_TYPE = #{paras.transType,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.amtType != null" >
+        AND AMT_TYPE = #{paras.amtType,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.amount != null" >
+        AND AMOUNT = #{paras.amount,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.transStatus != null" >
+        AND TRANS_STATUS = #{paras.transStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.daily != null" >
+        AND DAILY = #{paras.daily,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.transRemark != null" >
+        AND TRANS_REMARK = #{paras.transRemark,jdbcType=VARCHAR}
+      </if>
+      <if test="paras.toPartyId != null" >
+        AND TO_PARTY_ID = #{paras.toPartyId,jdbcType=BIGINT}
+      </if>
+      <if test="paras.toMobilePhone != null" >
+        AND TO_MOBILE_PHONE = #{paras.toMobilePhone,jdbcType=VARCHAR}
+      </if>
+    </where>
+    <if test="page != null" >
+      order by CREATE_TIME desc
+      <bind name="start" value="(page.startPage-1)*page.pageSize"/>
+      limit #{start},#{page.pageSize}
+    </if>
+  </select>
+</mapper>

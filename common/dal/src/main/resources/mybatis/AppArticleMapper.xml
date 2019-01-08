@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppArticleDAO">
+    <resultMap id="BaseResultMap"
+               type="com.xianglin.appserv.common.dal.dataobject.AppArticle">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="PARTY_ID" property="partyId" jdbcType="BIGINT"/>
+        <result column="GROUP_ID" property="groupId" jdbcType="BIGINT"/>
+        <result column="ARTICLE_TYPE" property="articleType" jdbcType="VARCHAR"/>
+        <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+        <result column="ARTICLE" property="article" jdbcType="VARCHAR"/>
+        <result column="ARTICLE_ORIGINAL" property="articleOriginal" jdbcType="VARCHAR"/>
+        <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+        <result column="ARTICLE_IMGS" property="articleImgs" jdbcType="VARCHAR"/>
+        <result column="ARTICLE_AUDIO" property="articleAudio" jdbcType="VARCHAR"/>
+        <result column="ARTICLE_AUDIO_LENGTH" property="articleAudioLength" jdbcType="INTEGER"/>
+        <result column="VIDEO_URL" property="videoUrl" jdbcType="VARCHAR"/>
+        <result column="VIDEO_LENGTH" property="videoLength" jdbcType="INTEGER"/>
+        <result column="SHARE_IMG" property="shareImg" jdbcType="VARCHAR"/>
+        <result column="SHARE_TITLE" property="shareTitle" jdbcType="VARCHAR"/>
+        <result column="SHARE_URL" property="shareUrl" jdbcType="VARCHAR"/>
+        <result column="CONTACTS" property="contacts" jdbcType="VARCHAR"/>
+        <result column="CONTACT_PHONE" property="contactsPhone" jdbcType="VARCHAR"/>
+        <result column="ARTICLE_STATUS" property="articleStatus" jdbcType="VARCHAR"/>
+        <result column="REPLY_COUNT" property="replyCount" jdbcType="INTEGER"/>
+        <result column="PRAISE_COUNT" property="praiseCount" jdbcType="INTEGER"/>
+        <result column="COLLECT_COUNT" property="collectCount" jdbcType="INTEGER"/>
+        <result column="SHARE_COUNT" property="shareCount" jdbcType="INTEGER"/>
+        <result column="REPLY_ID" property="replyId" jdbcType="BIGINT"/>
+        <result column="COMMENT_ID" property="commentId" jdbcType="BIGINT"/>
+        <result column="ARTICLE_ID" property="articleId" jdbcType="BIGINT"/>
+        <result column="REPLY_PARTY_ID" property="replyPartyId" jdbcType="BIGINT"/>
+        <result column="TOP_LEVEL" property="topLevel" jdbcType="INTEGER"/>
+        <result column="TOP_TIME" property="topTime" jdbcType="TIMESTAMP"/>
+        <result column="REC_SIGN" property="recSign" jdbcType="VARCHAR"/>
+        <result column="VISIBLE_LEVEL" property="visibleLevel" jdbcType="INTEGER"/>
+        <result column="PROVINCE" property="province" jdbcType="VARCHAR"/>
+        <result column="CITY" property="city" jdbcType="VARCHAR"/>
+        <result column="COUNTY" property="county" jdbcType="VARCHAR"/>
+        <result column="TOWN" property="town" jdbcType="VARCHAR"/>
+        <result column="VILLAGE" property="village" jdbcType="VARCHAR"/>
+        <result column="WEIGHT" property="weight" jdbcType="DECIMAL"/>
+        <result column="WEIGHT_ADJUST" property="weightAdjust" jdbcType="DECIMAL"/>
+        <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="COMMENTS" property="comments" jdbcType="VARCHAR"/>
+        <result column="READ_COUNT" property="readCount" jdbcType="INTEGER"/>
+        <result column="SUPPORT_USERS" property="supportUsers" jdbcType="VARCHAR"/>
+        <association property="user" column="PARTY_ID" select="selectUserInfo"></association>
+        <association property="replyUser" column="REPLY_PARTY_ID" select="selectUserInfo"></association>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, PARTY_ID,GROUP_ID, ARTICLE_TYPE,TITLE, ARTICLE, ARTICLE_IMGS, ARTICLE_AUDIO, ARTICLE_AUDIO_LENGTH,
+    VIDEO_URL,VIDEO_LENGTH,SHARE_IMG,SHARE_TITLE,SHARE_URL,CONTACTS, CONTACT_PHONE,
+    ARTICLE_STATUS, REPLY_COUNT, PRAISE_COUNT, COLLECT_COUNT, SHARE_COUNT, REPLY_ID,
+    COMMENT_ID, ARTICLE_ID, REPLY_PARTY_ID, TOP_LEVEL,TOP_TIME,REC_SIGN, VISIBLE_LEVEL, PROVINCE, CITY,
+    COUNTY, TOWN, VILLAGE,WEIGHT,WEIGHT_ADJUST, IS_DELETED, CREATE_TIME, UPDATE_TIME, COMMENTS,READ_COUNT,SUPPORT_USERS,IMAGE
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from app_article
+        where ID = #{id,jdbcType=BIGINT} and IS_DELETED = 'N'
+    </select>
+
+    <select id="queryArticleListByIds" resultMap="BaseResultMap"
+    >
+        select
+        <include refid="Base_Column_List"/>
+        from app_article
+        where IS_DELETED = 'N' and ID in
+        <foreach collection="array" index="index" item="ids"
+                 open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from app_article
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+
+
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.xianglin.appserv.common.dal.dataobject.AppArticle">
+        update app_article
+        <set>
+            <if test="groupId != null">
+                GROUP_ID = #{groupId,jdbcType=BIGINT},
+            </if>
+            <if test="partyId != null">
+                PARTY_ID = #{partyId,jdbcType=BIGINT},
+            </if>
+            <if test="articleType != null">
+                ARTICLE_TYPE = #{articleType,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                TITLE = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="image != null">
+                IMAGE = #{image,jdbcType=VARCHAR},
+            </if>
+            <if test="article != null">
+                ARTICLE = #{article,jdbcType=VARCHAR},
+            </if>
+            <if test="articleImgs != null">
+                ARTICLE_IMGS = #{articleImgs,jdbcType=VARCHAR},
+            </if>
+            <if test="articleAudio != null">
+                ARTICLE_AUDIO = #{articleAudio,jdbcType=VARCHAR},
+            </if>
+            <if test="articleAudioLength != null">
+                ARTICLE_AUDIO_LENGTH = #{articleAudioLength,jdbcType=INTEGER},
+            </if>
+            <if test="videoUrl != null">
+                VIDEO_URL = #{videoUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="videoLength != null">
+                VIDEO_LENGTH = #{videoLength,jdbcType=INTEGER},
+            </if>
+            <if test="shareImg != null">
+                SHARE_IMG = #{shareImg,jdbcType=VARCHAR},
+            </if>
+            <if test="shareTitle != null">
+                SHARE_TITLE = #{shareTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="shareUrl != null">
+                SHARE_URL = #{shareUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="weight != null">
+                WEIGHT = #{weight,jdbcType=VARCHAR},
+            </if>
+            <if test="weightAdjust != null">
+                WEIGHT_ADJUST = #{weightAdjust,jdbcType=VARCHAR},
+            </if>
+            <if test="articleStatus != null">
+                ARTICLE_STATUS = #{articleStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="replyCount != null">
+                REPLY_COUNT = #{replyCount,jdbcType=INTEGER},
+            </if>
+            <if test="praiseCount != null">
+                PRAISE_COUNT = #{praiseCount,jdbcType=INTEGER},
+            </if>
+            <if test="replyId != null">
+                REPLY_ID = #{replyId,jdbcType=BIGINT},
+            </if>
+            <if test="articleId != null">
+                ARTICLE_ID = #{articleId,jdbcType=BIGINT},
+            </if>
+            <if test="topLevel != null">
+                TOP_LEVEL = #{topLevel,jdbcType=INTEGER},
+            </if>
+            <if test="topTime != null">
+                TOP_TIME = #{topTime,jdbcType=VARCHAR},
+            </if>
+            <if test="topTime == null">
+                TOP_TIME = null,
+            </if>
+            <if test="visibleLevel != null">
+                VISIBLE_LEVEL = #{visibleLevel,jdbcType=INTEGER},
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+            </if>
+            <if test="readCount != null">
+                READ_COUNT = #{readCount,jdbcType=INTEGER},
+            </if>
+            <if test="supportUsers != null">
+                SUPPORT_USERS = #{supportUsers,jdbcType=VARCHAR},
+            </if>
+            UPDATE_TIME = NOW(),
+            <if test="comments != null">
+                COMMENTS = #{comments,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="selectArticleList" resultMap="BaseResultMap"
+            parameterType="map">
+        <if test="startPage != null and pageSize !=null">
+            <bind name="start" value="(startPage-1)*pageSize"/>
+        </if>
+        select
+        A.ID, A.PARTY_ID,A.GROUP_ID,A.ARTICLE_TYPE,A.TITLE, A.ARTICLE,
+        A.ARTICLE_IMGS, A.ARTICLE_AUDIO, A.ARTICLE_AUDIO_LENGTH,
+        A.VIDEO_URL,A.VIDEO_LENGTH,A.SHARE_IMG,A.SHARE_TITLE,A.SHARE_URL,A.CONTACTS,A.CONTACT_PHONE,A.ARTICLE_STATUS,
+        A.REPLY_COUNT,
+        A.PRAISE_COUNT,A.COLLECT_COUNT,A.SHARE_COUNT,A.REPLY_ID,A.COMMENT_ID,
+        A.ARTICLE_ID,A.REPLY_PARTY_ID, A.TOP_LEVEL,A.TOP_TIME,A.REC_SIGN, A.VISIBLE_LEVEL,
+        A.PROVINCE,A.CITY,A.COUNTY,A.town,A.VILLAGE,A.WEIGHT,A.WEIGHT_ADJUST,
+        A.IS_DELETED, A.CREATE_TIME, A.UPDATE_TIME,
+        A.COMMENTS,A.REPLY_COUNT+A.PRAISE_COUNT AS
+        FOLLOWCOUNT,A.REPLY_COUNT+A.PRAISE_COUNT AS
+        FOLLOWCOUNT2,READ_COUNT,SUPPORT_USERS,IMAGE
+        from app_article A LEFT JOIN app_user b ON A.PARTY_ID = b.PARTY_ID
+        <where>A.IS_DELETED = 'N'
+            <if test="showName != null and showName != ''">
+                and IF (length(TRIM(b.NIKER_NAME)) > 0, b.NIKER_NAME,IF (
+                LENGTH(TRIM(b.TRUE_NAME)) > 0, b.TRUE_NAME,
+                CONCAT('xl', b.PARTY_ID))) LIKE CONCAT('%', #{showName}, '%')
+            </if>
+            <if test="id != null">
+                and A.ID = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="ids != null">
+                and A.ID in
+                <foreach collection="ids" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="lastId != null">
+                and A.ID &lt; #{lastId,jdbcType=BIGINT}
+            </if>
+            <if test="partyId != null and partyId != ''">
+                and A.PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="excludePartyId != null">
+                and A.PARTY_ID != #{excludePartyId,jdbcType=BIGINT}
+            </if>
+            <if test="groupId != null">
+                and A.GROUP_ID = #{groupId,jdbcType=BIGINT}
+            </if>
+            <if test="groupIds != null">
+                and A.GROUP_ID in (${groupIds})
+            </if>
+            <if test="nickName != null">
+                and A.PARTY_ID IN (select PARTY_ID from app_user where
+                NIKER_NAME = #{nickName,jdbcType=VARCHAR})
+            </if>
+            <if test="articleType != null">
+                and A.ARTICLE_TYPE = #{articleType,jdbcType=VARCHAR}
+            </if>
+            <if test="title != null">
+                and A.TITLE = #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="article != null">
+                and A.ARTICLE = #{article,jdbcType=VARCHAR}
+            </if>
+            <if test="articleImgs != null">
+                and A.ARTICLE_IMGS = #{articleImgs,jdbcType=VARCHAR}
+            </if>
+            <if test="articleAudio != null">
+                and A.ARTICLE_AUDIO = #{articleAudio,jdbcType=VARCHAR}
+            </if>
+            <if test="articleAudioLength != null">
+                and A.ARTICLE_AUDIO_LENGTH =
+                #{articleAudioLength,jdbcType=INTEGER}
+            </if>
+            <if test="articleStatus != null">
+                and A.ARTICLE_STATUS = #{articleStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="replyCount != null">
+                and A.REPLY_COUNT = #{replyCount,jdbcType=INTEGER}
+            </if>
+            <if test="praiseCount != null">
+                and A.PRAISE_COUNT = #{praiseCount,jdbcType=INTEGER}
+            </if>
+            <if test="replyId != null">
+                and A.REPLY_ID = #{replyId,jdbcType=BIGINT}
+            </if>
+            <if test="articleId != null">
+                and A.ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+            </if>
+            <if test="commentId != null">
+                and COMMENT_ID = #{commentId,jdbcType=BIGINT}
+            </if>
+            <if test="topLevel != null">
+                and A.TOP_LEVEL = #{topLevel,jdbcType=INTEGER}
+            </if>
+            <if test="visibleLevel != null">
+                and A.VISIBLE_LEVEL IN
+                <foreach collection="visibleLevel" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="partyIds != null">
+                and A.PARTY_ID IN
+                <foreach collection="partyIds" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="isDeleted != null">
+                and A.IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="province != null">
+                and A.PROVINCE = #{province,jdbcType=VARCHAR}
+            </if>
+            <if test="city != null">
+                and A.CITY = #{city,jdbcType=VARCHAR}
+            </if>
+            <if test="county != null">
+                and A.COUNTY = #{county,jdbcType=VARCHAR}
+            </if>
+            <if test="town != null">
+                and A.town = #{town,jdbcType=VARCHAR}
+            </if>
+            <if test="village != null">
+                and A.VILLAGE = #{village,jdbcType=VARCHAR}
+            </if>
+            <if test="weight != null">
+                and A.WEIGHT = #{weight,jdbcType=VARCHAR}
+            </if>
+            <if test="weightAdjust != null">
+                and A.WEIGHT_ADJUST = #{weightAdjust,jdbcType=VARCHAR}
+            </if>
+            <if test="comments != null">
+                and A.COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and A.CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="recSign != null and recSign != ''">
+                and A.REC_SIGN = #{recSign,jdbcType=VARCHAR}
+            </if>
+            <if test="updateTime != null">
+                and A.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="queryKey != null and queryKey != ''">
+                and A.ARTICLE LIKE concat('%',#{queryKey,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="topic != null and topic != ''">
+                and A.ARTICLE REGEXP ".*&lt;span type='topic'&gt;[^&lt;]{0,28}${topic}[^>]{0,28}&lt;/span&gt;.*"
+            </if>
+            <if test="excludeShareUrl != null">
+                and A.SHARE_URL is null
+            </if>
+            <if test="phone != null  and phone != ''">
+                and B.LOGIN_NAME = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="startDate != null ">
+                and A.CREATE_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endDate != null ">
+                and A.CREATE_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        <if test="orderBy != null">
+            order by
+            <choose>
+                <when test="orderBy == 'FOLLOWCOUNT2'">
+                    FOLLOWCOUNT2 desc,
+                    CREATE_TIME desc
+                </when>
+                <when test="orderBy == 'FOLLOWCOUNT'">
+                    FOLLOWCOUNT desc,
+                    CREATE_TIME asc
+                </when>
+                <when test="orderBy == 'CREATETIME'">
+                    CREATE_TIME asc
+                </when>
+                <otherwise>
+                    ${orderBy}
+                </otherwise>
+            </choose>
+        </if>
+        <if test="orderBy == null">
+            order by TOP_LEVEL desc,
+                     TOP_TIME desc,
+                     CREATE_TIME desc
+        </if>
+        <if test="startPage != null and pageSize !=null">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <select id="selectUserInfo"
+            resultType="com.xianglin.appserv.common.dal.dataobject.User">
+    select ID AS id,PARTY_ID AS partyId,NIKER_NAME AS nikerName,HEAD_IMG AS headImg,USER_TYPE AS userType,TRUE_NAME trueName,IFNULL(IFNULL(NIKER_NAME,TRUE_NAME),CONCAT('xl',PARTY_ID)) showName,GENDER as gender from app_user where party_id = #{partyId,jdbcType=BIGINT}
+  </select>
+
+
+    <select id="selectArticleCount" resultType="int" parameterType="map">
+        select COUNT(*) from
+        app_article A LEFT JOIN app_user b ON A.PARTY_ID = b.PARTY_ID
+        <where>A.IS_DELETED = 'N'
+            <if test="showName != null and showName != ''">
+                and IF (length(TRIM(b.NIKER_NAME)) > 0, b.NIKER_NAME,IF (
+                LENGTH(TRIM(b.TRUE_NAME)) > 0, b.TRUE_NAME,
+                CONCAT('xl', b.PARTY_ID))) LIKE CONCAT('%', #{showName}, '%')
+            </if>
+            <if test="partyId != null and partyId != ''">
+                and A.PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="groupId != null">
+                and A.GROUP_ID = #{groupId,jdbcType=BIGINT}
+            </if>
+            <if test="excludeShareUrl != null">
+                and A.SHARE_URL is null
+            </if>
+            <if test="articleType != null">
+                and A.ARTICLE_TYPE = #{articleType,jdbcType=VARCHAR}
+            </if>
+            <if test="title != null">
+                and A.TITLE = #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="article != null">
+                and A.ARTICLE = #{article,jdbcType=VARCHAR}
+            </if>
+            <if test="articleImgs != null">
+                and A.ARTICLE_IMGS = #{articleImgs,jdbcType=VARCHAR}
+            </if>
+            <if test="articleAudio != null">
+                and A.ARTICLE_AUDIO = #{articleAudio,jdbcType=VARCHAR}
+            </if>
+            <if test="articleAudioLength != null">
+                and A.ARTICLE_AUDIO_LENGTH =
+                #{articleAudioLength,jdbcType=INTEGER}
+            </if>
+            <if test="articleStatus != null">
+                and A.ARTICLE_STATUS = #{articleStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="replyCount != null">
+                and A.REPLY_COUNT = #{replyCount,jdbcType=INTEGER}
+            </if>
+            <if test="praiseCount != null">
+                and A.PRAISE_COUNT = #{praiseCount,jdbcType=INTEGER}
+            </if>
+            <if test="replyId != null">
+                and A.REPLY_ID = #{replyId,jdbcType=BIGINT}
+            </if>
+            <if test="articleId != null">
+                and A.ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+            </if>
+            <if test="commentId != null">
+                and A.COMMENT_ID = #{commentId,jdbcType=BIGINT}
+            </if>
+            <if test="topLevel != null">
+                and A.TOP_LEVEL = #{topLevel,jdbcType=INTEGER}
+            </if>
+            <if test="phone != null  and phone != ''">
+                and B.LOGIN_NAME = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="visibleLevel != null">
+                and A.VISIBLE_LEVEL IN
+                <foreach collection="visibleLevel" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="province != null">
+                and A.PROVINCE = #{province,jdbcType=VARCHAR}
+            </if>
+            <if test="city != null">
+                and A.CITY = #{city,jdbcType=VARCHAR}
+            </if>
+            <if test="COUNTY != null">
+                and A.COUNTY = #{county,jdbcType=VARCHAR}
+            </if>
+            <if test="town != null">
+                and A.TOWN = #{town,jdbcType=VARCHAR}
+            </if>
+            <if test="village != null">
+                and A.VILLAGE = #{village,jdbcType=VARCHAR}
+            </if>
+            <if test="weight != null">
+                and A.WEIGHT = #{weight,jdbcType=VARCHAR}
+            </if>
+            <if test="weightAdjust != null">
+                and A.WEIGHT_ADJUST = #{weightAdjust,jdbcType=VARCHAR}
+            </if>
+            <if test="isDeleted != null">
+                and A.IS_DELETED = #{isDeleted,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and A.CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and A.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="comments != null">
+                and A.COMMENTS = #{comments,jdbcType=VARCHAR}
+            </if>
+            <if test="topic != null and topic != ''">
+                and A.ARTICLE REGEXP ".*&lt;span type='topic'&gt;[^&lt;]{0,28}${topic}[^>]{0,28}&lt;/span&gt;.*"
+            </if>
+            <if test="queryKey != null and queryKey != ''">
+                and A.ARTICLE LIKE concat('%',#{queryKey,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="recSign != null and recSign != ''">
+                and A.REC_SIGN = #{recSign,jdbcType=VARCHAR}
+            </if>
+            <if test="startDate != null">
+                and A.CREATE_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endDate != null ">
+                and A.CREATE_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryLearningFileList" resultMap="BaseResultMap">
+        <bind name="from" value="(startPage-1) * pageSize"/>
+        <bind name="to" value="pageSize"/>
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM app_article
+        WHERE ARTICLE_TYPE = 'LEARNING_PPT'
+        AND IS_DELETED='N'
+        ORDER BY CREATE_TIME DESC
+        LIMIT #{from},#{to}
+    </select>
+    <select id="countLearningFile" resultType="java.lang.Integer">
+        SELECT COUNT(0)
+        FROM app_article
+        WHERE ARTICLE_TYPE = 'LEARNING_PPT'
+        AND IS_DELETED='N'
+    </select>
+
+    <update id="batchDelete">
+        update app_article
+        set IS_DELETED = 'Y'
+        where ID in
+        <foreach collection="list" close=")" open="(" separator=","
+                 index="index" item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateTipCount" parameterType="java.lang.Long">
+    UPDATE app_article
+    SET
+      UPDATE_TIME = NOW(),
+      PRAISE_COUNT = (select count(*) from app_article_tip where TIP_TYPE = 'PRAISE' and ARTICLE_ID = #{id,jdbcType=BIGINT} and IS_DELETED = 'N' and TIP_STATUS = 'Y'),
+      COLLECT_COUNT = (select count(*) from app_article_tip where TIP_TYPE = 'COLLET' and ARTICLE_ID = #{id,jdbcType=BIGINT} and IS_DELETED = 'N' and TIP_STATUS = 'Y'),
+      SHARE_COUNT = (select count(*) from app_article_tip where TIP_TYPE = 'SHARE' and ARTICLE_ID = #{id,jdbcType=BIGINT} and IS_DELETED = 'N' and TIP_STATUS = 'Y')
+    WHERE ID = #{id,jdbcType=BIGINT}
+  </update>
+
+    <update id="setTopLevel">
+    UPDATE app_article
+    SET TOP_LEVEL = ABS(TOP_LEVEL - 9)
+    WHERE  id=#{id}
+    </update>
+    <update id="incrReadCount">
+    UPDATE app_article
+    SET
+      UPDATE_TIME = NOW(),
+      READ_COUNT=READ_COUNT+1
+    WHERE ID = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="queryRandArticle" resultMap="BaseResultMap"
+            parameterType="map">
+        <bind name="start" value="(startPage-1)*pageSize"/>
+        select
+        max(A.ID) ID, max(A.PARTY_ID) PARTY_ID,max(A.GROUP_ID) GROUP_ID,max(A.ARTICLE_TYPE) ARTICLE_TYPE,max(A.TITLE)
+        TITLE, max(A.ARTICLE) ARTICLE,
+        max(A.ARTICLE_IMGS) ARTICLE_IMGS, max(A.ARTICLE_AUDIO)ARTICLE_AUDIO, max(A.ARTICLE_AUDIO_LENGTH)
+        ARTICLE_AUDIO_LENGTH,
+        max(A.VIDEO_URL) VIDEO_URL,max(A.VIDEO_LENGTH) VIDEO_LENGTH,max(A.SHARE_IMG) SHARE_IMG,max(A.SHARE_TITLE)
+        SHARE_TITLE,max(A.SHARE_URL) SHARE_URL,max(A.CONTACTS) CONTACTS,max(A.CONTACT_PHONE)
+        CONTACT_PHONE,max(A.ARTICLE_STATUS) ARTICLE_STATUS,
+        max(A.REPLY_COUNT) REPLY_COUNT,
+        max(A.PRAISE_COUNT) PRAISE_COUNT,max(A.COLLECT_COUNT) COLLECT_COUNT,max(A.SHARE_COUNT)
+        SHARE_COUNT,max(A.REPLY_ID) REPLY_ID,max(A.COMMENT_ID) COMMENT_ID,
+        max(A.ARTICLE_ID) ARTICLE_ID,max(A.REPLY_PARTY_ID) REPLY_PARTY_ID, max(A.TOP_LEVEL) TOP_LEVEL,
+        max(A.VISIBLE_LEVEL) VISIBLE_LEVEL,
+        max(A.PROVINCE) PROVINCE,max(A.CITY) CITY,max(A.COUNTY) COUNTY,max(A.town)town,max(A.VILLAGE)VILLAGE,
+        max(A.IS_DELETED)IS_DELETED, max(A.CREATE_TIME)CREATE_TIME, max(A.UPDATE_TIME)UPDATE_TIME,
+        max(A.COMMENTS)COMMENTS,max(A.REPLY_COUNT+A.PRAISE_COUNT) AS
+        FOLLOWCOUNT,max(A.REPLY_COUNT+A.PRAISE_COUNT) AS
+        FOLLOWCOUNT2,max(READ_COUNT)READ_COUNT,max(SUPPORT_USERS)SUPPORT_USERS,max(IMAGE)IMAGE
+        from app_article A LEFT JOIN app_user b ON A.PARTY_ID = b.PARTY_ID
+        where A.IS_DELETED='N' AND a.ARTICLE_TYPE ='SUBJECT' AND a.GROUP_ID=0
+        <if test="followCount != null">
+            and a.PARTY_ID IN (
+            SELECT
+            partyId
+            FROM
+            (
+            SELECT
+            aur.TO_PARTY_ID partyId,
+            count(*) count
+            FROM
+            app_user_relation aur
+            WHERE
+            both_status IN ('FOLLOW', 'BOTH')
+            AND is_deleted = 'N'
+            GROUP BY
+            aur.TO_PARTY_ID
+            ) a
+            WHERE
+            count >= #{followCount,jdbcType=BIGINT}
+            )
+            AND a.CREATE_TIME >= DATE_SUB(NOW(), INTERVAL 6 DAY)
+        </if>
+        and a.PARTY_ID != #{excludePartyId,jdbcType=BIGINT}
+        <if test="partyIds != null">
+            and a.PARTY_ID  not in
+            <foreach collection="partyIds" index="index" item="item"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="province != null">
+            and A.PROVINCE = #{province,jdbcType=VARCHAR}
+        </if>
+        <if test="city != null">
+            and A.CITY = #{city,jdbcType=VARCHAR}
+        </if>
+        GROUP BY
+        a.PARTY_ID
+        
+        <if test="rand != null">
+        ORDER BY RAND()
+        </if>
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="selectPopularArticles" resultType="long">
+        SELECT ID
+        FROM app_article
+        WHERE ARTICLE_TYPE = 'SUBJECT'
+        AND IS_DELETED='N' AND GROUP_ID = 0
+        <if test="startDate != null">
+            and CREATE_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            and CREATE_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        ORDER BY WEIGHT DESC,CREATE_TIME DESC
+        limit #{limit}
+    </select>
+
+</mapper>

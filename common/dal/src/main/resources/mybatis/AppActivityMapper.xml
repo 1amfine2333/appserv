@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppActivityDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppActivity" >
+    <id column="ID" property="id" jdbcType="BIGINT" /><result column="ACTIVITY_NAME" property="activityName" jdbcType="VARCHAR" />
+    <result column="CATEGORY" property="category" jdbcType="VARCHAR" />
+    <result column="ACTIVITY_CODE" property="activeCode" jdbcType="VARCHAR" />
+    <result column="ACTIVITY_NAME" property="activityName" jdbcType="VARCHAR" />
+    <result column="ACTIVITY_DESC" property="activityDesc" jdbcType="VARCHAR" />
+    <result column="ACTIVITY_URL" property="activityUrl" jdbcType="VARCHAR" />
+    <result column="ACTIVITY_IMG_URL" property="activityImgUrl" jdbcType="VARCHAR" />
+    <result column="ACTIVITY_DETAIL_IMG_URL" property="activityDetailImgUrl" jdbcType="VARCHAR" />
+    <result column="IS_PRAISE" property="isPraise" jdbcType="VARCHAR" />
+    <result column="DATA_STATUS" property="dataStatus" jdbcType="VARCHAR" />
+    <result column="CLICK_NUM" property="clickNum" jdbcType="VARCHAR" />
+    <result column="START_DATE" property="startDate" jdbcType="VARCHAR" />
+    <result column="END_DATE" property="endDate" jdbcType="VARCHAR" />
+    <result column="SUPPORT_VERSION" property="supportVersion" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID,CATEGORY, ACTIVITY_CODE,ACTIVITY_NAME, ACTIVITY_DESC, ACTIVITY_URL,ACTIVITY_IMG_URL,ACTIVITY_DETAIL_IMG_URL,IS_PRAISE, DATA_STATUS,CLICK_NUM,START_DATE,END_DATE,SUPPORT_VERSION,IS_DELETED, CREATE_TIME,
+    UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_activity
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_activity
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppActivity" >
+    insert into app_activity (ID, ACTIVITY_CODE,ACTIVITY_NAME, ACTIVITY_DESC,
+      ACTIVITY_URL,,ACTIVITY_IMG_URL,ACTIVITY_DETAIL_IMG_URL,IS_PRAISE, DATA_STATUS, IS_DELETED,
+      CREATE_TIME, UPDATE_TIME, COMMENTS
+      )
+    values (#{id,jdbcType=BIGINT}, #{activeCode,jdbcType=VARCHAR},#{activityName,jdbcType=VARCHAR}, #{activityDesc,jdbcType=VARCHAR},
+      #{activityUrl,jdbcType=VARCHAR},#{activityImgUrl,jdbcType=VARCHAR},#{activityDetailImgUrl,jdbcType=VARCHAR},#{isPraise,jdbcType=VARCHAR}, #{dataStatus,jdbcType=VARCHAR}, 'N',
+      NOW(), NOW(), #{comments,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.AppActivity" >
+    update app_activity
+    <set >
+        <if test="category != null" >
+            CATEGORY = #{category,jdbcType=VARCHAR},
+        </if>
+      <if test="activityName != null" >
+        ACTIVITY_NAME = #{activeName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityDesc != null" >
+        ACTIVITY_DESC = #{activityDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="activityUrl != null" >
+        ACTIVITY_URL = #{activityUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="activityImgUrl != null" >
+        ACTIVITY_IMG_URL = #{activityImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="activityDetailImgUrl != null" >
+        ACTIVITY_DETAIL_IMG_URL = #{activityDetailImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isPraise != null" >
+        IS_PRAISE = #{isPraise,jdbcType=VARCHAR},
+      </if>
+      <if test="dataStatus != null" >
+        DATA_STATUS = #{dataStatus,jdbcType=VARCHAR},
+      </if>
+        <if test="clickNum != null" >
+            CLICK_NUM = #{clickNum,jdbcType=VARCHAR},
+        </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+        UPDATE_TIME = NOW(),
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    <bind name="start" value="(startPage-1)*pageSize"/>
+    select
+    <include refid="Base_Column_List" />
+    from app_activity
+    <where> IS_DELETED = 'N'
+      <if test="category != null" >
+         AND CATEGORY = #{category,jdbcType=VARCHAR}
+      </if>
+      <if test="activeCode != null" >
+        AND ACTIVITY_CODE = #{activeCode,jdbcType=BIGINT}
+      </if>
+      <if test="activityName != null" >
+        AND ACTIVITY_NAME = #{activityName,jdbcType=BIGINT}
+      </if>
+      <if test="isPraise != null" >
+        AND IS_PRAISE = #{isPraise,jdbcType=BIGINT}
+      </if>
+      <if test="date != null" >
+          <![CDATA[  AND START_DATE <= #{date,jdbcType=BIGINT} AND END_DATE >= #{date,jdbcType=BIGINT} ]]>
+      </if>
+      <if test="dataStatus != null" >
+        AND DATA_STATUS = #{dataStatus,jdbcType=BIGINT}
+      </if>
+    </where>
+    <if test="orderBy != null">
+      order by ${orderBy} desc,CREATE_TIME desc
+    </if>
+    <if test="orderBy == null">
+      order by UPDATE_TIME desc
+    </if>
+    limit #{start},#{pageSize}
+  </select>
+
+  <select id="selectByCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from app_activity
+    where ACTIVITY_CODE = #{activeCode,jdbcType=BIGINT} AND IS_DELETED = 'N'
+  </select>
+
+  <select id="selecActivitytList" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from app_activity
+    <where> IS_DELETED = 'N'
+        <if test="paras.category != null" >
+            AND CATEGORY = #{paras.category,jdbcType=VARCHAR}
+        </if>
+      <if test="paras.activeCode != null" >
+        AND ACTIVITY_CODE = #{paras.activeCode,jdbcType=BIGINT}
+      </if>
+      <if test="paras.activityName != null" >
+        AND ACTIVITY_NAME = #{paras.activityName,jdbcType=BIGINT}
+      </if>
+      <if test="paras.isPraise != null" >
+        AND IS_PRAISE = #{paras.isPraise,jdbcType=BIGINT}
+      </if>
+      <if test="paras.date != null" >
+        <![CDATA[  AND START_DATE <= #{paras.date,jdbcType=BIGINT} AND END_DATE >= #{paras.date,jdbcType=BIGINT} ]]>
+      </if>
+      <if test="paras.dataStatus != null" >
+        AND DATA_STATUS = #{paras.dataStatus,jdbcType=BIGINT}
+      </if>
+    </where>
+      order by UPDATE_TIME desc
+    <if test="page != null" >
+      <bind name="start" value="(page.startPage-1)*page.pageSize"/>
+      limit #{start},#{page.pageSize}
+    </if>
+  </select>
+</mapper>

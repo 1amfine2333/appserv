@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.SystemConfigMapper" >
+
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.SystemConfigModel" >
+    <id column="seq_id" property="seqId" jdbcType="BIGINT" />
+    <result column="Para_name" property="code" jdbcType="VARCHAR" />
+    <result column="Para_value" property="value" jdbcType="VARCHAR" />
+    <result column="Create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="Update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="Para_desc" property="description" jdbcType="VARCHAR" />
+    <result column="comments" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.SystemConfigModel" >
+    insert into app_sys_para (Para_name,Para_value,Create_time,
+    Update_time, Para_desc, comments)
+    values (#{code,jdbcType=VARCHAR},#{value,jdbcType=VARCHAR},NOW(),
+    NOW(), #{description,jdbcType=VARCHAR}, #{comments,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.SystemConfigModel" >
+    update app_sys_para
+    <set >
+      <if test="value != null" >
+        Para_value = #{value,jdbcType=VARCHAR},
+      </if>
+        Update_time = NOW(),
+      <if test="description != null" >
+        Para_desc = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="comments != null" >
+        comments = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where seq_id = #{seqId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectMap" resultMap="BaseResultMap" parameterType="map">
+    <bind name="start" value="(startPage-1)*pageSize"/>
+    SELECT  seq_id,Para_name,Para_value,Create_time,Update_time, Para_desc, comments
+    FROM app_sys_para
+    <where>
+      <if test="code != null" >
+        Para_name = #{code,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by Update_time desc
+  </select>
+
+  <select id="getSysConfig" resultMap="BaseResultMap">
+  	SELECT seq_id,Para_name, Para_value,Para_desc FROM app_sys_para
+  </select>
+  
+  <select id="getSysConfigByKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT seq_id,Para_name, Para_value,Para_desc FROM app_sys_para where Para_name = #{matchingKey}
+  </select>
+
+  <select id="getSysConfigValue" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT  Para_value  FROM app_sys_para where Para_name = #{key}
+  </select>
+
+    <update id="updateByName" parameterType="com.xianglin.appserv.common.dal.dataobject.SystemConfigModel" >
+        update app_sys_para
+        <set >
+            <if test="value != null" >
+                Para_value = #{value,jdbcType=VARCHAR},
+            </if>
+            Update_time = NOW(),
+            <if test="description != null" >
+                Para_desc = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="comments != null" >
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where Para_name = #{code,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateSyn" >
+        update app_sys_para set Para_value = #{resultValue,jdbcType=VARCHAR},Update_time = NOW() where Para_name = #{paraName,jdbcType=VARCHAR} and Para_value = #{curValue,jdbcType=VARCHAR}
+    </update>
+</mapper>

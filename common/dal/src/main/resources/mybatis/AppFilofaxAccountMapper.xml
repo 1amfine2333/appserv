@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.AppFilofaxAccountDAO">
+    <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.AppFilofaxAccount">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="PARTY_ID" property="partyId" jdbcType="BIGINT"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="ICON" property="icon" jdbcType="VARCHAR"/>
+        <result column="BALANCE" property="balance" jdbcType="DECIMAL"/>
+        <result column="IS_STATIS" property="isStatis" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="COMMENTS" property="comments" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, PARTY_ID, NAME,ICON, BALANCE, IS_STATIS, STATUS, IS_DELETED, CREATE_DATE, UPDATE_DATE,
+    COMMENTS
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from app_filofax_account
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxAccount" useGeneratedKeys="true" keyProperty="id">
+    insert into app_filofax_account (ID, PARTY_ID, NAME, ICON,
+      BALANCE, IS_STATIS, STATUS, 
+      IS_DELETED, CREATE_DATE, UPDATE_DATE, 
+      COMMENTS)
+    values (NULL, #{partyId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR},
+      #{balance,jdbcType=DECIMAL}, #{isStatis,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      'N', NOW(), NOW(),
+      #{comments,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxAccount">
+        update app_filofax_account
+        <set>
+            <if test="partyId != null">
+                PARTY_ID = #{partyId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                ICON = #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="balance != null">
+                BALANCE = #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="isStatis != null">
+                IS_STATIS = #{isStatis,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+            </if>
+            UPDATE_DATE = NOW(),
+            <if test="comments != null">
+                COMMENTS = #{comments,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from app_filofax_account
+        <where> IS_DELETED = 'N'
+            <if test="id != null">
+                and ID = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="partyId != null">
+                and PARTY_ID = #{partyId,jdbcType=BIGINT}
+            </if>
+            <if test="name != null">
+                and NAME = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="balance != null">
+                and BALANCE = #{balance,jdbcType=DECIMAL}
+            </if>
+            <if test="isStatis != null">
+                and IS_STATIS = #{isStatis,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by ID ASC
+    </select>
+
+    <update id="updateAccountBalance" parameterType="com.xianglin.appserv.common.dal.dataobject.AppFilofaxAccount">
+      UPDATE app_filofax_account
+      SET
+        <if test="isStatis != null">
+            IS_STATIS = #{isStatis,jdbcType=VARCHAR},
+        </if>
+        <if test="name != null">
+            NAME = #{name,jdbcType=VARCHAR},
+        </if>
+        <if test="status != null">
+            STATUS = #{status,jdbcType=VARCHAR},
+        </if>
+        <if test="isDeleted != null">
+            IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+        </if>
+        UPDATE_DATE = NOW(),
+        BALANCE =
+        (SELECT IFNULL(sum(AMOUNT),0)
+         FROM app_filofax_detail
+         WHERE FILOFAX_ACCOUNT = #{id,jdbcType=BIGINT}
+           AND CATEGORY_MODE = 'IN' AND IS_DELETED = 'N') -
+        (SELECT IFNULL(sum(AMOUNT),0)
+         FROM app_filofax_detail
+         WHERE FILOFAX_ACCOUNT = #{id,jdbcType=BIGINT}
+           AND CATEGORY_MODE = 'OUT' AND IS_DELETED = 'N')
+      WHERE ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.RedPacketPoolDAO">
+	<resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.RedPacketPool">
+		<id column="ID" property="id" jdbcType="BIGINT" />
+		<result column="TYPE" property="type" jdbcType="VARCHAR" />
+		<result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+		<result column="SEND_PARTY_ID" property="sendPartyId" jdbcType="BIGINT" />
+		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+		<result column="ACCOUNT_NAME" property="accountName" jdbcType="VARCHAR" />
+		<result column="ORDER_NUMBER" property="orderNumber" jdbcType="VARCHAR" />
+		<result column="TRANSACTION_STATUS" property="transactionStatus" jdbcType="VARCHAR" />
+		<result column="STATUS" property="status" jdbcType="VARCHAR" />
+		<result column="AMOUNT" property="amount" jdbcType="DECIMAL" />
+		<result column="RED_PACKET_CODE" property="redPacketCode" jdbcType="VARCHAR" />
+		<result column="SOURCE" property="source" jdbcType="VARCHAR" />
+		<result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+		<result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+		<result column="EFFECTIVE_DATE" property="effectiveDate" jdbcType="TIMESTAMP" />
+		<result column="EXPIRED_DATE" property="expiredDate" jdbcType="TIMESTAMP" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID, TYPE,PARTY_ID,SEND_PARTY_ID,ORDER_NUMBER,USER_NAME,ACCOUNT_NAME, TRANSACTION_STATUS,STATUS, AMOUNT, RED_PACKET_CODE, SOURCE, DESCRIPTION,IS_DELETED, EFFECTIVE_DATE, EXPIRED_DATE,
+		CREATE_DATE, UPDATE_DATE
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from red_packet_pool
+		where ID = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from red_packet_pool
+		where ID = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.RedPacketPool">
+		<selectKey keyColumn="id" keyProperty="id" resultType="long">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+		insert into red_packet_pool (ID, TYPE,PARTY_ID,SEND_PARTY_ID,ORDER_NUMBER,USER_NAME,ACCOUNT_NAME, TRANSACTION_STATUS,STATUS,
+		AMOUNT, RED_PACKET_CODE, SOURCE, DESCRIPTION,
+		IS_DELETED, EFFECTIVE_DATE, EXPIRED_DATE,
+		CREATE_DATE, UPDATE_DATE)
+		values (#{id,jdbcType=BIGINT}, #{type,jdbcType=VARCHAR},#{partyId,jdbcType=BIGINT},#{sendPartyId,jdbcType=BIGINT},#{orderNumber,jdbcType=VARCHAR},
+		#{userName,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, #{transactionStatus,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+		#{amount,jdbcType=DECIMAL}, #{redPacketCode,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},
+		#{isDeleted,jdbcType=VARCHAR}, #{effectiveDate,jdbcType=TIMESTAMP}, #{expiredDate,jdbcType=TIMESTAMP},
+		#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP})
+	</insert>
+	
+	<insert id="insertSelective" parameterType="com.xianglin.appserv.common.dal.dataobject.RedPacketPool">
+		insert into red_packet_pool
+		<selectKey keyColumn="id" keyProperty="id" resultType="long">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="type != null">
+				TYPE,
+			</if>
+			<if test="partyId != null">
+				PARTY_ID,
+			</if>
+			<if test="sendPartyId != null">
+				SEND_PARTY_ID,
+			</if>
+			<if test="orderNumber != null">
+				ORDER_NUMBER,
+			</if>
+			<if test="userName != null">
+				USER_NAME,
+			</if>
+			<if test="accountName != null">
+				ACCOUNT_NAME,
+			</if>
+			<if test="transactionStatus != null">
+				TRANSACTION_STATUS,
+			</if>
+			<if test="status != null">
+				STATUS,
+			</if>
+			<if test="amount != null">
+				AMOUNT,
+			</if>
+			<if test="redPacketCode != null">
+				RED_PACKET_CODE,
+			</if>
+			<if test="source != null">
+				SOURCE,
+			</if>
+			<if test="description != null">
+				DESCRIPTION,
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED,
+			</if>
+			<if test="effectiveDate != null">
+				EFFECTIVE_DATE,
+			</if>
+			<if test="expiredDate != null">
+				EXPIRED_DATE,
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE,
+			</if>
+			<if test="updateDate != null">
+				UPDATE_DATE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="partyId != null">
+				#{partyId,jdbcType=BIGINT},
+			</if>
+			<if test="sendPartyId != null">
+				#{sendPartyId,jdbcType=BIGINT},
+			</if>
+			<if test="orderNumber != null">
+				#{orderNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountName != null">
+				#{accountName,jdbcType=VARCHAR},
+			</if>
+			<if test="transactionStatus != null">
+				#{transactionStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="amount != null">
+				#{amount,jdbcType=DECIMAL},
+			</if>
+			<if test="redPacketCode != null">
+				#{redPacketCode,jdbcType=VARCHAR},
+			</if>
+			<if test="source != null">
+				#{source,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{source,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=VARCHAR},
+			</if>
+			<if test="effectiveDate != null">
+				#{effectiveDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="expiredDate != null">
+				#{expiredDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createDate != null">
+				#{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.RedPacketPool">
+		update red_packet_pool
+		<set>
+			<if test="type != null">
+				TYPE = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="partyId != null">
+				PARTY_ID = #{partyId,jdbcType=BIGINT},
+			</if>
+			<if test="orderNumber != null">
+				ORDER_NUMBER =	#{orderNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				USER_NAME =	#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountName != null">
+				ACCOUNT_NAME =	#{accountName,jdbcType=VARCHAR},
+			</if>
+			<if test="transactionStatus != null">
+				TRANSACTION_STATUS=#{transactionStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				STATUS = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="amount != null">
+				AMOUNT = #{amount,jdbcType=DECIMAL},
+			</if>
+			<if test="redPacketCode != null">
+				RED_PACKET_CODE = #{redPacketCode,jdbcType=VARCHAR},
+			</if>
+			<if test="source != null">
+				SOURCE = #{source,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				DESCRIPTION = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+			</if>
+			<if test="effectiveDate != null">
+				EFFECTIVE_DATE = #{effectiveDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="expiredDate != null">
+				EXPIRED_DATE = #{expiredDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateDate != null">
+				UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.xianglin.appserv.common.dal.dataobject.RedPacketPool">
+		update red_packet_pool
+		set TYPE = #{type,jdbcType=VARCHAR},
+		PARTY_ID = #{partyId,jdbcType=BIGINT},
+		TRANSACTION_STATUS=#{transactionStatus,jdbcType=VARCHAR},
+		ORDER_NUMBER =	#{orderNumber,jdbcType=VARCHAR},
+		USER_NAME =	#{userName,jdbcType=VARCHAR},
+		ACCOUNT_NAME =	#{accountName,jdbcType=VARCHAR},
+		STATUS = #{status,jdbcType=VARCHAR},
+		AMOUNT = #{amount,jdbcType=DECIMAL},
+		RED_PACKET_CODE = #{redPacketCode,jdbcType=VARCHAR},
+		SOURCE = #{source,jdbcType=VARCHAR},
+		DESCRIPTION = #{description,jdbcType=VARCHAR},
+		IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+		EFFECTIVE_DATE = #{effectiveDate,jdbcType=TIMESTAMP},
+		EXPIRED_DATE = #{expiredDate,jdbcType=TIMESTAMP},
+		CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+		UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+		where ID = #{id,jdbcType=BIGINT}
+	</update>
+
+
+	<update id="expiredPacketPool" parameterType="map">
+		update red_packet_pool set status='EXPIRED'
+		<where>
+			<if test="type != null">
+				AND TYPE = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				AND STATUS = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="amount != null">
+				AND AMOUNT = #{amount,jdbcType=DECIMAL}
+			</if>
+			<if test="redPacketCode != null">
+				AND RED_PACKET_CODE = #{redPacketCode,jdbcType=VARCHAR}
+			</if>
+			<if test="source != null">
+				AND SOURCE = #{source,jdbcType=VARCHAR}
+			</if>
+			<if test="effectiveDate != null">
+				AND EFFECTIVE_DATE = #{effectiveDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="expiredDate != null">
+				AND EXPIRED_DATE &lt;= #{expiredDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createDate != null">
+				AND DATE_FORMAT(CREATE_DATE,'%Y%m%d) = #{createDate,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				AND DATE_FORMAT(UPDATE_DATE ,'%Y%m%d)= #{updateDate,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</update>
+	<select id="getRedPacketPool" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List">
+		</include>
+		from red_packet_pool
+		<where>
+			is_deleted='0'
+			<if test="partyId != null">
+				AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+			</if>
+			<if test="sendPartyId != null">
+				AND SEND_PARTY_ID = #{sendPartyId,jdbcType=BIGINT}
+			</if>
+			<if test="type != null">
+				AND TYPE = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				AND STATUS = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="orderNumber != null">
+				AND ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR}
+			</if>
+			<if test="userName != null">
+				AND USER_NAME = #{userName,jdbcType=VARCHAR}
+			</if>
+			<if test="accountName != null">
+				AND ACCOUNT_NAME = #{accountName,jdbcType=VARCHAR}
+			</if>
+			<if test="amount != null">
+				AND AMOUNT = #{amount,jdbcType=DECIMAL}
+			</if>
+			<if test="redPacketCode != null">
+				AND RED_PACKET_CODE = #{redPacketCode,jdbcType=VARCHAR}
+			</if>
+			<if test="source != null">
+				AND SOURCE = #{source,jdbcType=VARCHAR}
+			</if>
+			<if test="effectiveDate != null">
+				AND DATE_FORMAT(EFFECTIVE_DATE ,'%Y%m%d') = #{effectiveDate,jdbcType=VARCHAR}
+			</if>
+			<if test="expiredDate != null">
+				AND DATE_FORMAT(EXPIRED_DATE ,'%Y%m%d') = #{expiredDate,jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				AND DATE_FORMAT(CREATE_DATE,'%Y%m%d') = #{createDate,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				AND DATE_FORMAT(UPDATE_DATE ,'%Y%m%d')= #{updateDate,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by update_date desc
+		<if test="startPage !=null and pageSize !=null">
+			limit #{startPage,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+		</if>
+	</select>
+
+
+	<insert id="batchInsert" parameterType="list">
+		insert into red_packet_pool (ID, TYPE, STATUS,
+		AMOUNT, RED_PACKET_CODE, SOURCE, DESCRIPTION,
+		IS_DELETED, EFFECTIVE_DATE, EXPIRED_DATE,
+		CREATE_DATE, UPDATE_DATE) values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.id,jdbcType=BIGINT}, #{item.type,jdbcType=VARCHAR}, #{item.status,jdbcType=VARCHAR},
+			#{item.amount,jdbcType=DECIMAL}, #{item.redPacketCode,jdbcType=VARCHAR}, #{item.source,jdbcType=VARCHAR},
+			#{item.description,jdbcType=VARCHAR},
+			#{item.isDeleted,jdbcType=VARCHAR}, #{item.effectiveDate,jdbcType=TIMESTAMP}, #{item.expiredDate,jdbcType=TIMESTAMP},
+			#{item.createDate,jdbcType=TIMESTAMP}, #{item.updateDate,jdbcType=TIMESTAMP})
+		</foreach>
+	</insert>
+
+	<select id="selectCount" parameterType="map" resultType="java.lang.Integer">
+		select count(*) from red_packet_pool where is_deleted='0'
+		<include refid="where_sql_if"></include>
+	</select>
+
+	<update id="expiredUserRedPacket" parameterType="map">
+		update red_bind_record rbr set status='EXPIRED'
+		<where>
+			is_deleted='0'
+			<if test="partyId != null">
+			and	PARTY_ID = #{partyId,jdbcType=BIGINT}
+			</if>
+			<if test="sendPartyId != null">
+				AND SEND_PARTY_ID = #{sendPartyId,jdbcType=BIGINT}
+			</if>
+			<if test="expiredDate !=null">
+			and rpp.expiredDate &lt;=#{expiredDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="status != null">
+			and	STATUS = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+			and	CREATE_DATE &lt;= #{createDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateDate != null">
+			and	UPDATE_DATE &lt;= #{updateDate,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</update>
+
+	<sql id="where_sql_if">
+		<if test="type != null">
+			AND TYPE = #{type,jdbcType=VARCHAR}
+		</if>
+		<if test="status != null">
+			AND STATUS = #{status,jdbcType=VARCHAR}
+		</if>
+		<if test="partyId!=null">
+			AND party_id =#{partyId,jdbcType=BIGINT}
+		</if>
+		<if test="sendPartyId != null">
+			AND SEND_PARTY_ID = #{sendPartyId,jdbcType=BIGINT}
+		</if>
+		<if test="amount != null">
+			AND AMOUNT = #{amount,jdbcType=DECIMAL}
+		</if>
+		<if test="redPacketCode != null">
+			AND RED_PACKET_CODE = #{redPacketCode,jdbcType=VARCHAR}
+		</if>
+		<if test="source != null">
+			AND SOURCE = #{source,jdbcType=VARCHAR}
+		</if>
+		<if test="effectiveDate != null">
+			AND DATE_FORMAT(EFFECTIVE_DATE,'%Y%m%d') = #{effectiveDate,jdbcType=VARCHAR}
+		</if>
+		<if test="expiredDate != null">
+			AND DATE_FORMAT(EXPIRED_DATE,'%Y%m%d') = #{expiredDate,jdbcType=VARCHAR}
+		</if>
+		<if test="createDate != null">
+			AND DATE_FORMAT(CREATE_DATE,'%Y%m%d) = #{createDate,jdbcType=VARCHAR}
+		</if>
+		<if test="updateDate != null">
+			AND DATE_FORMAT(UPDATE_DATE ,'%Y%m%d)= #{updateDate,jdbcType=VARCHAR}
+		</if>
+	</sql>
+
+	<update id="updateRedPacketPool" parameterType="map">
+		update red_packet_pool set status='USED' ,
+		<if test="orderNumber!=null">
+			order_number =#{orderNumber,jdbcType=VARCHAR},
+		</if>
+		<if test="partyId!=null">
+			party_id =#{partyId,jdbcType=BIGINT},
+		</if>
+		<if test="userName!=null">
+			user_name =#{userName,jdbcType=BIGINT},
+		</if>
+		<if test="accountName != null">
+			account_name =#{accountName,jdbcType=BIGINT},
+		</if>
+		<if test="transactionStatus">
+			transaction_status =#{transactionStatus,jdbcType=VARCHAR},
+		</if>
+		update_date = now()
+		WHERE ID =#{id,jdbcType=BIGINT}
+		and status=#{status,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="generateRedPacketSeq" resultType="Long">
+		select getseq_app_redPacketPool()
+	</select>
+	<select id="getParticipateUser" parameterType="map" resultMap="BaseResultMap">
+	select
+		<include refid="Base_Column_List">
+		</include>
+		from red_packet_pool
+		<where>
+			is_deleted='0'
+			<if test="partyId != null">
+				AND PARTY_ID = #{partyId,jdbcType=BIGINT}
+			</if>
+			<if test="sendPartyId != null">
+				AND SEND_PARTY_ID = #{sendPartyId,jdbcType=BIGINT}
+			</if>
+			<if test="types != null">
+				AND TYPE IN
+				<foreach collection="types" close=")" item="item" open="(" separator=",">
+					#{item,jdbcType=VARCHAR}
+				</foreach>
+				
+			</if>
+				AND STATUS = 'USED'
+			<if test="orderNumber != null">
+				AND ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR}
+			</if>
+			<if test="userName != null">
+				AND USER_NAME = #{userName,jdbcType=VARCHAR}
+			</if>
+			<if test="accountName != null">
+				AND ACCOUNT_NAME = #{accountName,jdbcType=VARCHAR}
+			</if>
+			<if test="amount != null">
+				AND AMOUNT = #{amount,jdbcType=DECIMAL}
+			</if>
+			<if test="redPacketCode != null">
+				AND RED_PACKET_CODE = #{redPacketCode,jdbcType=VARCHAR}
+			</if>
+			<if test="source != null">
+				AND SOURCE = #{source,jdbcType=VARCHAR}
+			</if>
+			<if test="effectiveDate != null">
+				AND DATE_FORMAT(EFFECTIVE_DATE ,'%Y%m%d') = #{effectiveDate,jdbcType=VARCHAR}
+			</if>
+			<if test="expiredDate != null">
+				AND DATE_FORMAT(EXPIRED_DATE ,'%Y%m%d') = #{expiredDate,jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				AND DATE_FORMAT(CREATE_DATE,'%Y%m%d') = #{createDate,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				AND DATE_FORMAT(UPDATE_DATE ,'%Y%m%d')= #{updateDate,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by update_date desc
+		<if test="startPage !=null and pageSize !=null">
+			limit #{startPage,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+		</if>
+	</select>
+</mapper>

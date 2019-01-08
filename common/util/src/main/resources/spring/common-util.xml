@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:redisson="http://redisson.org/schema/redisson"
+	   xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://redisson.org/schema/redisson
+       http://redisson.org/schema/redisson/redisson.xsd
+">
+	<context:annotation-config />
+
+	<context:component-scan base-package="{package}.common.util" />
+
+	<bean id="sessionHelper" class="com.xianglin.appserv.common.util.SessionHelper">
+		<property name="sessionRepository">
+			<!-- session仓库 -->
+			<bean class="com.xianglin.fala.session.RedisSessionRepository">
+				<property name="sessionIdPrefix" value="${session.id.prefix}" />
+				<property name="defaultMaxInactiveInterval" value="${session.timeout}" />
+				<property name="redisClient">
+					<bean class="com.xianglin.fala.session.RedisClient" init-method="init" destroy-method="destroy">
+						<property name="redisHosts" value="${session.redis.hosts}" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="idempotentChecker" class="com.xianglin.appserv.common.util.IdempotentChecker">
+		<property name="redisClient" ref="redisClient" />
+	</bean>
+	
+	<bean id="redisClient" class="com.xianglin.fala.session.RedisClient" init-method="init" destroy-method="destroy">
+		<property name="redisHosts" value="${session.redis.hosts}" />
+	</bean>
+	<bean id="redisUtil" class="com.xianglin.appserv.common.util.RedisUtil">
+	</bean>
+
+	<!--redisson的实例 -->
+	<redisson:client id="redissonClient">
+		<redisson:single-server address="${redis.hosts}"
+								connection-minimum-idle-size="${redis.connectionMinimumIdleSize}"
+								connection-pool-size="${redis.connectionPoolSize}"
+								client-name="${system.name}"
+								database="${redis.database}"/>
+	</redisson:client>
+
+	<!--<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" p:host-name="${redis.hostname}" p:port="6379" p:database="1">-->
+	<!--</bean>-->
+
+	<!--<bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate" p:connection-factory-ref="jedisConnectionFactory">-->
+
+	<!--</bean>-->
+</beans>

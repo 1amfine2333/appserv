@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<dubbo:application name="xlcNodeDubboProvider" />
+
+	<!-- Dev -->
+	<!-- <dubbo:registry address="zookeeper://zookeeper.dev.xianglin.com:2181" /> -->
+	<!-- Test 
+	<dubbo:registry
+		address="zookeeper://zookeeper181.test.xianglin.com:2181?backup=zookeeper182.test.xianglin.com:2181,zookeeper183.test.xianglin.com:2181" />
+	-->
+	
+	<dubbo:registry address="multicast://224.5.6.7:1234" />
+    
+	<dubbo:reference id="indexService" interface="com.xianglin.appserv.common.service.facade.app.IndexService" url="dubbo://172.16.12.153:20880"/>
+	
+</beans>

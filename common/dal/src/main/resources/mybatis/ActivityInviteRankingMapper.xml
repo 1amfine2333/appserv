@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xianglin.appserv.common.dal.daointerface.ActivityInviteRankingDAO" >
+  <resultMap id="BaseResultMap" type="com.xianglin.appserv.common.dal.dataobject.ActivityInviteRanking" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="RANKING_DATE" property="rankingDate" jdbcType="VARCHAR" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="RANKING" property="ranking" jdbcType="INTEGER" />
+    <result column="INVITE_COUNT" property="inviteCount" jdbcType="INTEGER" />
+    <result column="INVITE_AMT" property="inviteAmt" jdbcType="DECIMAL" />
+    <result column="REWARD_AMT" property="rewardAmt" jdbcType="DECIMAL" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="IS_DELETED" property="isDeleted" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, RANKING_DATE, PARTY_ID, RANKING, INVITE_COUNT, INVITE_AMT, REWARD_AMT, STATUS, 
+    IS_DELETED, CREATE_TIME, UPDATE_TIME, COMMENTS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_activity_invite_ranking
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_activity_invite_ranking
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityInviteRanking" >
+    insert into app_activity_invite_ranking (ID, RANKING_DATE, PARTY_ID, 
+      RANKING, INVITE_COUNT, INVITE_AMT, 
+      REWARD_AMT, STATUS, IS_DELETED, 
+      CREATE_TIME, UPDATE_TIME, COMMENTS
+      )
+    values (#{id,jdbcType=BIGINT}, #{rankingDate,jdbcType=VARCHAR}, #{partyId,jdbcType=BIGINT},
+      #{ranking,jdbcType=INTEGER}, #{inviteCount,jdbcType=INTEGER}, #{inviteAmt,jdbcType=DECIMAL}, 
+      #{rewardAmt,jdbcType=DECIMAL}, #{status,jdbcType=VARCHAR}, 'N', 
+      NOW(), NOW(), #{comments,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianglin.appserv.common.dal.dataobject.ActivityInviteRanking" >
+    update app_activity_invite_ranking
+    <set >
+      <if test="rankingDate != null" >
+        RANKING_DATE = #{rankingDate,jdbcType=VARCHAR},
+      </if>
+      <if test="partyId != null" >
+        PARTY_ID = #{partyId,jdbcType=BIGINT},
+      </if>
+      <if test="ranking != null" >
+        RANKING = #{ranking,jdbcType=INTEGER},
+      </if>
+      <if test="inviteCount != null" >
+        INVITE_COUNT = #{inviteCount,jdbcType=INTEGER},
+      </if>
+      <if test="inviteAmt != null" >
+        INVITE_AMT = #{inviteAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="rewardAmt != null" >
+        REWARD_AMT = #{rewardAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        IS_DELETED = #{isDeleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comments != null" >
+        COMMENTS = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+	
+  <select id="selectRanking" resultMap="BaseResultMap" parameterType="map" >
+  	<bind name="start" value="(startPage-1)*pageSize"/>
+    select 
+    <include refid="Base_Column_List" />
+    from app_activity_invite_ranking 
+    <where> IS_DELETED = 'N' 
+	   <if test="rankingDate != null" >
+        and RANKING_DATE = #{rankingDate,jdbcType=VARCHAR}
+      </if>
+      <if test="partyId != null" >
+        and PARTY_ID = #{partyId,jdbcType=BIGINT}
+      </if>
+      <if test="ranking != null" >
+        and RANKING = #{ranking,jdbcType=INTEGER}
+      </if>
+      <if test="inviteCount != null" >
+        and INVITE_COUNT = #{inviteCount,jdbcType=INTEGER}
+      </if>
+      <if test="inviteAmt != null" >
+        and INVITE_AMT = #{inviteAmt,jdbcType=DECIMAL}
+      </if>
+      <if test="rewardAmt != null" >
+        and REWARD_AMT = #{rewardAmt,jdbcType=DECIMAL}
+      </if>
+      <if test="status != null" >
+        and STATUS = #{status,jdbcType=VARCHAR}
+      </if>
+	</where>
+	order by CREATE_TIME desc 
+	limit #{start},#{pageSize}
+  </select>
+</mapper>
